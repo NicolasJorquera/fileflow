@@ -30,6 +30,7 @@ class PlatformFileGateway implements FileGateway, ImageCodec {
         PlatformFilesException.accessLost => const SourceAccessLost(),
         PlatformFilesException.noSpace => InsufficientStorage(requiredBytes),
         PlatformFilesException.cancelled => const Cancelled(),
+        PlatformFilesException.noApp => const NoAppAvailable(),
         _ => Unexpected('platform_files:${e.code}'),
       });
     }

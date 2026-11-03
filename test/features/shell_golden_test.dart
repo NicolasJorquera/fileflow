@@ -9,13 +9,7 @@ import 'package:fileflow/features/home/presentation/home_screen.dart';
 import 'package:fileflow/features/settings/presentation/settings_screen.dart';
 import 'package:fileflow/l10n/app_localizations.dart';
 
-class _MemorySettings implements SettingsRepository {
-  @override
-  ThemePreference theme = ThemePreference.system;
-
-  @override
-  Future<void> setTheme(ThemePreference value) async => theme = value;
-}
+import '../support/fakes.dart';
 
 /// One phone-sized screen with the real theme, locale and providers.
 Widget _screen(
@@ -25,7 +19,12 @@ Widget _screen(
   bool rtl = false,
 }) {
   return ProviderScope(
-    overrides: [settingsRepositoryProvider.overrideWithValue(_MemorySettings())],
+    overrides: fakeOverrides(
+      recents: MemoryRecents([
+        sampleRecent(),
+        sampleRecent(id: 'r2', name: 'Escaneo carnet ambos lados.pdf', pages: 2),
+      ]),
+    ),
     child: MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: buildTheme(brightness),
@@ -77,10 +76,10 @@ void main() {
   );
 
   testWidgets('elegir Oscuro en Ajustes cambia el tema al instante', (tester) async {
-    final settings = _MemorySettings();
+    final settings = MemorySettings();
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [settingsRepositoryProvider.overrideWithValue(settings)],
+        overrides: fakeOverrides(settings: settings),
         child: Consumer(
           builder: (context, ref, _) {
             final pref = ref.watch(themePreferenceProvider);

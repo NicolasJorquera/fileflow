@@ -66,6 +66,11 @@ final class Cancelled extends AppFailure {
   const Cancelled();
 }
 
+/// No installed app can open or receive the file (share, «Abrir con»).
+final class NoAppAvailable extends AppFailure {
+  const NoAppAvailable();
+}
+
 /// E-GEN-01: anything unexpected. [diagnostic] goes to the local log only and
 /// must never contain file names or paths.
 final class Unexpected extends AppFailure {

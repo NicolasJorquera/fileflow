@@ -1,17 +1,193 @@
 {
   "@@locale": "es",
   "appName": "FileFlow",
-  "@appName": {"description": "Product name. Trademark search still pending (Legal)."},
+  "@appName": {
+    "description": "Product name. Trademark search still pending (Legal)."
+  },
   "settingsTitle": "Ajustes",
   "settingsAppearance": "Apariencia e idioma",
-  "@settingsAppearance": {"description": "Section header in Settings."},
+  "@settingsAppearance": {
+    "description": "Section header in Settings."
+  },
   "themeLabel": "Tema",
   "themeSystem": "Sistema",
   "themeLight": "Claro",
   "themeDark": "Oscuro",
   "privacyNote": "Todo se procesa en tu teléfono. Funciona sin conexión.",
-  "homeToolsPending": "Las herramientas llegan en los próximos hitos.",
-  "@homeToolsPending": {"description": "Development placeholder on Home until the tools exist (H4+)."},
   "pageCount": "{count, plural, one{1 página} other{{count} páginas}}",
-  "@pageCount": {"placeholders": {"count": {"type": "int"}}}
+  "@pageCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeSection": "¿Qué necesitas hacer?",
+  "recentTitle": "Recientes",
+  "seeAll": "Ver todos",
+  "toolMergeTitle": "Unir en uno solo",
+  "toolMergeSubtitle": "Unir PDF",
+  "interruptedNotice": "La operación anterior se interrumpió. Tus archivos originales no cambiaron.",
+  "mergeHint": "Arrastra para cambiar el orden. Se unen de arriba hacia abajo.",
+  "mergeAdd": "Agregar PDF",
+  "mergeEmpty": "Elige al menos 2 PDF para unirlos en uno solo.",
+  "mergeSummary": "{files, plural, one{1 archivo} other{{files} archivos}} · {pages, plural, one{1 página} other{{pages} páginas}}",
+  "@mergeSummary": {
+    "placeholders": {
+      "files": {
+        "type": "int"
+      },
+      "pages": {
+        "type": "int"
+      }
+    }
+  },
+  "mergeButton": "{files, plural, one{Unir 1 archivo} other{Unir {files} archivos}}",
+  "@mergeButton": {
+    "placeholders": {
+      "files": {
+        "type": "int"
+      }
+    }
+  },
+  "mergeNeedTwo": "Agrega al menos 2 PDF",
+  "mergeSkipped": "{count, plural, one{Se omite 1 archivo con problemas.} other{Se omiten {count} archivos con problemas.}}",
+  "@mergeSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mergeTooManyPages": "Son {pages} páginas. El máximo para unir es {max}.",
+  "@mergeTooManyPages": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "mergeTooManyFiles": "Puedes unir hasta {max} archivos a la vez.",
+  "@mergeTooManyFiles": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "mergeBig": "Son muchos MB: puede tardar unos minutos.",
+  "mergedName": "Documento unido {date}",
+  "@mergedName": {
+    "description": "Default name of a merged PDF, without extension.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "itemPreparing": "Preparando…",
+  "itemMeta": "{pages, plural, one{1 pág.} other{{pages} págs.}} · {size}",
+  "@itemMeta": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "removeItem": "Quitar {name}",
+  "@removeItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "moveItem": "Mover {name}",
+  "@moveItem": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "moveUp": "Mover arriba",
+  "moveDown": "Mover abajo",
+  "removedSnack": "Se quitó {name}",
+  "@removedSnack": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "undo": "Deshacer",
+  "processingMerge": "Uniendo…",
+  "processingStep": "Paso {done} de {total}",
+  "@processingStep": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "processingHint": "Puedes ir a otra pantalla: seguimos trabajando mientras la app esté abierta.",
+  "cancel": "Cancelar",
+  "cancelConfirmTitle": "¿Cancelar?",
+  "cancelConfirmBody": "Se descarta lo avanzado. Tus archivos originales no cambian.",
+  "keepGoing": "Seguir",
+  "back": "Volver",
+  "resultTitle": "Listo",
+  "resultMerged": "Unido en un solo PDF",
+  "resultMeta": "{pages, plural, one{1 página} other{{pages} páginas}} · {size}",
+  "@resultMeta": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "fileNameLabel": "Nombre del archivo",
+  "share": "Compartir",
+  "saveTo": "Guardar en…",
+  "openWith": "Abrir con otra app",
+  "nextStep": "Siguiente paso",
+  "nextMergeAnother": "Unir con otro PDF",
+  "recentsNote": "Queda en Recientes por 7 días. Usa «Guardar en…» para conservarlo en tu teléfono.",
+  "savedSnack": "Guardado",
+  "close": "Cerrar",
+  "errDamaged": "No pudimos abrir este archivo. Puede estar dañado o no ser un PDF.",
+  "errPassword": "Este PDF tiene contraseña. Esta versión todavía no puede abrirlo.",
+  "errAccessLost": "Ya no tenemos acceso a ese archivo. Vuelve a elegirlo.",
+  "errNoSpace": "No hay espacio suficiente. Necesitas unos {size} libres.",
+  "@errNoSpace": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "errNoSpaceGeneric": "No hay espacio suficiente en el teléfono.",
+  "errNoApp": "No hay una app para abrir este archivo.",
+  "errGeneric": "Algo falló al procesar el archivo. Tu original no cambió.",
+  "retry": "Reintentar",
+  "processingPercent": "{percent} %",
+  "@processingPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  }
 }

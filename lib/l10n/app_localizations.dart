@@ -141,17 +141,335 @@ abstract class AppLocalizations {
   /// **'Todo se procesa en tu teléfono. Funciona sin conexión.'**
   String get privacyNote;
 
-  /// Development placeholder on Home until the tools exist (H4+).
-  ///
-  /// In es, this message translates to:
-  /// **'Las herramientas llegan en los próximos hitos.'**
-  String get homeToolsPending;
-
   /// No description provided for @pageCount.
   ///
   /// In es, this message translates to:
   /// **'{count, plural, one{1 página} other{{count} páginas}}'**
   String pageCount(int count);
+
+  /// No description provided for @homeSection.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Qué necesitas hacer?'**
+  String get homeSection;
+
+  /// No description provided for @recentTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recientes'**
+  String get recentTitle;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver todos'**
+  String get seeAll;
+
+  /// No description provided for @toolMergeTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Unir en uno solo'**
+  String get toolMergeTitle;
+
+  /// No description provided for @toolMergeSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Unir PDF'**
+  String get toolMergeSubtitle;
+
+  /// No description provided for @interruptedNotice.
+  ///
+  /// In es, this message translates to:
+  /// **'La operación anterior se interrumpió. Tus archivos originales no cambiaron.'**
+  String get interruptedNotice;
+
+  /// No description provided for @mergeHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Arrastra para cambiar el orden. Se unen de arriba hacia abajo.'**
+  String get mergeHint;
+
+  /// No description provided for @mergeAdd.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar PDF'**
+  String get mergeAdd;
+
+  /// No description provided for @mergeEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige al menos 2 PDF para unirlos en uno solo.'**
+  String get mergeEmpty;
+
+  /// No description provided for @mergeSummary.
+  ///
+  /// In es, this message translates to:
+  /// **'{files, plural, one{1 archivo} other{{files} archivos}} · {pages, plural, one{1 página} other{{pages} páginas}}'**
+  String mergeSummary(int files, int pages);
+
+  /// No description provided for @mergeButton.
+  ///
+  /// In es, this message translates to:
+  /// **'{files, plural, one{Unir 1 archivo} other{Unir {files} archivos}}'**
+  String mergeButton(int files);
+
+  /// No description provided for @mergeNeedTwo.
+  ///
+  /// In es, this message translates to:
+  /// **'Agrega al menos 2 PDF'**
+  String get mergeNeedTwo;
+
+  /// No description provided for @mergeSkipped.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{Se omite 1 archivo con problemas.} other{Se omiten {count} archivos con problemas.}}'**
+  String mergeSkipped(int count);
+
+  /// No description provided for @mergeTooManyPages.
+  ///
+  /// In es, this message translates to:
+  /// **'Son {pages} páginas. El máximo para unir es {max}.'**
+  String mergeTooManyPages(int pages, int max);
+
+  /// No description provided for @mergeTooManyFiles.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes unir hasta {max} archivos a la vez.'**
+  String mergeTooManyFiles(int max);
+
+  /// No description provided for @mergeBig.
+  ///
+  /// In es, this message translates to:
+  /// **'Son muchos MB: puede tardar unos minutos.'**
+  String get mergeBig;
+
+  /// Default name of a merged PDF, without extension.
+  ///
+  /// In es, this message translates to:
+  /// **'Documento unido {date}'**
+  String mergedName(String date);
+
+  /// No description provided for @itemPreparing.
+  ///
+  /// In es, this message translates to:
+  /// **'Preparando…'**
+  String get itemPreparing;
+
+  /// No description provided for @itemMeta.
+  ///
+  /// In es, this message translates to:
+  /// **'{pages, plural, one{1 pág.} other{{pages} págs.}} · {size}'**
+  String itemMeta(int pages, String size);
+
+  /// No description provided for @removeItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar {name}'**
+  String removeItem(String name);
+
+  /// No description provided for @moveItem.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover {name}'**
+  String moveItem(String name);
+
+  /// No description provided for @moveUp.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover arriba'**
+  String get moveUp;
+
+  /// No description provided for @moveDown.
+  ///
+  /// In es, this message translates to:
+  /// **'Mover abajo'**
+  String get moveDown;
+
+  /// No description provided for @removedSnack.
+  ///
+  /// In es, this message translates to:
+  /// **'Se quitó {name}'**
+  String removedSnack(String name);
+
+  /// No description provided for @undo.
+  ///
+  /// In es, this message translates to:
+  /// **'Deshacer'**
+  String get undo;
+
+  /// No description provided for @processingMerge.
+  ///
+  /// In es, this message translates to:
+  /// **'Uniendo…'**
+  String get processingMerge;
+
+  /// No description provided for @processingStep.
+  ///
+  /// In es, this message translates to:
+  /// **'Paso {done} de {total}'**
+  String processingStep(int done, int total);
+
+  /// No description provided for @processingHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes ir a otra pantalla: seguimos trabajando mientras la app esté abierta.'**
+  String get processingHint;
+
+  /// No description provided for @cancel.
+  ///
+  /// In es, this message translates to:
+  /// **'Cancelar'**
+  String get cancel;
+
+  /// No description provided for @cancelConfirmTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cancelar?'**
+  String get cancelConfirmTitle;
+
+  /// No description provided for @cancelConfirmBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Se descarta lo avanzado. Tus archivos originales no cambian.'**
+  String get cancelConfirmBody;
+
+  /// No description provided for @keepGoing.
+  ///
+  /// In es, this message translates to:
+  /// **'Seguir'**
+  String get keepGoing;
+
+  /// No description provided for @back.
+  ///
+  /// In es, this message translates to:
+  /// **'Volver'**
+  String get back;
+
+  /// No description provided for @resultTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Listo'**
+  String get resultTitle;
+
+  /// No description provided for @resultMerged.
+  ///
+  /// In es, this message translates to:
+  /// **'Unido en un solo PDF'**
+  String get resultMerged;
+
+  /// No description provided for @resultMeta.
+  ///
+  /// In es, this message translates to:
+  /// **'{pages, plural, one{1 página} other{{pages} páginas}} · {size}'**
+  String resultMeta(int pages, String size);
+
+  /// No description provided for @fileNameLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Nombre del archivo'**
+  String get fileNameLabel;
+
+  /// No description provided for @share.
+  ///
+  /// In es, this message translates to:
+  /// **'Compartir'**
+  String get share;
+
+  /// No description provided for @saveTo.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardar en…'**
+  String get saveTo;
+
+  /// No description provided for @openWith.
+  ///
+  /// In es, this message translates to:
+  /// **'Abrir con otra app'**
+  String get openWith;
+
+  /// No description provided for @nextStep.
+  ///
+  /// In es, this message translates to:
+  /// **'Siguiente paso'**
+  String get nextStep;
+
+  /// No description provided for @nextMergeAnother.
+  ///
+  /// In es, this message translates to:
+  /// **'Unir con otro PDF'**
+  String get nextMergeAnother;
+
+  /// No description provided for @recentsNote.
+  ///
+  /// In es, this message translates to:
+  /// **'Queda en Recientes por 7 días. Usa «Guardar en…» para conservarlo en tu teléfono.'**
+  String get recentsNote;
+
+  /// No description provided for @savedSnack.
+  ///
+  /// In es, this message translates to:
+  /// **'Guardado'**
+  String get savedSnack;
+
+  /// No description provided for @close.
+  ///
+  /// In es, this message translates to:
+  /// **'Cerrar'**
+  String get close;
+
+  /// No description provided for @errDamaged.
+  ///
+  /// In es, this message translates to:
+  /// **'No pudimos abrir este archivo. Puede estar dañado o no ser un PDF.'**
+  String get errDamaged;
+
+  /// No description provided for @errPassword.
+  ///
+  /// In es, this message translates to:
+  /// **'Este PDF tiene contraseña. Esta versión todavía no puede abrirlo.'**
+  String get errPassword;
+
+  /// No description provided for @errAccessLost.
+  ///
+  /// In es, this message translates to:
+  /// **'Ya no tenemos acceso a ese archivo. Vuelve a elegirlo.'**
+  String get errAccessLost;
+
+  /// No description provided for @errNoSpace.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay espacio suficiente. Necesitas unos {size} libres.'**
+  String errNoSpace(String size);
+
+  /// No description provided for @errNoSpaceGeneric.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay espacio suficiente en el teléfono.'**
+  String get errNoSpaceGeneric;
+
+  /// No description provided for @errNoApp.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay una app para abrir este archivo.'**
+  String get errNoApp;
+
+  /// No description provided for @errGeneric.
+  ///
+  /// In es, this message translates to:
+  /// **'Algo falló al procesar el archivo. Tu original no cambió.'**
+  String get errGeneric;
+
+  /// No description provided for @retry.
+  ///
+  /// In es, this message translates to:
+  /// **'Reintentar'**
+  String get retry;
+
+  /// No description provided for @processingPercent.
+  ///
+  /// In es, this message translates to:
+  /// **'{percent} %'**
+  String processingPercent(int percent);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

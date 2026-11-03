@@ -1,4 +1,6 @@
 {
   "@@locale": "es_ES",
-  "privacyNote": "Todo se procesa en tu móvil. Funciona sin conexión."
+  "privacyNote": "Todo se procesa en tu móvil. Funciona sin conexión.",
+  "recentsNote": "Queda en Recientes durante 7 días. Usa «Guardar en…» para conservarlo en tu móvil.",
+  "errNoSpaceGeneric": "No hay espacio suficiente en el móvil."
 }

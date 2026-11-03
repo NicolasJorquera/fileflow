@@ -5,6 +5,8 @@ analyzer:
     - build/**
     - android/**
     - ios/**
+    # Each package is analyzed in its own CI job with its own dependencies.
+    - packages/**
 
 formatter:
   page_width: 120
