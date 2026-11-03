@@ -122,6 +122,25 @@ class PlatformFileGateway implements FileGateway, ImageCodec {
     ),
   );
 
+  @override
+  Future<Result<int>> writeImage({
+    required Uint8List rgba,
+    required int width,
+    required int height,
+    required ImageFormat format,
+    required int quality,
+    required String path,
+  }) => _guard(
+    () => _api.encodeToFile(
+      rgba: rgba,
+      width: width,
+      height: height,
+      png: format == ImageFormat.png,
+      quality: quality,
+      destPath: path,
+    ),
+  );
+
   static String _mimeOf(String path) => switch (path.split('.').last.toLowerCase()) {
     'pdf' => _pdf,
     'jpg' || 'jpeg' => 'image/jpeg',

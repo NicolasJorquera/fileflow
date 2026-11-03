@@ -8,6 +8,7 @@ import '../../../../core/domain/files.dart';
 import '../../../../core/domain/result.dart';
 import '../../../../core/domain/tools.dart';
 import '../../../../core/jobs/jobs.dart';
+import '../../shared/presentation/run_job.dart';
 
 /// One row of the Unir list: preparing (copying and reading), ready with its
 /// page count, or marked with the reason it will be skipped.
@@ -43,15 +44,6 @@ class MergeState {
   bool get tooManyPages => pages > MergeLimits.maxPages;
   bool get isBig => bytes > MergeLimits.softTotalBytes;
   bool get canMerge => ready.length >= 2 && !preparing && !tooManyPages;
-}
-
-/// What Unir starts with: files shared to the app, or a previous result
-/// («Siguiente paso → Unir con otro PDF»).
-class MergeArgs {
-  const MergeArgs({this.picked = const [], this.local = const []});
-
-  final List<PickedFile> picked;
-  final List<LocalFile> local;
 }
 
 final mergeControllerProvider = NotifierProvider.autoDispose<MergeController, MergeState>(MergeController.new);
@@ -91,7 +83,9 @@ class MergeController extends Notifier<MergeState> {
       final item = _append(f.name);
       _enqueue(() => _import(item.key, f));
     }
-    return files.length > room ? LimitExceeded(Limit.files, state.items.length + files.length - room) : null;
+    return files.length > room
+        ? LimitExceeded(Limit.files, state.items.length + files.length - room, MergeLimits.maxFiles)
+        : null;
   }
 
   /// Adds files already in the app (a result from Recientes). They are read
@@ -136,14 +130,7 @@ class MergeController extends Notifier<MergeState> {
   Job start(String outputName) {
     final inputs = [for (final i in state.ready) i.file!];
     final body = ref.read(mergeDocumentsProvider).call(inputs, outputName: outputName);
-    final link = ref.keepAlive();
-    return ref.read(jobRunnerProvider).enqueue((token) async* {
-      try {
-        yield* body(token);
-      } finally {
-        link.close();
-      }
-    });
+    return runKeepingAlive(ref, body);
   }
 
   MergeItem _append(String name) {

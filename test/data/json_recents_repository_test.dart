@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:fileflow/core/domain/tools.dart';
+import 'package:fileflow/core/domain/recents.dart';
 import 'package:fileflow/data/recents/json_recents_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -16,7 +16,7 @@ void main() {
   Future<String> addResult(JsonRecentsRepository repo, String name, {int bytes = 10}) async {
     final slot = await repo.reserve(name);
     await File(slot.path).writeAsBytes(List.filled(bytes, 1));
-    return (await repo.add(slot, tool: ToolId.merge, pages: 3, inputBytes: 99)).id;
+    return (await repo.add(slot, kind: ResultKind.merged, pages: 3, inputBytes: 99)).id;
   }
 
   setUp(() {
@@ -107,5 +107,49 @@ void main() {
     await Future<void>.delayed(Duration.zero);
     await sub.cancel();
     expect(seen, [0, 1, 0]);
+  });
+
+  test('a multi-file result keeps its files together and adds their sizes', () async {
+    final repo = await open();
+    final slot = await repo.reserve('contrato (separado)');
+    File('${slot.dir}/a.pdf').writeAsBytesSync(List.filled(3, 1));
+    File('${slot.dir}/b.pdf').writeAsBytesSync(List.filled(4, 1));
+    final item = await repo.add(slot, kind: ResultKind.split, pages: 2, files: ['a.pdf', 'b.pdf']);
+
+    expect(item.sizeBytes, 7);
+    final again = (await open()).current.single;
+    expect((again.kind, again.isSingleFile), (ResultKind.split, false));
+    expect(again.files, ['a.pdf', 'b.pdf']);
+  });
+
+  test('results expire exactly when the period ends, with a fake clock', () async {
+    final repo = await open();
+    await addResult(repo, 'a.pdf');
+    final created = now;
+    const week = Duration(days: 7);
+
+    expect(await repo.purgeExpired(created.add(week - const Duration(microseconds: 1)), week), 0);
+    expect(repo.expiring(created.add(week), week).$1, 1);
+    expect(await repo.purgeExpired(created.add(week), week), 1);
+    expect(repo.current, isEmpty);
+  });
+
+  test('«hasta que yo los borre» never expires anything', () async {
+    final repo = await open();
+    await addResult(repo, 'a.pdf');
+    expect(await repo.purgeExpired(now.add(const Duration(days: 3650)), null), 0);
+    expect(repo.expiring(now.add(const Duration(days: 3650)), null), (0, 0));
+  });
+
+  test('reads the H4 index (version 1) as merge results', () async {
+    Directory('$resultsDir/old').createSync();
+    File('$resultsDir/old/Unido.pdf').writeAsStringSync('pdf');
+    File('$filesDir/recents.json').writeAsStringSync(
+      '{"version":1,"items":[{"id":"old","name":"Unido.pdf","tool":"merge","pages":2,"sizeBytes":3,'
+      '"inputBytes":null,"createdAt":"2026-11-03T10:00:00.000Z"}]}',
+    );
+    final item = (await open()).current.single;
+    expect((item.kind, item.path), (ResultKind.merged, '$resultsDir/old/Unido.pdf'));
+    expect(item.files, ['Unido.pdf']);
   });
 }

@@ -11,6 +11,7 @@ class PrefsSettingsRepository implements SettingsRepository {
       PrefsSettingsRepository(await SharedPreferences.getInstance());
 
   static const _themeKey = 'theme';
+  static const _retentionKey = 'recents_retention';
 
   final SharedPreferences _prefs;
 
@@ -20,4 +21,11 @@ class PrefsSettingsRepository implements SettingsRepository {
 
   @override
   Future<void> setTheme(ThemePreference value) => _prefs.setString(_themeKey, value.name);
+
+  @override
+  RecentsRetention get retention =>
+      RecentsRetention.values.asNameMap()[_prefs.getString(_retentionKey)] ?? RecentsRetention.sevenDays;
+
+  @override
+  Future<void> setRetention(RecentsRetention value) => _prefs.setString(_retentionKey, value.name);
 }

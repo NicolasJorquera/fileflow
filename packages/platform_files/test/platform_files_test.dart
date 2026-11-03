@@ -44,4 +44,19 @@ void main() {
       throwsA(isA<PlatformFilesException>().having((e) => e.code, 'code', PlatformFilesException.accessLost)),
     );
   });
+
+  test('encodeToFile sends the format and returns the written size', () async {
+    reply((_) => 1234);
+    final size = await api.encodeToFile(
+      rgba: Uint8List(16),
+      width: 2,
+      height: 2,
+      png: true,
+      quality: 90,
+      destPath: '/r/a.png',
+    );
+    expect(size, 1234);
+    expect((calls.single.arguments as Map)['format'], 'png');
+    expect(calls.single.method, 'encodeToFile');
+  });
 }

@@ -6,12 +6,14 @@ import '../../../app/flavor.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../core/domain/settings.dart';
+import '../../../core/format/sizes.dart';
 import '../../../design_system/theme.dart';
 import '../../../design_system/tokens.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../shared/retention_label.dart';
 
-/// Settings (H1: theme only). Language, page size, recents and privacy rows
-/// arrive with their features.
+/// Ajustes: theme and how long Recientes keeps results. Language, page size
+/// and privacy rows arrive with their milestones.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -25,16 +27,7 @@ class SettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: Space.l),
         children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(Space.xs, Space.xs, 0, Space.s),
-            child: Semantics(
-              header: true,
-              child: Text(
-                l10n.settingsAppearance.toUpperCase(),
-                style: Theme.of(context).textTheme.labelMedium?.copyWith(color: palette.muted, letterSpacing: 0.3),
-              ),
-            ),
-          ),
+          _SectionLabel(l10n.settingsAppearance),
           DecoratedBox(
             decoration: BoxDecoration(
               color: palette.surface,
@@ -62,6 +55,9 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: Space.xl),
+          _SectionLabel(l10n.settingsRecents),
+          const _RetentionCard(),
           if (ref.watch(flavorProvider) == Flavor.dev) ...[
             const SizedBox(height: Space.xl),
             ListTile(
@@ -71,6 +67,88 @@ class SettingsScreen extends ConsumerWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsetsDirectional.fromSTEB(Space.xs, Space.xs, 0, Space.s),
+    child: Semantics(
+      header: true,
+      child: Text(
+        text.toUpperCase(),
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(color: context.palette.muted, letterSpacing: 0.3),
+      ),
+    ),
+  );
+}
+
+/// «Borrar resultados»: 1, 7 or 30 days, or never. A shorter period warns how
+/// many results go right away (UX v1.0, Ajustes).
+class _RetentionCard extends ConsumerWidget {
+  const _RetentionCard();
+
+  Future<void> _select(BuildContext context, WidgetRef ref, RecentsRetention value) async {
+    final l10n = AppLocalizations.of(context);
+    final (count, bytes) = ref.read(recentsRepositoryProvider).expiring(ref.read(clockProvider)(), value.period);
+    if (count > 0) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(l10n.retentionShortenTitle),
+          content: Text(l10n.retentionShortenBody(count, formatBytes(bytes, l10n.localeName))),
+          actions: [
+            TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancel)),
+            TextButton(onPressed: () => Navigator.of(context).pop(true), child: Text(l10n.clearAllConfirm)),
+          ],
+        ),
+      );
+      if (confirmed != true) return;
+    }
+    await ref.read(retentionProvider.notifier).select(value);
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final retention = ref.watch(retentionProvider);
+    return Material(
+      color: palette.surface,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.card),
+        side: BorderSide(color: palette.line),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: Space.s),
+        child: RadioGroup<RecentsRetention>(
+          groupValue: retention,
+          onChanged: (value) => _select(context, ref, value!),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(Space.l, Space.s, Space.l, 0),
+                child: Text(l10n.retentionLabel, style: Theme.of(context).textTheme.bodyLarge),
+              ),
+              for (final option in RecentsRetention.values)
+                RadioListTile<RecentsRetention>(
+                  value: option,
+                  title: Text(
+                    option.period == null ? l10n.retentionNever : l10n.retentionAfter(retentionLabel(l10n, option)),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

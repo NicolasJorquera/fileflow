@@ -15,7 +15,7 @@ import '../../tools/registry.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  /// How many results Inicio shows; the rest are in Recientes (H5).
+  /// How many results Inicio shows; «Ver todos» opens Recientes.
   static const _recentCount = 3;
 
   @override
@@ -60,7 +60,15 @@ class HomeScreen extends ConsumerWidget {
           for (final tool in tools) ...[_ToolCard(tool: tool), const SizedBox(height: Space.s)],
           if (recents.isNotEmpty) ...[
             const SizedBox(height: Space.l),
-            _SectionTitle(l10n.recentTitle),
+            Row(
+              children: [
+                Expanded(child: _SectionTitle(l10n.recentTitle)),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: Space.m),
+                  child: TextButton(onPressed: () => context.push(Routes.recents), child: Text(l10n.seeAll)),
+                ),
+              ],
+            ),
             Material(
               color: palette.surface,
               clipBehavior: Clip.antiAlias,
@@ -76,7 +84,9 @@ class HomeScreen extends ConsumerWidget {
                       leading: Icon(Icons.picture_as_pdf_outlined, color: palette.muted),
                       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
                       subtitle: Text(
-                        l10n.itemMeta(item.pages, formatBytes(item.sizeBytes, l10n.localeName)),
+                        item.isSingleFile
+                            ? l10n.itemMeta(item.pages, formatBytes(item.sizeBytes, l10n.localeName))
+                            : l10n.filesMeta(item.files.length, formatBytes(item.sizeBytes, l10n.localeName)),
                         style: text.bodySmall?.copyWith(color: palette.muted),
                       ),
                       onTap: () => context.push(Routes.result(item.id)),

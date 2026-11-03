@@ -7,8 +7,8 @@ import 'package:fileflow/core/jobs/jobs.dart';
 import 'package:fileflow/design_system/theme.dart';
 import 'package:fileflow/features/shared/processing_screen.dart';
 import 'package:fileflow/features/shared/result_screen.dart';
-import 'package:fileflow/features/tools/merge/presentation/merge_controller.dart';
 import 'package:fileflow/features/tools/merge/presentation/merge_screen.dart';
+import 'package:fileflow/features/tools/shared/presentation/tool_args.dart';
 import 'package:fileflow/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -52,7 +52,7 @@ ProcessingScreen _processing() {
 
 void main() {
   const phone = BoxConstraints.tightFor(width: 390, height: 844);
-  final merge = MergeScreen(args: MergeArgs(picked: _picked));
+  final merge = MergeScreen(args: ToolArgs(picked: _picked));
 
   goldenTest(
     'Unir, Procesando y Resultado en claro, oscuro e inglés',

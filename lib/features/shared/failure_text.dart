@@ -1,5 +1,4 @@
 import '../../core/domain/failures.dart';
-import '../../core/domain/tools.dart';
 import '../../core/format/sizes.dart';
 import '../../l10n/app_localizations.dart';
 
@@ -15,8 +14,8 @@ extension FailureText on AppLocalizations {
       formatBytes(requiredBytes, localeName),
     ),
     InsufficientStorage() => errNoSpaceGeneric,
-    LimitExceeded(limit: Limit.pages, :final actual) => mergeTooManyPages(actual, MergeLimits.maxPages),
-    LimitExceeded(limit: Limit.files) => mergeTooManyFiles(MergeLimits.maxFiles),
+    LimitExceeded(limit: Limit.pages, :final actual, :final max) => errTooManyPages(actual, max),
+    LimitExceeded(limit: Limit.files, :final max) => mergeTooManyFiles(max),
     NoAppAvailable() => errNoApp,
     Cancelled() => '',
     ImagesUnreadable() || LimitExceeded() || ScannerUnavailable() || Unexpected() => errGeneric,

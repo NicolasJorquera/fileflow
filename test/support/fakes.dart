@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:fileflow/app/providers.dart';
 import 'package:fileflow/core/domain/failures.dart';
@@ -7,7 +8,6 @@ import 'package:fileflow/core/domain/pdf.dart';
 import 'package:fileflow/core/domain/recents.dart';
 import 'package:fileflow/core/domain/result.dart';
 import 'package:fileflow/core/domain/settings.dart';
-import 'package:fileflow/core/domain/tools.dart';
 import 'package:fileflow/core/jobs/jobs.dart';
 import 'package:flutter_riverpod/misc.dart' show Override;
 
@@ -19,6 +19,12 @@ class MemorySettings implements SettingsRepository {
 
   @override
   Future<void> setTheme(ThemePreference value) async => theme = value;
+
+  @override
+  RecentsRetention retention = RecentsRetention.sevenDays;
+
+  @override
+  Future<void> setRetention(RecentsRetention value) async => retention = value;
 }
 
 class FakeWorkspace implements JobWorkspace {
@@ -128,6 +134,70 @@ class FakePdfService implements PdfService {
     onProgress?.call(inputs.length + 1, inputs.length + 1);
     return Ok(inputs.fold(0, (sum, p) => sum + (pages[_name(p)] ?? 1)));
   }
+
+  /// (input, pages, output) of every compose call.
+  final composed = <(String, List<PageRef>, String)>[];
+
+  @override
+  Future<Result<int>> compose(
+    String input,
+    List<PageRef> pages,
+    String output, {
+    CancelToken? token,
+    void Function(int done, int total)? onProgress,
+  }) async {
+    if (token?.isCancelled ?? false) return const Err(Cancelled());
+    final failure = mergeFailure;
+    if (failure != null) return Err(failure);
+    composed.add((input, pages, output));
+    onProgress?.call(1, 1);
+    return Ok(pages.length);
+  }
+
+  /// (pages, outputs, format, dpi) of every export call.
+  final exported = <(List<int>, List<String>, ImageFormat, int)>[];
+
+  @override
+  Future<Result<int>> exportImages(
+    String input,
+    List<int> pages,
+    List<String> outputs, {
+    required ImageFormat format,
+    required int dpi,
+    CancelToken? token,
+    void Function(int done, int total)? onProgress,
+  }) async {
+    exported.add((pages, outputs, format, dpi));
+    for (var i = 0; i < pages.length; i++) {
+      if (token?.isCancelled ?? false) return const Err(Cancelled());
+      onProgress?.call(i + 1, pages.length);
+    }
+    return Ok(pages.length * 1000);
+  }
+}
+
+/// Thumbnails that never arrive: tiles keep their numbered placeholder.
+class FakeThumbnailSource implements ThumbnailSource {
+  @override
+  Future<Result<Thumbnails>> open(String path) async => Ok(_NoThumbnails(pages: 1));
+}
+
+class _NoThumbnails implements Thumbnails {
+  _NoThumbnails({required this.pages});
+
+  final int pages;
+
+  @override
+  int get pageCount => pages;
+
+  @override
+  Future<Uint8List?> page(int index) async => null;
+
+  @override
+  void cancel(int index) {}
+
+  @override
+  Future<void> close() async {}
 }
 
 class MemoryRecents implements RecentsRepository {
@@ -150,19 +220,26 @@ class MemoryRecents implements RecentsRepository {
 
   @override
   Future<ResultSlot> reserve(String name) async =>
-      ResultSlot(id: 'r${_items.length}', path: '/results/r${_items.length}/$name', name: name);
+      ResultSlot(id: 'r${_items.length}', dir: '/results/r${_items.length}', name: name);
 
   @override
-  Future<RecentItem> add(ResultSlot slot, {required ToolId tool, required int pages, int? inputBytes}) async {
+  Future<RecentItem> add(
+    ResultSlot slot, {
+    required ResultKind kind,
+    required int pages,
+    int? inputBytes,
+    List<String>? files,
+  }) async {
     final item = RecentItem(
       id: slot.id,
       name: slot.name,
-      path: slot.path,
-      tool: tool,
+      dir: slot.dir,
+      files: files ?? [slot.name],
+      kind: kind,
       pages: pages,
       sizeBytes: 1024 * 1024,
       inputBytes: inputBytes,
-      createdAt: DateTime(2026, 11, 3),
+      createdAt: DateTime(2026, 11, 3, 12),
     );
     _items = [item, ..._items];
     _emit();
@@ -174,7 +251,7 @@ class MemoryRecents implements RecentsRepository {
 
   @override
   Future<RecentItem> rename(String id, String newName) async {
-    final item = _items.firstWhere((i) => i.id == id).copyWith(name: newName);
+    final item = _items.firstWhere((i) => i.id == id).copyWith(name: newName, files: [newName]);
     _items = [for (final i in _items) i.id == id ? item : i];
     _emit();
     return item;
@@ -189,8 +266,25 @@ class MemoryRecents implements RecentsRepository {
     _emit();
   }
 
+  bool _expired(RecentItem i, DateTime now, Duration? period) =>
+      period != null && !now.isBefore(i.createdAt.add(period));
+
   @override
-  Future<int> purgeExpired(DateTime now, Duration ttl) async => 0;
+  Future<int> purgeExpired(DateTime now, Duration? period) async {
+    final before = _items.length;
+    _items = [
+      for (final i in _items)
+        if (!_expired(i, now, period)) i,
+    ];
+    if (_items.length != before) _emit();
+    return before - _items.length;
+  }
+
+  @override
+  (int, int) expiring(DateTime now, Duration? period) {
+    final expired = _items.where((i) => _expired(i, now, period));
+    return (expired.length, expired.fold(0, (sum, i) => sum + i.sizeBytes));
+  }
 
   @override
   Future<int> clear() async {
@@ -201,16 +295,27 @@ class MemoryRecents implements RecentsRepository {
   }
 }
 
-RecentItem sampleRecent({String id = 'r1', String name = 'Documento unido 2026-11-03.pdf', int pages = 14}) =>
-    RecentItem(
-      id: id,
-      name: name,
-      path: '/results/$id/$name',
-      tool: ToolId.merge,
-      pages: pages,
-      sizeBytes: 7969177,
-      createdAt: DateTime(2026, 11, 3),
-    );
+/// The fixed «now» of widget tests (see [fakeOverrides]).
+final testNow = DateTime(2026, 11, 3, 12);
+
+RecentItem sampleRecent({
+  String id = 'r1',
+  String name = 'Documento unido 2026-11-03.pdf',
+  int pages = 14,
+  ResultKind kind = ResultKind.merged,
+  List<String>? files,
+  DateTime? createdAt,
+  int sizeBytes = 7969177,
+}) => RecentItem(
+  id: id,
+  name: name,
+  dir: '/results/$id',
+  files: files ?? [name],
+  kind: kind,
+  pages: pages,
+  sizeBytes: sizeBytes,
+  createdAt: createdAt ?? DateTime(2026, 11, 3, 10),
+);
 
 /// Every port overridden with a fake; pass the ones a test inspects.
 List<Override> fakeOverrides({
@@ -227,4 +332,6 @@ List<Override> fakeOverrides({
   recentsRepositoryProvider.overrideWithValue(recents ?? MemoryRecents()),
   jobWorkspaceProvider.overrideWithValue(workspace ?? FakeWorkspace()),
   interruptedJobsProvider.overrideWithValue(interrupted),
+  thumbnailSourceProvider.overrideWithValue(FakeThumbnailSource()),
+  clockProvider.overrideWithValue(() => testNow),
 ];

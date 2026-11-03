@@ -44,10 +44,10 @@ final class InsufficientStorage extends AppFailure {
 
 /// E-LIM-01: a hard limit of the tool was exceeded.
 final class LimitExceeded extends AppFailure {
-  const LimitExceeded(this.limit, this.actual);
+  const LimitExceeded(this.limit, this.actual, this.max);
 
   final Limit limit;
-  final int actual;
+  final int actual, max;
 }
 
 enum Limit { pages, files, images, totalBytes }

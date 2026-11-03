@@ -201,7 +201,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nextMergeAnother => 'Merge with another PDF';
 
   @override
-  String get recentsNote => 'It stays in Recent for 7 days. Use “Save to…” to keep it on your phone.';
+  String recentsNote(String period) {
+    return 'It stays in Recent for $period. Use “Save to…” to keep it on your phone.';
+  }
 
   @override
   String get savedSnack => 'Saved';
@@ -238,5 +240,465 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String processingPercent(int percent) {
     return '$percent%';
+  }
+
+  @override
+  String get toolOrganizeTitle => 'Organize pages';
+
+  @override
+  String get toolOrganizeSubtitle => 'Split, extract, rotate';
+
+  @override
+  String get toolToImageTitle => 'PDF to image';
+
+  @override
+  String get toolToImageSubtitle => 'JPG or PNG';
+
+  @override
+  String get nextToImage => 'Convert to image';
+
+  @override
+  String get choosePdf => 'Choose a PDF';
+
+  @override
+  String get chooseToolTitle => 'What do you want to do?';
+
+  @override
+  String get change => 'Change';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get select => 'Select';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String moreFor(String name) {
+    return 'More options for $name';
+  }
+
+  @override
+  String get rotate => 'Rotate';
+
+  @override
+  String get extract => 'Extract';
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String get clearSelection => 'Clear selection';
+
+  @override
+  String selectedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count selected', one: '1 selected');
+    return '$_temp0';
+  }
+
+  @override
+  String get moveBefore => 'Move before';
+
+  @override
+  String get moveAfter => 'Move after';
+
+  @override
+  String pageLabel(int position) {
+    return 'Page $position';
+  }
+
+  @override
+  String pageLabelRotated(int position, int degrees) {
+    return 'Page $position, rotated $degrees°';
+  }
+
+  @override
+  String sourceMeta(String name, int pages) {
+    String _temp0 = intl.Intl.pluralLogic(pages, locale: localeName, other: '$pages pages', one: '1 page');
+    return '$name · $_temp0';
+  }
+
+  @override
+  String get organizeEmpty => 'Choose the PDF whose pages you want to reorder, rotate, extract or split.';
+
+  @override
+  String get organizeHint => 'Tap pages to select them. Press and hold to move them.';
+
+  @override
+  String get organizeLong => 'That is a lot of pages: thumbnails may take a while to appear.';
+
+  @override
+  String get organizeKeepOne => 'At least one page must remain.';
+
+  @override
+  String organizeDeleted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages deleted',
+      one: '1 page deleted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get discardTitle => 'Discard changes?';
+
+  @override
+  String get discardBody => 'Your original file does not change.';
+
+  @override
+  String get discard => 'Discard';
+
+  @override
+  String get keepEditing => 'Keep editing';
+
+  @override
+  String get splitMenu => 'Split…';
+
+  @override
+  String get selectRangeMenu => 'Select a range';
+
+  @override
+  String get splitTitle => 'Split into several PDFs';
+
+  @override
+  String get splitEvery => 'Every few pages';
+
+  @override
+  String get splitEveryLabel => 'Pages per file';
+
+  @override
+  String get splitRanges => 'By ranges';
+
+  @override
+  String get splitEachPage => 'One page per file';
+
+  @override
+  String splitButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Split into $count files',
+      one: 'Split into 1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get splitButtonIdle => 'Split';
+
+  @override
+  String get rangeLabel => 'Pages';
+
+  @override
+  String get rangeHint => '1-3, 5, 8-10';
+
+  @override
+  String rangeHelper(int count) {
+    return 'From 1 to $count';
+  }
+
+  @override
+  String get rangeEmpty => 'Type pages, for example 1-3, 5.';
+
+  @override
+  String rangeNotANumber(String token) {
+    return '“$token” is not a page or a range.';
+  }
+
+  @override
+  String rangeOutOfRange(String token, int count) {
+    return '“$token” is outside the document (1 to $count).';
+  }
+
+  @override
+  String rangeReversed(String token) {
+    return 'In “$token” the first number must be the smaller one.';
+  }
+
+  @override
+  String nameEdited(String stem) {
+    return '$stem (edited)';
+  }
+
+  @override
+  String namePages(String stem, String pages) {
+    return '$stem (pages $pages)';
+  }
+
+  @override
+  String namePage(String stem, String page) {
+    return '$stem (page $page)';
+  }
+
+  @override
+  String nameSplit(String stem) {
+    return '$stem (split)';
+  }
+
+  @override
+  String nameImages(String stem) {
+    return '$stem (images)';
+  }
+
+  @override
+  String get processingSave => 'Saving…';
+
+  @override
+  String get processingExtract => 'Extracting…';
+
+  @override
+  String get processingSplit => 'Splitting…';
+
+  @override
+  String get processingConvert => 'Converting…';
+
+  @override
+  String get toImageEmpty => 'Choose the PDF you want to turn into images.';
+
+  @override
+  String get formatLabel => 'Format';
+
+  @override
+  String get formatJpg => 'JPG · smaller';
+
+  @override
+  String get formatPng => 'PNG · lossless';
+
+  @override
+  String get resolutionLabel => 'Resolution';
+
+  @override
+  String dpiValue(int dpi) {
+    return '$dpi dpi';
+  }
+
+  @override
+  String get resolutionHelp => '150 dpi: looks good on screen and in WhatsApp. 300 dpi: for printing.';
+
+  @override
+  String get pagesLabel => 'Pages';
+
+  @override
+  String pagesAll(int count) {
+    return 'All ($count)';
+  }
+
+  @override
+  String get pagesChoose => 'Choose pages';
+
+  @override
+  String pagesChosen(int count, String list) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count pages', one: '1 page');
+    return '$_temp0: $list';
+  }
+
+  @override
+  String usePages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Use $count pages',
+      one: 'Use 1 page',
+      zero: 'Choose pages',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String toImageEstimate(int count, String format, String size) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count $format images',
+      one: '1 $format image',
+    );
+    return '$_temp0 · about $size in total';
+  }
+
+  @override
+  String toImageTooMany(int max) {
+    return 'You can convert up to $max pages at a time. Choose fewer pages.';
+  }
+
+  @override
+  String convertButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Convert $count pages',
+      one: 'Convert 1 page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get resultEdited => 'Changes saved in a new PDF';
+
+  @override
+  String resultExtracted(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count pages extracted',
+      one: 'Page extracted',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String resultSplit(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Split into $count files',
+      one: 'Split into 1 file',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String resultImages(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count images ready',
+      one: '1 image ready',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String filesMeta(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count files', one: '1 file');
+    return '$_temp0 · $size';
+  }
+
+  @override
+  String andMore(int count) {
+    return 'and $count more';
+  }
+
+  @override
+  String get shareAll => 'Share all';
+
+  @override
+  String get saveToFolder => 'Save to folder…';
+
+  @override
+  String savedFolderSnack(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count files saved', one: '1 file saved');
+    return '$_temp0';
+  }
+
+  @override
+  String daysCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count days', one: '1 day');
+    return '$_temp0';
+  }
+
+  @override
+  String get recentsNoteForever => 'It stays in Recent until you delete it.';
+
+  @override
+  String recentsNotice(String period) {
+    return 'Results delete themselves after $period. You can change this in Settings.';
+  }
+
+  @override
+  String get recentsNoticeForever => 'Results stay here until you delete them. You can change this in Settings.';
+
+  @override
+  String get groupToday => 'Today';
+
+  @override
+  String get groupWeek => 'This week';
+
+  @override
+  String get groupOlder => 'Earlier';
+
+  @override
+  String get tagMerged => 'Merged';
+
+  @override
+  String get tagEdited => 'Edited';
+
+  @override
+  String get tagExtracted => 'Extracted';
+
+  @override
+  String get tagSplit => 'Split';
+
+  @override
+  String get tagImages => 'Images';
+
+  @override
+  String expiresInDays(String size, int days) {
+    String _temp0 = intl.Intl.pluralLogic(days, locale: localeName, other: '$days days', one: '1 day');
+    return '$size · deleted in $_temp0';
+  }
+
+  @override
+  String expiresToday(String size) {
+    return '$size · deleted today';
+  }
+
+  @override
+  String get useInTool => 'Use in another tool';
+
+  @override
+  String get clearAll => 'Delete all';
+
+  @override
+  String get clearAllTitle => 'Delete all?';
+
+  @override
+  String clearAllBody(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count results', one: '1 result');
+    return '$_temp0 ($size) will be deleted. What you saved in other folders does not change.';
+  }
+
+  @override
+  String get clearAllConfirm => 'Delete';
+
+  @override
+  String get recentsEmptyTitle => 'What you create shows up here';
+
+  @override
+  String get recentsEmptyBody =>
+      'The PDFs and images you create with FileFlow stay here for a while so you can share them again.';
+
+  @override
+  String get settingsRecents => 'Recent';
+
+  @override
+  String get retentionLabel => 'Delete results automatically';
+
+  @override
+  String retentionAfter(String period) {
+    return 'After $period';
+  }
+
+  @override
+  String get retentionNever => 'Never: I delete them';
+
+  @override
+  String get retentionShortenTitle => 'Change the period?';
+
+  @override
+  String retentionShortenBody(int count, String size) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count results', one: '1 result');
+    return 'With this period $_temp0 ($size) will be deleted now.';
+  }
+
+  @override
+  String errTooManyPages(int pages, int max) {
+    return 'That is $pages pages. The maximum is $max.';
   }
 }

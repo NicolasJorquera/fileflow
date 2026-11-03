@@ -83,8 +83,17 @@ class PdfiumEngine implements PdfEngine {
   Future<EngineResult<void>> save(DocHandle doc, String outPath) => _run(wSave, (doc.id, outPath));
 
   @override
-  Future<EngineResult<RenderedPage>> render(DocHandle doc, int page, {required int widthPx}) =>
-      _run(wRender, (doc.id, page, widthPx));
+  Future<EngineResult<RenderedPage>> render(
+    DocHandle doc,
+    int page, {
+    int? widthPx,
+    double? dpi,
+    int maxWidthPx = 4000,
+    bool rgba = false,
+  }) {
+    assert((widthPx == null) != (dpi == null), 'pass widthPx or dpi');
+    return _run(wRender, (doc.id, page, widthPx ?? 0, dpi ?? 0, maxWidthPx, rgba));
+  }
 
   /// Documents and pages open in the worker (leak checks in tests).
   @visibleForTesting

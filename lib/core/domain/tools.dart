@@ -10,3 +10,17 @@ abstract final class MergeLimits {
   /// Soft limit: above this the UI warns that it may take a while.
   static const softTotalBytes = 300 * 1024 * 1024;
 }
+
+/// PRD H5 Organizar páginas: a warning above [softPages], refused above
+/// [maxPages].
+abstract final class OrganizeLimits {
+  static const softPages = 300;
+  static const maxPages = 1000;
+}
+
+/// PRD H6 PDF a imagen.
+abstract final class ToImageLimits {
+  static const maxPages = 200;
+  static const dpiChoices = [72, 150, 300];
+  static const defaultDpi = 150;
+}
