@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "appName": "Listo PDF",
+  "settingsTitle": "Settings",
+  "settingsAppearance": "Appearance and language",
+  "themeLabel": "Theme",
+  "themeSystem": "System",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "privacyNote": "Everything is processed on your phone. Works offline.",
+  "homeToolsPending": "Tools arrive in the next milestones.",
+  "pageCount": "{count, plural, one{1 page} other{{count} pages}}"
+}

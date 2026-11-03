@@ -1,0 +1,13 @@
+{
+  "@@locale": "pt",
+  "appName": "Listo PDF",
+  "settingsTitle": "Configurações",
+  "settingsAppearance": "Aparência e idioma",
+  "themeLabel": "Tema",
+  "themeSystem": "Sistema",
+  "themeLight": "Claro",
+  "themeDark": "Escuro",
+  "privacyNote": "Tudo é processado no seu celular. Funciona sem conexão.",
+  "homeToolsPending": "As ferramentas chegam nos próximos marcos.",
+  "pageCount": "{count, plural, one{1 página} other{{count} páginas}}"
+}

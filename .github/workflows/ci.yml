@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      # Personal repo: always resolve from pub.dev, never a private mirror.
+      PUB_HOSTED_URL: https://pub.dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          # Keep in sync with .fvmrc.
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Lockfile only references pub.dev
+        run: |
+          if grep -n "url:" pubspec.lock | grep -v "https://pub.dev"; then
+            echo "pubspec.lock references a host other than pub.dev" && exit 1
+          fi
+
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed lib test tool
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Architecture rules
+        run: dart run tool/check_imports.dart
+
+      - name: Tests (CI goldens)
+        run: flutter test

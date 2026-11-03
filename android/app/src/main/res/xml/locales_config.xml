@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Per-app language (Android 13+). Keep in sync with lib/l10n/*.arb. -->
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+    <locale android:name="es" />
+    <locale android:name="es-ES" />
+    <locale android:name="en" />
+    <locale android:name="pt-BR" />
+</locale-config>

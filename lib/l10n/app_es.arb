@@ -1,0 +1,17 @@
+{
+  "@@locale": "es",
+  "appName": "Listo PDF",
+  "@appName": {"description": "Provisional product name, pending trademark search (Legal)."},
+  "settingsTitle": "Ajustes",
+  "settingsAppearance": "Apariencia e idioma",
+  "@settingsAppearance": {"description": "Section header in Settings."},
+  "themeLabel": "Tema",
+  "themeSystem": "Sistema",
+  "themeLight": "Claro",
+  "themeDark": "Oscuro",
+  "privacyNote": "Todo se procesa en tu teléfono. Funciona sin conexión.",
+  "homeToolsPending": "Las herramientas llegan en los próximos hitos.",
+  "@homeToolsPending": {"description": "Development placeholder on Home until the tools exist (H4+)."},
+  "pageCount": "{count, plural, one{1 página} other{{count} páginas}}",
+  "@pageCount": {"placeholders": {"count": {"type": "int"}}}
+}
