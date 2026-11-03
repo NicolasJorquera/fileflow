@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.listopdf.listo_pdf"
+    namespace = "io.github.nicolasjorquera.fileflow"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         // Provisional: the final application id is fixed together with the product
         // name (trademark search pending) before the first Play upload (H10).
-        applicationId = "dev.listopdf.listo_pdf"
+        applicationId = "io.github.nicolasjorquera.fileflow"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // API 24: minimum of the document scanner plugin (PRD RNF-08).
@@ -40,11 +40,11 @@ android {
         create("dev") {
             dimension = "env"
             applicationIdSuffix = ".dev"
-            resValue("string", "app_name", "Listo PDF dev")
+            resValue("string", "app_name", "FileFlow dev")
         }
         create("prod") {
             dimension = "env"
-            resValue("string", "app_name", "Listo PDF")
+            resValue("string", "app_name", "FileFlow")
         }
     }
 

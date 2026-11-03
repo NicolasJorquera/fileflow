@@ -1,7 +1,7 @@
 {
   "@@locale": "es",
-  "appName": "Listo PDF",
-  "@appName": {"description": "Provisional product name, pending trademark search (Legal)."},
+  "appName": "FileFlow",
+  "@appName": {"description": "Product name. Trademark search still pending (Legal)."},
   "settingsTitle": "Ajustes",
   "settingsAppearance": "Apariencia e idioma",
   "@settingsAppearance": {"description": "Section header in Settings."},

@@ -8,14 +8,14 @@ import '../l10n/app_localizations.dart';
 import 'providers.dart';
 import 'router.dart';
 
-class ListoApp extends ConsumerStatefulWidget {
-  const ListoApp({super.key});
+class FileFlowApp extends ConsumerStatefulWidget {
+  const FileFlowApp({super.key});
 
   @override
-  ConsumerState<ListoApp> createState() => _ListoAppState();
+  ConsumerState<FileFlowApp> createState() => _FileFlowAppState();
 }
 
-class _ListoAppState extends ConsumerState<ListoApp> {
+class _FileFlowAppState extends ConsumerState<FileFlowApp> {
   late final GoRouter _router = buildRouter();
 
   @override

@@ -2,7 +2,8 @@
 //
 //   dart run tool/check_imports.dart        exits 1 and lists violations
 //
-// 1. lib/core/domain is pure Dart: no Flutter, no dart:io, no packages.
+// 1. lib/core/domain and lib/core/jobs are pure Dart: no Flutter, no dart:io, no
+//    packages; they may import each other.
 // 2. Presentation (lib/features/**/presentation) never imports lib/data.
 // 3. Only lib/data/ads may use network-capable SDKs (RN-01: no document
 //    operation touches the network).
@@ -19,6 +20,9 @@ class Violation {
 
 final _importRe = RegExp(r'''^\s*(?:import|export)\s+['"]([^'"]+)['"]''', multiLine: true);
 
+const _pureFolders = ['lib/core/domain/', 'lib/core/jobs/'];
+const _pureDartLibraries = {'dart:async', 'dart:core', 'dart:collection', 'dart:typed_data', 'dart:math'};
+
 const _networkPackages = ['package:http/', 'package:dio/', 'package:google_mobile_ads/', 'package:web_socket'];
 
 /// [files] maps a path relative to the project root (with `/`) to its source.
@@ -27,11 +31,10 @@ List<Violation> checkImports(Map<String, String> files) {
   for (final MapEntry(key: path, value: source) in files.entries) {
     for (final match in _importRe.allMatches(source)) {
       final target = match.group(1)!;
-      if (path.startsWith('lib/core/domain/') &&
-          !target.startsWith('dart:async') &&
-          !target.startsWith('dart:core') &&
-          !_isRelativeInside(path, target, 'lib/core/domain/')) {
-        violations.add(Violation(path, target, 'core/domain must be pure Dart'));
+      if (_pureFolders.any(path.startsWith) &&
+          !_pureDartLibraries.contains(target) &&
+          !_pureFolders.any((folder) => _isRelativeInside(path, target, folder))) {
+        violations.add(Violation(path, target, 'core/domain and core/jobs must be pure Dart'));
       }
       if (path.contains('/presentation/') && _resolves(path, target).startsWith('lib/data/')) {
         violations.add(Violation(path, target, 'presentation must not import lib/data'));
@@ -51,9 +54,9 @@ bool _isRelativeInside(String from, String target, String folder) =>
     !target.contains(':') && _resolves(from, target).startsWith(folder);
 
 /// Resolves a relative import against [from]; package/dart imports pass through,
-/// except `package:listo_pdf/x` which maps to `lib/x`.
+/// except `package:fileflow/x` which maps to `lib/x`.
 String _resolves(String from, String target) {
-  if (target.startsWith('package:listo_pdf/')) return 'lib/${target.substring('package:listo_pdf/'.length)}';
+  if (target.startsWith('package:fileflow/')) return 'lib/${target.substring('package:fileflow/'.length)}';
   if (target.contains(':')) return target;
   final parts = from.split('/')..removeLast();
   for (final segment in target.split('/')) {

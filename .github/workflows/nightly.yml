@@ -1,0 +1,36 @@
+name: Nightly robustness
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  fuzz:
+    runs-on: ubuntu-latest
+    env:
+      PUB_HOSTED_URL: https://pub.dev
+    defaults:
+      run:
+        working-directory: packages/pdf_engine
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - run: dart pub get
+      - run: dart run tool/make_fixtures.dart
+
+      - name: Fuzz 200 mutated PDFs (new seed every day)
+        run: dart run tool/fuzz.dart 200 "$(date +%Y%m%d)"
+
+      - name: Keep the input that broke the engine
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fuzz-failure
+          path: packages/pdf_engine/test/fixtures/fuzz/

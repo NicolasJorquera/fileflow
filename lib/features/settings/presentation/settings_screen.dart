@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../app/flavor.dart';
 import '../../../app/providers.dart';
+import '../../../app/router.dart';
 import '../../../core/domain/settings.dart';
 import '../../../design_system/theme.dart';
 import '../../../design_system/tokens.dart';
@@ -59,6 +62,14 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          if (ref.watch(flavorProvider) == Flavor.dev) ...[
+            const SizedBox(height: Space.xl),
+            ListTile(
+              leading: const Icon(Icons.bug_report_outlined),
+              title: const Text('Diagnóstico (solo dev)'),
+              onTap: () => context.push(Routes.diagnostics),
+            ),
+          ],
         ],
       ),
     );

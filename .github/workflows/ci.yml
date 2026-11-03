@@ -41,3 +41,67 @@ jobs:
 
       - name: Tests (CI goldens)
         run: flutter test
+
+      - name: Plugin Dart tests
+        working-directory: packages/platform_files
+        run: flutter test
+
+  engine:
+    runs-on: ubuntu-latest
+    env:
+      PUB_HOSTED_URL: https://pub.dev
+    defaults:
+      run:
+        working-directory: packages/pdf_engine
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - name: Dependencies
+        run: dart pub get
+
+      - name: Lockfile only references pub.dev
+        run: |
+          if grep -n "url:" pubspec.lock | grep -v "https://pub.dev"; then
+            echo "pubspec.lock references a host other than pub.dev" && exit 1
+          fi
+
+      - name: Format and analyze
+        run: |
+          dart format --output=none --set-exit-if-changed lib test tool
+          dart analyze
+
+      - name: Fixtures
+        run: dart run tool/make_fixtures.dart
+
+      - name: Engine tests (ops, robustness, compression, 1,000-task stability)
+        run: dart test
+
+  android:
+    runs-on: ubuntu-latest
+    env:
+      PUB_HOSTED_URL: https://pub.dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.47.9
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Kotlin unit tests (platform_files)
+        working-directory: android
+        run: ./gradlew :platform_files:testDebugUnitTest --console=plain

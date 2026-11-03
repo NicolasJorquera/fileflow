@@ -10,7 +10,7 @@ class AppLocalizationsPt extends AppLocalizations {
   AppLocalizationsPt([String locale = 'pt']) : super(locale);
 
   @override
-  String get appName => 'Listo PDF';
+  String get appName => 'FileFlow';
 
   @override
   String get settingsTitle => 'Configurações';

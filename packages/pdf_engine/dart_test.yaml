@@ -1,0 +1,8 @@
+# PDFium is process-global and `dart test` runs each test file in its own isolate
+# of the same process: initializing PDFium from several isolates at once crashes
+# inside FPDF_InitLibrary. One file at a time is reliable.
+concurrency: 1
+
+tags:
+  slow:
+    description: Long-running stability checks.

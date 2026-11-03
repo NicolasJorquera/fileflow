@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- Shares only files/results/ (results ready for the user), with
+             temporary read grants. Nothing else in the app is exposed. -->
+        <provider
+            android:name="io.github.nicolasjorquera.platform_files.PlatformFilesProvider"
+            android:authorities="${applicationId}.platform_files.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/platform_files_paths" />
+        </provider>
+    </application>
+</manifest>

@@ -2,12 +2,12 @@ import 'package:alchemist/alchemist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:listo_pdf/app/providers.dart';
-import 'package:listo_pdf/core/domain/settings.dart';
-import 'package:listo_pdf/design_system/theme.dart';
-import 'package:listo_pdf/features/home/presentation/home_screen.dart';
-import 'package:listo_pdf/features/settings/presentation/settings_screen.dart';
-import 'package:listo_pdf/l10n/app_localizations.dart';
+import 'package:fileflow/app/providers.dart';
+import 'package:fileflow/core/domain/settings.dart';
+import 'package:fileflow/design_system/theme.dart';
+import 'package:fileflow/features/home/presentation/home_screen.dart';
+import 'package:fileflow/features/settings/presentation/settings_screen.dart';
+import 'package:fileflow/l10n/app_localizations.dart';
 
 class _MemorySettings implements SettingsRepository {
   @override

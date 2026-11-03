@@ -10,7 +10,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Listo PDF';
+  String get appName => 'FileFlow';
 
   @override
   String get settingsTitle => 'Settings';

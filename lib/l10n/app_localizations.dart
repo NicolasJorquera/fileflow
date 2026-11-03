@@ -93,10 +93,10 @@ abstract class AppLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('es'), Locale('es', 'ES'), Locale('pt')];
 
-  /// Provisional product name, pending trademark search (Legal).
+  /// Product name. Trademark search still pending (Legal).
   ///
   /// In es, this message translates to:
-  /// **'Listo PDF'**
+  /// **'FileFlow'**
   String get appName;
 
   /// No description provided for @settingsTitle.

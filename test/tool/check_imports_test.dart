@@ -8,6 +8,11 @@ void main() {
     expect(v.single.rule, contains('pure Dart'));
   });
 
+  test('domain may import core/jobs and dart:typed_data', () {
+    final v = checkImports({'lib/core/domain/x.dart': "import '../jobs/jobs.dart';\nimport 'dart:typed_data';"});
+    expect(v, isEmpty);
+  });
+
   test('domain may import its own files and dart:async', () {
     final v = checkImports({'lib/core/domain/result.dart': "import 'failures.dart';\nimport 'dart:async';"});
     expect(v, isEmpty);
