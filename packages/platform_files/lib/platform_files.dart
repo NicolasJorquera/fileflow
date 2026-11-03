@@ -74,6 +74,17 @@ abstract interface class PlatformFilesApi {
     required int quality,
   });
 
+  /// Encodes RGBA pixels as JPEG ([png] false) or PNG straight into
+  /// [destPath] and returns the file size. PNG ignores [quality].
+  Future<int> encodeToFile({
+    required Uint8List rgba,
+    required int width,
+    required int height,
+    required bool png,
+    required int quality,
+    required String destPath,
+  });
+
   /// Documents received through "Share" from other apps, including the one
   /// that launched the app.
   Stream<List<PickedDocument>> get incoming;
@@ -146,6 +157,23 @@ class MethodChannelPlatformFiles implements PlatformFilesApi {
     'targetWidth': targetWidth,
     'targetHeight': targetHeight,
     'quality': quality,
+  });
+
+  @override
+  Future<int> encodeToFile({
+    required Uint8List rgba,
+    required int width,
+    required int height,
+    required bool png,
+    required int quality,
+    required String destPath,
+  }) => _call<int>('encodeToFile', {
+    'bytes': rgba,
+    'width': width,
+    'height': height,
+    'format': png ? 'png' : 'jpeg',
+    'quality': quality,
+    'destPath': destPath,
   });
 
   @override

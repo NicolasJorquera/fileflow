@@ -18,6 +18,21 @@ class FileFlowApp extends ConsumerStatefulWidget {
 class _FileFlowAppState extends ConsumerState<FileFlowApp> {
   late final GoRouter _router = buildRouter();
 
+  /// Results expire while the app sits in the background too.
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    _lifecycle = AppLifecycleListener(onResume: () => ref.read(purgeRecentsProvider)());
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themePreferenceProvider);

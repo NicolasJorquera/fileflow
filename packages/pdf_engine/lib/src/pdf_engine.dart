@@ -38,5 +38,15 @@ abstract interface class PdfEngine {
   /// Streams the document to [outPath]; never holds the whole output in memory.
   Future<EngineResult<void>> save(DocHandle doc, String outPath);
 
-  Future<EngineResult<RenderedPage>> render(DocHandle doc, int page, {required int widthPx});
+  /// Renders [page] on white, [widthPx] wide or at [dpi], capped at
+  /// [maxWidthPx] (height keeps the aspect ratio). Pixels are BGRA, or RGBA
+  /// for the platform codecs when [rgba] is true.
+  Future<EngineResult<RenderedPage>> render(
+    DocHandle doc,
+    int page, {
+    int? widthPx,
+    double? dpi,
+    int maxWidthPx = 4000,
+    bool rgba = false,
+  });
 }

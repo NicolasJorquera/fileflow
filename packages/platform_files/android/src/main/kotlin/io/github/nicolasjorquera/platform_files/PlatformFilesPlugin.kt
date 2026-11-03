@@ -121,6 +121,7 @@ class PlatformFilesPlugin :
                 "openWith" -> openWith(call.argument("path")!!, call.argument("mime")!!, result)
                 "freeBytes" -> result.success(StatFs(call.argument<String>("path")!!).availableBytes)
                 "encodeJpeg" -> encodeJpeg(call, result)
+                "encodeToFile" -> encodeToFile(call, result)
                 else -> result.notImplemented()
             }
         } catch (e: NullPointerException) {
@@ -377,6 +378,25 @@ class PlatformFilesPlugin :
             try {
                 val jpeg = encoder.encode(bytes, width, height, targetWidth, targetHeight, quality)
                 main.post { result.success(jpeg) }
+            } catch (e: Throwable) {
+                main.post { result.error(ErrorCodes.ENCODE_FAILED, e.javaClass.simpleName, null) }
+            }
+        }
+    }
+
+    private fun encodeToFile(call: MethodCall, result: MethodChannel.Result) {
+        val bytes = call.argument<ByteArray>("bytes")!!
+        val width = call.argument<Int>("width")!!
+        val height = call.argument<Int>("height")!!
+        val png = call.argument<String>("format")!! == "png"
+        val quality = call.argument<Int>("quality")!!
+        val dest = File(call.argument<String>("destPath")!!)
+        encoderPool.execute {
+            try {
+                val size = encoder.encodeToFile(bytes, width, height, png, quality, dest)
+                main.post { result.success(size) }
+            } catch (e: java.io.IOException) {
+                main.post { result.error(classifyIo(e), e.javaClass.simpleName, null) }
             } catch (e: Throwable) {
                 main.post { result.error(ErrorCodes.ENCODE_FAILED, e.javaClass.simpleName, null) }
             }

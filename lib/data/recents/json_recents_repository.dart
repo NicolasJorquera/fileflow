@@ -2,15 +2,17 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import '../../core/domain/files.dart';
 import '../../core/domain/recents.dart';
-import '../../core/domain/tools.dart';
 
 /// Recientes as an index file (`files/recents.json`) plus one folder per result
-/// under `files/results/<id>/<name>`. The folder keeps the user-facing name,
-/// which is what other apps see when the file is shared. Writes are atomic
-/// (temporary file + rename) so a crash never corrupts the index.
+/// under `files/results/<id>/`. Files keep their user-facing names, which is
+/// what other apps see when they are shared. Writes are atomic (temporary file
+/// + rename) so a crash never corrupts the index.
 class JsonRecentsRepository implements RecentsRepository {
   JsonRecentsRepository._(this._indexFile, this._resultsDir, this._items, this._clock);
+
+  static const _version = 2;
 
   static Future<JsonRecentsRepository> open({
     required String filesDir,
@@ -24,16 +26,18 @@ class JsonRecentsRepository implements RecentsRepository {
         final json = jsonDecode(await index.readAsString()) as Map<String, Object?>;
         items = [for (final e in json['items']! as List<Object?>) _fromJson(e! as Map<String, Object?>, resultsDir)];
       } on FormatException {
-        // A damaged index loses the list, never the app: results stay on disk
-        // until the purge or "Borrar todo" removes them.
+        items = [];
+      } on TypeError {
+        // A damaged index loses the list, never the app; the orphan sweep
+        // below then removes the files it pointed to.
         items = [];
       }
     }
-    // Drop entries whose file disappeared, and folders no entry owns: a job the
+    // Drop entries with a missing file, and folders no entry owns: a job the
     // system killed after reserving its slot (RF-08).
     items = [
       for (final i in items)
-        if (File(i.path).existsSync()) i,
+        if (i.paths.every((p) => File(p).existsSync())) i,
     ];
     final owned = {for (final i in items) i.id};
     final root = Directory(resultsDir);
@@ -68,19 +72,30 @@ class JsonRecentsRepository implements RecentsRepository {
     final id = '${_clock().microsecondsSinceEpoch}_${_counter++}';
     final dir = Directory('$_resultsDir/$id');
     await dir.create(recursive: true);
-    final safe = _uniqueName(_safe(name));
-    return ResultSlot(id: id, path: '${dir.path}/$safe', name: safe);
+    return ResultSlot(id: id, dir: dir.path, name: _uniqueName(_safe(name)));
   }
 
   @override
-  Future<RecentItem> add(ResultSlot slot, {required ToolId tool, required int pages, int? inputBytes}) async {
+  Future<RecentItem> add(
+    ResultSlot slot, {
+    required ResultKind kind,
+    required int pages,
+    int? inputBytes,
+    List<String>? files,
+  }) async {
+    final names = files ?? [slot.name];
+    var size = 0;
+    for (final f in names) {
+      size += await File('${slot.dir}/$f').length();
+    }
     final item = RecentItem(
       id: slot.id,
       name: slot.name,
-      path: slot.path,
-      tool: tool,
+      dir: slot.dir,
+      files: names,
+      kind: kind,
       pages: pages,
-      sizeBytes: await File(slot.path).length(),
+      sizeBytes: size,
       inputBytes: inputBytes,
       createdAt: _clock(),
     );
@@ -95,9 +110,10 @@ class JsonRecentsRepository implements RecentsRepository {
   @override
   Future<RecentItem> rename(String id, String newName) async {
     final item = _items.firstWhere((i) => i.id == id);
+    if (!item.isSingleFile) throw StateError('only single-file results can be renamed');
     final safe = _safe(newName);
     if (safe == item.name) return item;
-    final renamed = item.copyWith(name: safe, path: '${File(item.path).parent.path}/$safe');
+    final renamed = item.copyWith(name: safe, files: [safe]);
     await File(item.path).rename(renamed.path);
     _items = [for (final i in _items) i.id == id ? renamed : i];
     await _save();
@@ -114,11 +130,20 @@ class JsonRecentsRepository implements RecentsRepository {
     await _save();
   }
 
+  bool _expired(RecentItem i, DateTime now, Duration? period) =>
+      period != null && !now.isBefore(i.createdAt.add(period));
+
   @override
-  Future<int> purgeExpired(DateTime now, Duration ttl) async {
+  (int, int) expiring(DateTime now, Duration? period) {
+    final expired = _items.where((i) => _expired(i, now, period));
+    return (expired.length, expired.fold(0, (sum, i) => sum + i.sizeBytes));
+  }
+
+  @override
+  Future<int> purgeExpired(DateTime now, Duration? period) async {
     final expired = [
       for (final i in _items)
-        if (now.difference(i.createdAt) >= ttl) i,
+        if (_expired(i, now, period)) i,
     ];
     for (final i in expired) {
       await _deleteFolder(i.id);
@@ -126,7 +151,7 @@ class JsonRecentsRepository implements RecentsRepository {
     if (expired.isNotEmpty) {
       _items = [
         for (final i in _items)
-          if (now.difference(i.createdAt) < ttl) i,
+          if (!_expired(i, now, period)) i,
       ];
       await _save();
     }
@@ -153,7 +178,7 @@ class JsonRecentsRepository implements RecentsRepository {
     final tmp = File('${_indexFile.path}.tmp');
     await tmp.writeAsString(
       jsonEncode({
-        'version': 1,
+        'version': _version,
         'items': [for (final i in _items) _toJson(i)],
       }),
       flush: true,
@@ -162,12 +187,7 @@ class JsonRecentsRepository implements RecentsRepository {
     _changes.add(current);
   }
 
-  /// Names come from people and other apps: keep them readable, never a path.
-  static String _safe(String name) {
-    var s = name.replaceAll(RegExp(r'[/\\:*?"<>|\x00-\x1f]'), '_').trim();
-    if (s.isEmpty) s = 'documento.pdf';
-    return s.length > 120 ? s.substring(0, 120) : s;
-  }
+  static String _safe(String name) => safeFileName(name);
 
   /// «Documento unido.pdf», «Documento unido (2).pdf»… among current results.
   String _uniqueName(String name) {
@@ -184,18 +204,23 @@ class JsonRecentsRepository implements RecentsRepository {
   static Map<String, Object?> _toJson(RecentItem i) => {
     'id': i.id,
     'name': i.name,
-    'tool': i.tool.name,
+    'files': i.files,
+    'kind': i.kind.name,
     'pages': i.pages,
     'sizeBytes': i.sizeBytes,
     'inputBytes': i.inputBytes,
     'createdAt': i.createdAt.toUtc().toIso8601String(),
   };
 
+  /// Version 1 (H4) had one file named like the item and only merge results.
   static RecentItem _fromJson(Map<String, Object?> j, String resultsDir) => RecentItem(
     id: j['id']! as String,
     name: j['name']! as String,
-    path: '$resultsDir/${j['id']}/${j['name']}',
-    tool: ToolId.values.byName(j['tool']! as String),
+    dir: '$resultsDir/${j['id']}',
+    files: [
+      for (final f in (j['files'] as List<Object?>?) ?? [j['name']]) f! as String,
+    ],
+    kind: ResultKind.values.asNameMap()[j['kind']] ?? ResultKind.merged,
     pages: j['pages']! as int,
     sizeBytes: j['sizeBytes']! as int,
     inputBytes: j['inputBytes'] as int?,

@@ -13,14 +13,15 @@ import '../../../../design_system/tokens.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../shared/failure_text.dart';
 import '../../../shared/processing_screen.dart';
+import '../../shared/presentation/tool_args.dart';
 import 'merge_controller.dart';
 
 /// Unir en uno solo (UX v1.0): instruction, numbered list, «Agregar PDF»,
 /// summary and the button that says what will happen.
 class MergeScreen extends ConsumerStatefulWidget {
-  const MergeScreen({super.key, this.args = const MergeArgs()});
+  const MergeScreen({super.key, this.args = const ToolArgs()});
 
-  final MergeArgs args;
+  final ToolArgs args;
 
   @override
   ConsumerState<MergeScreen> createState() => _MergeScreenState();

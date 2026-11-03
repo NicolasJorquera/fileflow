@@ -98,6 +98,35 @@ void main() {
     }
   });
 
+  test('render by dpi follows the page size and stops at the width cap', () async {
+    final doc = ok(await engine.open(fixture('text_50p.pdf')));
+    try {
+      final a4 = ok(await engine.render(doc, 0, dpi: 150));
+      expect(a4.width, closeTo(595.28 * 150 / 72, 1), reason: 'A4 at 150 dpi');
+      expect(a4.height / a4.width, closeTo(841.89 / 595.28, 0.01));
+      final capped = ok(await engine.render(doc, 0, dpi: 600, maxWidthPx: 4000));
+      expect(capped.width, 4000);
+    } finally {
+      await engine.close(doc);
+    }
+  });
+
+  test('render can hand RGBA to the platform codecs', () async {
+    final doc = ok(await engine.open(fixture('scan_color_10p.pdf')));
+    try {
+      final bgra = ok(await engine.render(doc, 0, widthPx: 200)).pixels.materialize().asUint8List();
+      final rgba = ok(await engine.render(doc, 0, widthPx: 200, rgba: true)).pixels.materialize().asUint8List();
+      var differing = 0;
+      for (var i = 0; i < bgra.length; i += 4) {
+        expect([rgba[i], rgba[i + 1], rgba[i + 2], rgba[i + 3]], [bgra[i + 2], bgra[i + 1], bgra[i], bgra[i + 3]]);
+        if (bgra[i] != bgra[i + 2]) differing++;
+      }
+      expect(differing, greaterThan(0), reason: 'the page must have colour for this check to mean anything');
+    } finally {
+      await engine.close(doc);
+    }
+  });
+
   test('saving where it cannot write is writeFailed and leaves no file', () async {
     final doc = ok(await engine.open(fixture('text_50p.pdf')));
     try {

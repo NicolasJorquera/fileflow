@@ -3,6 +3,19 @@ import 'dart:typed_data';
 import '../jobs/jobs.dart';
 import 'result.dart';
 
+/// Names come from people and other apps: keep them readable, never a path.
+String safeFileName(String name, {String fallback = 'documento.pdf'}) {
+  var s = name.replaceAll(RegExp(r'[/\\:*?"<>|\x00-\x1f]'), '_').trim();
+  if (s.isEmpty) s = fallback;
+  return s.length > 120 ? s.substring(0, 120) : s;
+}
+
+/// [name] without its extension: «contrato.pdf» → «contrato».
+String fileStem(String name) {
+  final dot = name.lastIndexOf('.');
+  return dot > 0 ? name.substring(0, dot) : name;
+}
+
 /// A document the user chose or shared to the app, not yet copied in.
 /// [ref] is opaque (a content URI on Android).
 class PickedFile {
@@ -67,7 +80,16 @@ abstract interface class FileGateway {
   Stream<List<PickedFile>> incomingShares();
 }
 
-/// JPEG with the platform codec.
+enum ImageFormat {
+  jpeg('jpg'),
+  png('png');
+
+  const ImageFormat(this.extension);
+
+  final String extension;
+}
+
+/// Image encoding with the platform codec.
 abstract interface class ImageCodec {
   Future<Result<Uint8List>> encodeJpeg({
     required Uint8List rgba,
@@ -76,5 +98,16 @@ abstract interface class ImageCodec {
     required int targetWidth,
     required int targetHeight,
     required int quality,
+  });
+
+  /// Writes RGBA pixels to [path] as [format] and returns the file size.
+  /// [quality] applies to JPEG only.
+  Future<Result<int>> writeImage({
+    required Uint8List rgba,
+    required int width,
+    required int height,
+    required ImageFormat format,
+    required int quality,
+    required String path,
   });
 }

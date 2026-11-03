@@ -359,23 +359,31 @@ bool wReplaceImage((int, int, int, TransferableTypedData) args) {
   });
 }
 
-RenderedPage wRender((int, int, int) args) {
-  final (doc, index, widthPx) = args;
+/// Renders a page at [widthPx], or at [dpi] (points × dpi / 72) when
+/// [widthPx] is 0, never wider than [maxWidthPx]. BGRA unless [rgba].
+RenderedPage wRender((int, int, int, double, int, bool) args) {
+  final (doc, index, requestedWidth, dpi, maxWidthPx, rgba) = args;
   final page = _page(doc, index);
   try {
     final pw = _pdfium.FPDF_GetPageWidthF(page), ph = _pdfium.FPDF_GetPageHeightF(page);
+    final widthPx = (requestedWidth > 0 ? requestedWidth : (pw * dpi / 72).round()).clamp(1, maxWidthPx);
     final heightPx = (widthPx * ph / pw).round().clamp(1, 20000);
     final bitmap = _pdfium.FPDFBitmap_CreateEx(widthPx, heightPx, fp.FPDFBitmap_BGRA, nullptr, 0);
     if (bitmap == nullptr) throw EngineException(EngineErrorCode.internal, 'bitmap alloc');
     try {
       _pdfium.FPDFBitmap_FillRect(bitmap, 0, 0, widthPx, heightPx, 0xFFFFFFFF);
-      const annotations = 0x01;
-      _pdfium.FPDF_RenderPageBitmap(bitmap, page, 0, 0, widthPx, heightPx, 0, annotations);
+      const annotations = 0x01, reverseByteOrder = 0x10;
+      final flags = annotations | (rgba ? reverseByteOrder : 0);
+      _pdfium.FPDF_RenderPageBitmap(bitmap, page, 0, 0, widthPx, heightPx, 0, flags);
       final stride = _pdfium.FPDFBitmap_GetStride(bitmap);
       final bytes = _pdfium.FPDFBitmap_GetBuffer(bitmap).cast<Uint8>().asTypedList(stride * heightPx);
-      final packed = Uint8List(widthPx * heightPx * 4);
+      final row = widthPx * 4;
+      if (stride == row) {
+        return RenderedPage(width: widthPx, height: heightPx, pixels: TransferableTypedData.fromList([bytes]));
+      }
+      final packed = Uint8List(row * heightPx);
       for (var y = 0; y < heightPx; y++) {
-        packed.setRange(y * widthPx * 4, (y + 1) * widthPx * 4, bytes, y * stride);
+        packed.setRange(y * row, (y + 1) * row, bytes, y * stride);
       }
       return RenderedPage(width: widthPx, height: heightPx, pixels: TransferableTypedData.fromList([packed]));
     } finally {

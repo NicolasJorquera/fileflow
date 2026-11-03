@@ -62,7 +62,7 @@ class RgbaImage {
   final TransferableTypedData pixels;
 }
 
-/// BGRA pixels of a rendered page (white background).
+/// Pixels of a rendered page on white: BGRA, or RGBA when asked for.
 class RenderedPage {
   const RenderedPage({required this.width, required this.height, required this.pixels});
 
