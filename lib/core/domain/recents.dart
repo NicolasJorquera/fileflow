@@ -7,7 +7,10 @@ enum ResultKind {
   edited(ToolId.organize),
   extracted(ToolId.organize),
   split(ToolId.organize),
-  images(ToolId.pdfToImage);
+  images(ToolId.pdfToImage),
+  reduced(ToolId.reduce),
+  scanned(ToolId.scan),
+  photos(ToolId.imagesToPdf);
 
   const ResultKind(this.tool);
 
@@ -31,6 +34,7 @@ class RecentItem {
     required this.sizeBytes,
     required this.createdAt,
     this.inputBytes,
+    this.targetBytes,
   });
 
   final String id;
@@ -52,7 +56,13 @@ class RecentItem {
 
   /// Total size of what went in, for «antes → después».
   final int? inputBytes;
+
+  /// «Ajustar a X MB»: the size asked for. The result met it when
+  /// [sizeBytes] is not above it.
+  final int? targetBytes;
   final DateTime createdAt;
+
+  bool get metTarget => targetBytes == null || sizeBytes <= targetBytes!;
 
   /// The first (usually the only) file.
   String get path => '$dir/${files.first}';
@@ -68,6 +78,7 @@ class RecentItem {
     pages: pages,
     sizeBytes: sizeBytes,
     inputBytes: inputBytes,
+    targetBytes: targetBytes,
     createdAt: createdAt,
   );
 
@@ -104,6 +115,7 @@ abstract interface class RecentsRepository {
     required ResultKind kind,
     required int pages,
     int? inputBytes,
+    int? targetBytes,
     List<String>? files,
   });
 

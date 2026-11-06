@@ -61,6 +61,12 @@ final class ScannerUnavailable extends AppFailure {
 
 enum ScannerIssue { moduleNotDownloaded, deviceNotSupported }
 
+/// RN-03: reducing would not make the file smaller. Not an error: the result
+/// screen says «Este PDF ya está optimizado» and no file is created.
+final class AlreadyOptimized extends AppFailure {
+  const AlreadyOptimized();
+}
+
 /// The user cancelled the job; not shown as an error.
 final class Cancelled extends AppFailure {
   const Cancelled();

@@ -8,6 +8,8 @@ import '../features/shared/result_screen.dart';
 import '../features/recents/presentation/recents_screen.dart';
 import '../features/tools/merge/presentation/merge_screen.dart';
 import '../features/tools/organize/presentation/organize_screen.dart';
+import '../features/tools/photos/presentation/photos_screen.dart';
+import '../features/tools/reduce/presentation/reduce_screen.dart';
 import '../features/tools/shared/presentation/tool_args.dart';
 import '../features/tools/to_image/presentation/to_image_screen.dart';
 
@@ -18,6 +20,8 @@ abstract final class Routes {
   static const settings = '/settings';
   static const recents = '/recents';
   static const merge = '/merge';
+  static const reduce = '/reduce';
+  static const photos = '/photos';
   static const organize = '/organize';
   static const toImage = '/to-image';
 
@@ -40,6 +44,14 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
         GoRoute(
           path: 'merge',
           builder: (context, state) => MergeScreen(args: _args(state)),
+        ),
+        GoRoute(
+          path: 'reduce',
+          builder: (context, state) => ReduceScreen(args: _args(state)),
+        ),
+        GoRoute(
+          path: 'photos',
+          builder: (context, state) => PhotosScreen(args: _args(state)),
         ),
         GoRoute(
           path: 'organize',

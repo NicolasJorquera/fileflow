@@ -100,6 +100,18 @@ abstract interface class ImageCodec {
     required int quality,
   });
 
+  /// Decodes the photo at [src] scaled to fit [maxWidth] × [maxHeight],
+  /// upright (EXIF orientation plus [quarterTurns]), and writes it as JPEG to
+  /// [dest]. Returns its size in pixels, or ImagesUnreadable(1).
+  Future<Result<(int, int)>> preparePhoto({
+    required String src,
+    required String dest,
+    required int maxWidth,
+    required int maxHeight,
+    required int quality,
+    int quarterTurns = 0,
+  });
+
   /// Writes RGBA pixels to [path] as [format] and returns the file size.
   /// [quality] applies to JPEG only.
   Future<Result<int>> writeImage({

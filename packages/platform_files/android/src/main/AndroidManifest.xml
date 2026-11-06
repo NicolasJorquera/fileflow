@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Normal permission (granted at install): only to tell E-SCAN-01 apart
+         when the scanner module is missing. No network access is made. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application>
         <!-- Shares only files/results/ (results ready for the user), with
              temporary read grants. Nothing else in the app is exposed. -->

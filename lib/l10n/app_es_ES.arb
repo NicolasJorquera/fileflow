@@ -3,5 +3,8 @@
   "privacyNote": "Todo se procesa en tu móvil. Funciona sin conexión.",
   "recentsNote": "Queda en Recientes durante {period}. Usa «Guardar en…» para conservarlo en tu móvil.",
   "errNoSpaceGeneric": "No hay espacio suficiente en el móvil.",
-  "resolutionHelp": "150 ppp: se ve bien en pantalla y en WhatsApp. 300 ppp: para imprimir."
+  "resolutionHelp": "150 ppp: se ve bien en pantalla y en WhatsApp. 300 ppp: para imprimir.",
+  "scanOfflineBody": "Tu móvil descarga el escáner una sola vez. Después funciona sin internet. Mientras tanto, puedes crear un PDF con fotos que ya tengas.",
+  "scanUnsupportedTitle": "El escáner no está disponible en este móvil",
+  "pageOficio": "Folio (216 × 330 mm)"
 }

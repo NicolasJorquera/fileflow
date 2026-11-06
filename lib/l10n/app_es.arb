@@ -603,5 +603,297 @@
         "type": "int"
       }
     }
+  },
+  "add": "Agregar",
+  "before": "Antes",
+  "after": "Ahora",
+  "beforeAfter": "{before} → {after} · {percent} % menos",
+  "@beforeAfter": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "after": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "alreadyOptimizedTitle": "Este PDF ya está optimizado",
+  "alreadyOptimizedBody": "Reducirlo no lo haría más liviano, así que no creamos un archivo nuevo. Tu original sirve tal cual.",
+  "choosePhotos": "Elegir fotos",
+  "createPdfButton": "{count, plural, =0{Crear PDF} one{Crear PDF · 1 página} other{Crear PDF · {count} páginas}}",
+  "@createPdfButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "levelHigh": "Alta",
+  "levelHighHelp": "Para imprimir o ampliar. Reduce menos.",
+  "levelBalanced": "Equilibrada",
+  "levelBalancedHelp": "Se lee bien en pantalla y al imprimir.",
+  "levelMinimal": "Mínima",
+  "levelMinimalHelp": "El archivo más liviano; las fotos pierden detalle.",
+  "margins": "Márgenes",
+  "marginNone": "Sin margen",
+  "marginSmall": "Pequeño",
+  "namePhotos": "Fotos {stamp}",
+  "@namePhotos": {
+    "placeholders": {
+      "stamp": {
+        "type": "String"
+      }
+    }
+  },
+  "nameReduced": "{stem} (reducido)",
+  "@nameReduced": {
+    "placeholders": {
+      "stem": {
+        "type": "String"
+      }
+    }
+  },
+  "nameScan": "Escaneo {stamp}",
+  "@nameScan": {
+    "placeholders": {
+      "stamp": {
+        "type": "String"
+      }
+    }
+  },
+  "nextReduce": "Ajustar tamaño",
+  "originalUnchanged": "Tu archivo original no cambia.",
+  "pageSize": "Tamaño de página",
+  "pageAuto": "Automático",
+  "pageAutoNamed": "Automático ({name})",
+  "@pageAutoNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pageAutoShort": "{name} · automático",
+  "@pageAutoShort": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pageLetter": "Carta",
+  "pageOficio": "Oficio (216 × 330 mm)",
+  "pageFitImage": "Ajustar a la foto",
+  "pageFitImageHelp": "Cada página mide lo que la foto",
+  "photoQuality": "Calidad",
+  "photoLabel": "Foto {position} de {count}",
+  "@photoLabel": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photoLabelUnreadable": "Foto {position} de {count}, no se pudo leer",
+  "@photoLabelUnreadable": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photoRemoved": "Se quitó la foto {position}",
+  "@photoRemoved": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "photoUnreadable": "No se pudo leer",
+  "rotatePhoto": "Girar foto {position}",
+  "@rotatePhoto": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "removePhoto": "Quitar foto {position}",
+  "@removePhoto": {
+    "placeholders": {
+      "position": {
+        "type": "int"
+      }
+    }
+  },
+  "photosCount": "{count, plural, one{1 foto} other{{count} fotos}} · mantén presionada una foto para moverla",
+  "@photosCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photosEmpty": "Elige las fotos que quieres juntar en un PDF.",
+  "photosEstimate": "Tamaño estimado: unos {size}",
+  "@photosEstimate": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "photosSkipped": "{count, plural, one{Se omite 1 foto que no se pudo leer.} other{Se omiten {count} fotos que no se pudieron leer.}}",
+  "@photosSkipped": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "photosTooMany": "Puedes juntar hasta {max} fotos en un PDF.",
+  "@photosTooMany": {
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "processingFit": "Ajustando a {size}…",
+  "@processingFit": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "processingReduce": "Reduciendo…",
+  "processingPhotos": "Creando el PDF…",
+  "reduceEmpty": "Elige el PDF que quieres hacer más liviano.",
+  "reduceHasImages": "Tiene imágenes: se puede reducir bastante",
+  "reduceTextOnly": "Este PDF es casi todo texto: la reducción será pequeña",
+  "reduceBig": "Es un archivo grande: puede tardar unos minutos.",
+  "reduceTooBig": "Este PDF supera el máximo ({pages} páginas o {size}). Sepáralo en partes y reduce cada una.",
+  "@reduceTooBig": {
+    "placeholders": {
+      "pages": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "reduceSplitInstead": "Separar en partes",
+  "reduceHow": "¿Cómo quieres reducirlo?",
+  "reduceModeSize": "Tamaño máximo",
+  "reduceModeQuality": "Calidad",
+  "reduceSizeHelp": "El límite que pide el portal o el correo",
+  "reduceOther": "Otro…",
+  "reduceOtherTitle": "Tamaño máximo",
+  "reduceOtherLabel": "Megabytes",
+  "reduceSizeExplain": "Buscamos la mejor calidad que quepa en {size}. Si no se puede, te mostramos el resultado más cercano y te lo decimos.",
+  "@reduceSizeExplain": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "reduceExpected": "Resultado",
+  "reduceExpectedSize": "Tamaño",
+  "reduceExpectedUnder": "{before} → máximo {target}",
+  "@reduceExpectedUnder": {
+    "placeholders": {
+      "before": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "reduceSelectableText": "Texto seleccionable",
+  "reduceKept": "Se conserva",
+  "reduceToButton": "Reducir a {size}",
+  "@reduceToButton": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "reduceButton": "Reducir",
+  "resultReduced": "Reducido un {percent} %",
+  "@resultReduced": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "resultUnder": "Quedó bajo {target}",
+  "@resultUnder": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "resultMissed": "Quedó en {size}: no alcanzó {target}",
+  "@resultMissed": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "resultMissedHint": "Es lo más liviano que se pudo sin dañar el texto. Separa el documento en partes y reduce cada una.",
+  "resultScanned": "Escaneo listo",
+  "resultPhotos": "{count, plural, one{PDF creado con 1 foto} other{PDF creado con {count} fotos}}",
+  "@resultPhotos": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "scanTitle": "Escanear documento",
+  "scanSubtitle": "Recorte automático y varias páginas",
+  "scanButton": "Escanear",
+  "scanOfflineTitle": "El escáner necesita conexión la primera vez",
+  "scanOfflineBody": "Tu teléfono descarga el escáner una sola vez. Después funciona sin internet. Mientras tanto, puedes crear un PDF con fotos que ya tengas.",
+  "scanUnsupportedTitle": "El escáner no está disponible en este teléfono",
+  "scanUnsupportedBody": "Necesita Google Play services y al menos 1,7 GB de memoria. Puedes sacar fotos con la cámara y crear un PDF con ellas.",
+  "scanUsePhotos": "Crear PDF con fotos",
+  "understood": "Entendido",
+  "tagReduced": "Reducido",
+  "tagScanned": "Escaneo",
+  "tagPhotos": "Fotos a PDF",
+  "toolReduceTitle": "Reducir tamaño",
+  "toolReduceSubtitle": "Deja tu PDF bajo 1, 2 o 10 MB para subirlo donde te lo piden",
+  "toolPhotosTitle": "Fotos a PDF",
+  "toolPhotosSubtitle": "JPG, PNG, HEIC",
+  "errImagesUnreadable": "{count, plural, one{No pudimos leer esa foto. Puede estar dañada o en un formato que el teléfono no abre.} other{No pudimos leer {count} fotos. Pueden estar dañadas o en un formato que el teléfono no abre.}}",
+  "@errImagesUnreadable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

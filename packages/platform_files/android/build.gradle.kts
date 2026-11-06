@@ -75,5 +75,9 @@ dependencies {
     implementation("androidx.core:core:1.13.1")
     // Photo Picker contracts (PickVisualMedia), backported by Google Play services.
     implementation("androidx.activity:activity:1.9.3")
+    // EXIF orientation of photos, HEIF included (Apache-2.0).
+    implementation("androidx.exifinterface:exifinterface:1.3.7")
+    // ML Kit document scanner; runs inside Google Play services (no camera permission).
+    implementation("com.google.android.gms:play-services-mlkit-document-scanner:16.0.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test")
 }

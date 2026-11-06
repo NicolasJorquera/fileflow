@@ -69,7 +69,10 @@ class PlatformFilesPlugin :
         class SaveAs(result: MethodChannel.Result, val src: String) : Pending(result)
         class SaveAll(result: MethodChannel.Result, val sources: List<String>, val names: List<String>, val mime: String) :
             Pending(result)
+        class Scan(result: MethodChannel.Result, val destPath: String) : Pending(result)
     }
+
+    private val scanner by lazy { DocumentScanner(context) }
 
     // region Flutter lifecycle
 
@@ -122,6 +125,14 @@ class PlatformFilesPlugin :
                 "freeBytes" -> result.success(StatFs(call.argument<String>("path")!!).availableBytes)
                 "encodeJpeg" -> encodeJpeg(call, result)
                 "encodeToFile" -> encodeToFile(call, result)
+                "prepareImage" -> prepareImage(call, result)
+                "deviceMemory" -> result.success(scanner.totalMemory())
+                "scannerStatus" -> scanner.status { result.success(it) }
+                "prepareScanner" -> {
+                    scanner.prepare()
+                    result.success(null)
+                }
+                "scanDocument" -> scanDocument(call.argument("maxPages")!!, call.argument("destPath")!!, result)
                 else -> result.notImplemented()
             }
         } catch (e: NullPointerException) {
@@ -178,7 +189,7 @@ class PlatformFilesPlugin :
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-        if (requestCode !in REQUEST_DOCUMENTS..REQUEST_SAVE_ALL) return false
+        if (requestCode !in REQUEST_DOCUMENTS..REQUEST_SCAN) return false
         val request = pending ?: return true
         pending = null
         val ok = resultCode == Activity.RESULT_OK && data != null
@@ -199,6 +210,10 @@ class PlatformFilesPlugin :
             is Pending.SaveAll -> {
                 val tree = data?.data
                 if (!ok || tree == null) request.result.success(null) else writeAll(tree, request)
+            }
+            is Pending.Scan -> {
+                val scanned = scanner.parse(resultCode, data)
+                if (scanned == null) request.result.success(null) else copyScan(scanned, request)
             }
         }
         return true
@@ -403,6 +418,59 @@ class PlatformFilesPlugin :
         }
     }
 
+    // region Photos and scanner
+
+    private fun prepareImage(call: MethodCall, result: MethodChannel.Result) {
+        val src = File(call.argument<String>("srcPath")!!)
+        val dest = File(call.argument<String>("destPath")!!)
+        val maxWidth = call.argument<Int>("maxWidth")!!
+        val maxHeight = call.argument<Int>("maxHeight")!!
+        val quality = call.argument<Int>("quality")!!
+        val turns = call.argument<Int>("quarterTurns") ?: 0
+        // One photo at a time per lane: a decoded 12 MP photo is ~48 MB.
+        encoderPool.execute {
+            try {
+                val size = ImagePreparer.prepare(src, dest, maxWidth, maxHeight, quality, turns)
+                main.post { result.success(listOf(size[0], size[1])) }
+            } catch (e: ImageUnreadable) {
+                main.post { result.error(ErrorCodes.IMAGE_UNREADABLE, "unreadable", null) }
+            } catch (e: OutOfMemoryError) {
+                main.post { result.error(ErrorCodes.IMAGE_UNREADABLE, "out of memory", null) }
+            } catch (e: java.io.IOException) {
+                main.post { result.error(classifyIo(e), e.javaClass.simpleName, null) }
+            }
+        }
+    }
+
+    private fun scanDocument(maxPages: Int, destPath: String, result: MethodChannel.Result) {
+        val a = activity ?: return result.error(ErrorCodes.IO, "no activity", null)
+        if (pending != null) return result.error(ErrorCodes.BUSY, "another picker is open", null)
+        val request = Pending.Scan(result, destPath)
+        pending = request
+        scanner.start(a, maxPages, REQUEST_SCAN) { code ->
+            if (pending === request) pending = null
+            result.error(code, code, null)
+        }
+    }
+
+    /** Copies the scanner's PDF out of Google Play services' cache into the result slot. */
+    private fun copyScan(scanned: Pair<Uri, Int>, request: Pending.Scan) {
+        io.execute {
+            val dest = File(request.destPath)
+            try {
+                context.contentResolver.openInputStream(scanned.first).use { input ->
+                    FileOutputStream(dest).use { out -> copyStream(input!!, out) }
+                }
+                main.post { request.result.success(scanned.second) }
+            } catch (e: Exception) {
+                dest.delete()
+                main.post { request.result.error(classifyIo(e), e.javaClass.simpleName, null) }
+            }
+        }
+    }
+
+    // endregion
+
     companion object {
         const val CHANNEL = "io.github.nicolasjorquera.platform_files"
         private const val HANDLED = "io.github.nicolasjorquera.platform_files.HANDLED"
@@ -410,5 +478,6 @@ class PlatformFilesPlugin :
         private const val REQUEST_IMAGES = 0x4F11
         private const val REQUEST_SAVE_AS = 0x4F12
         private const val REQUEST_SAVE_ALL = 0x4F13
+        private const val REQUEST_SCAN = 0x4F14
     }
 }

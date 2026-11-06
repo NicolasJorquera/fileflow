@@ -9,9 +9,10 @@ import '../../../design_system/theme.dart';
 import '../../../design_system/tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../tools/registry.dart';
+import '../../tools/scan/presentation/scan_action.dart';
 
-/// Inicio: privacy line, the tools available so far and the latest results.
-/// The scan card and the ad slot arrive in H6 and H9.
+/// Inicio: the scan card, privacy line, the tools and the latest results.
+/// The ad slot arrives in H9.
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -46,6 +47,8 @@ class HomeScreen extends ConsumerWidget {
             ),
             const SizedBox(height: Space.l),
           ],
+          const _ScanCard(),
+          const SizedBox(height: Space.m),
           Row(
             children: [
               Icon(Icons.verified_user_outlined, size: 16, color: palette.success),
@@ -190,6 +193,48 @@ class _Notice extends StatelessWidget {
               child: Text(text, style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.fg)),
             ),
             IconButton(tooltip: closeLabel, icon: const Icon(Icons.close), onPressed: onClose),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The main action (UX v1.0): scanning is what most people come for.
+class _ScanCard extends ConsumerWidget {
+  const _ScanCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final text = Theme.of(context).textTheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(color: palette.primarySoft, borderRadius: BorderRadius.circular(Radii.hero)),
+      child: Padding(
+        padding: const EdgeInsets.all(Space.l),
+        child: Row(
+          children: [
+            Icon(Icons.document_scanner_outlined, size: 36, color: palette.primary),
+            const SizedBox(width: Space.l),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    l10n.scanTitle,
+                    style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: palette.fg),
+                  ),
+                  Text(l10n.scanSubtitle, style: text.bodySmall?.copyWith(color: palette.fg)),
+                ],
+              ),
+            ),
+            const SizedBox(width: Space.s),
+            FilledButton(
+              style: FilledButton.styleFrom(minimumSize: const Size(0, Touch.minTarget)),
+              onPressed: () => startScan(context, ref),
+              child: Text(l10n.scanButton),
+            ),
           ],
         ),
       ),

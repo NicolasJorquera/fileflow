@@ -34,6 +34,9 @@ class PlatformFilesException implements Exception {
   static const busy = 'busy';
   static const noApp = 'no_app';
   static const notImplemented = 'not_implemented';
+  static const imageUnreadable = 'image_unreadable';
+  static const scannerModuleMissing = 'scanner_module_missing';
+  static const scannerUnsupported = 'scanner_unsupported';
 
   final String code;
 
@@ -84,6 +87,35 @@ abstract interface class PlatformFilesApi {
     required int quality,
     required String destPath,
   });
+
+  /// Decodes a photo scaled to fit [maxWidth] × [maxHeight], turns it upright
+  /// (EXIF orientation plus [quarterTurns]) and writes it as JPEG to
+  /// [destPath]. Returns the written size. Throws [PlatformFilesException.imageUnreadable] for photos
+  /// the device cannot decode.
+  Future<(int, int)> prepareImage({
+    required String srcPath,
+    required String destPath,
+    required int maxWidth,
+    required int maxHeight,
+    required int quality,
+    int quarterTurns = 0,
+  });
+
+  /// Total RAM of the device in bytes.
+  Future<int> deviceMemory();
+
+  /// `ready`, `needsDownload`, `offline` (module missing and no connection)
+  /// or `unsupported` (DocumentScanner on Android).
+  Future<String> scannerStatus();
+
+  /// Asks Google Play services to download the scanner module when it can.
+  Future<void> prepareScanner();
+
+  /// Opens the document scanner and copies the scanned PDF to [destPath].
+  /// Returns its page count, or null when the user cancels. Throws
+  /// [PlatformFilesException.scannerModuleMissing] or
+  /// [PlatformFilesException.scannerUnsupported] when it cannot start.
+  Future<int?> scanDocument({required int maxPages, required String destPath});
 
   /// Documents received through "Share" from other apps, including the one
   /// that launched the app.
@@ -175,6 +207,39 @@ class MethodChannelPlatformFiles implements PlatformFilesApi {
     'quality': quality,
     'destPath': destPath,
   });
+
+  @override
+  Future<(int, int)> prepareImage({
+    required String srcPath,
+    required String destPath,
+    required int maxWidth,
+    required int maxHeight,
+    required int quality,
+    int quarterTurns = 0,
+  }) async {
+    final size = await _call<List<Object?>>('prepareImage', {
+      'srcPath': srcPath,
+      'destPath': destPath,
+      'maxWidth': maxWidth,
+      'maxHeight': maxHeight,
+      'quality': quality,
+      'quarterTurns': quarterTurns,
+    });
+    return (size[0]! as int, size[1]! as int);
+  }
+
+  @override
+  Future<int> deviceMemory() => _call<int>('deviceMemory');
+
+  @override
+  Future<String> scannerStatus() => _call<String>('scannerStatus');
+
+  @override
+  Future<void> prepareScanner() => _call<void>('prepareScanner');
+
+  @override
+  Future<int?> scanDocument({required int maxPages, required String destPath}) =>
+      _call<int?>('scanDocument', {'maxPages': maxPages, 'destPath': destPath});
 
   @override
   Stream<List<PickedDocument>> get incoming => _incoming.receiveBroadcastStream().map(_docs);

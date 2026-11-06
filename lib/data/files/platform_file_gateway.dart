@@ -31,6 +31,7 @@ class PlatformFileGateway implements FileGateway, ImageCodec {
         PlatformFilesException.noSpace => InsufficientStorage(requiredBytes),
         PlatformFilesException.cancelled => const Cancelled(),
         PlatformFilesException.noApp => const NoAppAvailable(),
+        PlatformFilesException.imageUnreadable => const ImagesUnreadable(1),
         _ => Unexpected('platform_files:${e.code}'),
       });
     }
@@ -100,8 +101,14 @@ class PlatformFileGateway implements FileGateway, ImageCodec {
   Future<Result<void>> openWith(LocalFile file) =>
       _guard(() => _api.openWith(path: file.path, mime: _mimeOf(file.path)));
 
+  /// One native subscription shared by every listener: the event channel has
+  /// a single sink, so a second subscription would take it from the first.
+  late final Stream<List<PickedFile>> _incoming = _api.incoming
+      .map((docs) => docs.map(_map).toList())
+      .asBroadcastStream();
+
   @override
-  Stream<List<PickedFile>> incomingShares() => _api.incoming.map((docs) => docs.map(_map).toList());
+  Stream<List<PickedFile>> incomingShares() => _incoming;
 
   @override
   Future<Result<Uint8List>> encodeJpeg({
@@ -119,6 +126,25 @@ class PlatformFileGateway implements FileGateway, ImageCodec {
       targetWidth: targetWidth,
       targetHeight: targetHeight,
       quality: quality,
+    ),
+  );
+
+  @override
+  Future<Result<(int, int)>> preparePhoto({
+    required String src,
+    required String dest,
+    required int maxWidth,
+    required int maxHeight,
+    required int quality,
+    int quarterTurns = 0,
+  }) => _guard(
+    () => _api.prepareImage(
+      srcPath: src,
+      destPath: dest,
+      maxWidth: maxWidth,
+      maxHeight: maxHeight,
+      quality: quality,
+      quarterTurns: quarterTurns,
     ),
   );
 

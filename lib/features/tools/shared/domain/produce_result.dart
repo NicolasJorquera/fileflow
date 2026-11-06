@@ -25,6 +25,7 @@ JobBody produceResult({
   required String name,
   required ResultKind kind,
   int? inputBytes,
+  int? targetBytes,
   required Future<Result<Written>> Function(ResultSlot slot, CancelToken token, void Function(int, int) progress) write,
 }) => (token) {
   final events = StreamController<JobEvent>();
@@ -38,6 +39,7 @@ JobBody produceResult({
           kind: kind,
           pages: value.pages,
           inputBytes: inputBytes,
+          targetBytes: targetBytes,
           files: value.files,
         );
         events.add(JobCompleted(item));
