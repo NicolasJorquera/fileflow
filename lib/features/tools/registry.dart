@@ -19,6 +19,7 @@ class ToolEntry {
     required this.title,
     required this.subtitle,
     required this.nextStep,
+    this.takesPdf = true,
   });
 
   final ToolId id;
@@ -29,9 +30,23 @@ class ToolEntry {
 
   /// Label as a next step for a PDF result («Unir con otro PDF»).
   final String Function(AppLocalizations) nextStep;
+
+  /// Whether it works on a PDF (offered as a next step and in «Usar en otra
+  /// herramienta»). Fotos a PDF takes photos instead.
+  final bool takesPdf;
 }
 
+/// In Inicio's order (approved canvas). Escanear has its own card above.
 final tools = <ToolEntry>[
+  ToolEntry(
+    id: ToolId.reduce,
+    icon: Icons.compress,
+    tint: ToolTint.reduce,
+    route: Routes.reduce,
+    title: (l10n) => l10n.toolReduceTitle,
+    subtitle: (l10n) => l10n.toolReduceSubtitle,
+    nextStep: (l10n) => l10n.nextReduce,
+  ),
   ToolEntry(
     id: ToolId.merge,
     icon: Icons.merge_type,
@@ -40,6 +55,16 @@ final tools = <ToolEntry>[
     title: (l10n) => l10n.toolMergeTitle,
     subtitle: (l10n) => l10n.toolMergeSubtitle,
     nextStep: (l10n) => l10n.nextMergeAnother,
+  ),
+  ToolEntry(
+    id: ToolId.imagesToPdf,
+    icon: Icons.photo_library_outlined,
+    tint: ToolTint.photos,
+    route: Routes.photos,
+    title: (l10n) => l10n.toolPhotosTitle,
+    subtitle: (l10n) => l10n.toolPhotosSubtitle,
+    nextStep: (l10n) => l10n.toolPhotosTitle,
+    takesPdf: false,
   ),
   ToolEntry(
     id: ToolId.organize,
@@ -61,6 +86,9 @@ final tools = <ToolEntry>[
   ),
 ];
 
+/// The tools that take one PDF, in the same order.
+Iterable<ToolEntry> get pdfTools => tools.where((t) => t.takesPdf);
+
 /// Tag of a result in Recientes («Unido», «Extraído»…).
 String resultTag(AppLocalizations l10n, ResultKind kind) => switch (kind) {
   ResultKind.merged => l10n.tagMerged,
@@ -68,6 +96,9 @@ String resultTag(AppLocalizations l10n, ResultKind kind) => switch (kind) {
   ResultKind.extracted => l10n.tagExtracted,
   ResultKind.split => l10n.tagSplit,
   ResultKind.images => l10n.tagImages,
+  ResultKind.reduced => l10n.tagReduced,
+  ResultKind.scanned => l10n.tagScanned,
+  ResultKind.photos => l10n.tagPhotos,
 };
 
 ToolTint resultTint(ResultKind kind) => switch (kind.tool) {

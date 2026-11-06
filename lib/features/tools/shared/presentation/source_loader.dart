@@ -6,10 +6,13 @@ import 'tool_args.dart';
 
 /// The one PDF Organizar or PDF a imagen works on, ready to read.
 class LoadedSource {
-  const LoadedSource({required this.file, required this.pageCount});
+  const LoadedSource({required this.file, required this.pageCount, this.looksTextOnly = false});
 
   final LocalFile file;
   final int pageCount;
+
+  /// No images on the first pages: reducing would barely help.
+  final bool looksTextOnly;
 }
 
 /// Brings the PDF of a single-document tool into the app: copies a picked or
@@ -51,8 +54,8 @@ class SourceLoader {
     };
   }
 
-  Future<Result<LoadedSource>> _inspect(LocalFile file) async =>
-      (await _pdf.inspect(file.path)).map((summary) => LoadedSource(file: file, pageCount: summary.pageCount));
+  Future<Result<LoadedSource>> _inspect(LocalFile file) async => (await _pdf.inspect(file.path))
+      .map((summary) => LoadedSource(file: file, pageCount: summary.pageCount, looksTextOnly: summary.looksTextOnly));
 
   Future<void> dispose() async {
     _token.cancel();

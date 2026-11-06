@@ -64,6 +64,7 @@ void main() {
     // Back on Inicio the job folder is gone and the result is listed.
     await tester.tap(find.byTooltip('Cerrar'));
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(find.text(item.name), 200);
     expect(find.text(item.name), findsOneWidget);
     expect(Directory('${(await getTemporaryDirectory()).path}/jobs').listSync(), isEmpty);
   });

@@ -1124,6 +1124,540 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Son {pages} páginas. El máximo es {max}.'**
   String errTooManyPages(int pages, int max);
+
+  /// No description provided for @add.
+  ///
+  /// In es, this message translates to:
+  /// **'Agregar'**
+  String get add;
+
+  /// No description provided for @before.
+  ///
+  /// In es, this message translates to:
+  /// **'Antes'**
+  String get before;
+
+  /// No description provided for @after.
+  ///
+  /// In es, this message translates to:
+  /// **'Ahora'**
+  String get after;
+
+  /// No description provided for @beforeAfter.
+  ///
+  /// In es, this message translates to:
+  /// **'{before} → {after} · {percent} % menos'**
+  String beforeAfter(String before, String after, int percent);
+
+  /// No description provided for @alreadyOptimizedTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Este PDF ya está optimizado'**
+  String get alreadyOptimizedTitle;
+
+  /// No description provided for @alreadyOptimizedBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducirlo no lo haría más liviano, así que no creamos un archivo nuevo. Tu original sirve tal cual.'**
+  String get alreadyOptimizedBody;
+
+  /// No description provided for @choosePhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'Elegir fotos'**
+  String get choosePhotos;
+
+  /// No description provided for @createPdfButton.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, =0{Crear PDF} one{Crear PDF · 1 página} other{Crear PDF · {count} páginas}}'**
+  String createPdfButton(int count);
+
+  /// No description provided for @levelHigh.
+  ///
+  /// In es, this message translates to:
+  /// **'Alta'**
+  String get levelHigh;
+
+  /// No description provided for @levelHighHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'Para imprimir o ampliar. Reduce menos.'**
+  String get levelHighHelp;
+
+  /// No description provided for @levelBalanced.
+  ///
+  /// In es, this message translates to:
+  /// **'Equilibrada'**
+  String get levelBalanced;
+
+  /// No description provided for @levelBalancedHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'Se lee bien en pantalla y al imprimir.'**
+  String get levelBalancedHelp;
+
+  /// No description provided for @levelMinimal.
+  ///
+  /// In es, this message translates to:
+  /// **'Mínima'**
+  String get levelMinimal;
+
+  /// No description provided for @levelMinimalHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'El archivo más liviano; las fotos pierden detalle.'**
+  String get levelMinimalHelp;
+
+  /// No description provided for @margins.
+  ///
+  /// In es, this message translates to:
+  /// **'Márgenes'**
+  String get margins;
+
+  /// No description provided for @marginNone.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin margen'**
+  String get marginNone;
+
+  /// No description provided for @marginSmall.
+  ///
+  /// In es, this message translates to:
+  /// **'Pequeño'**
+  String get marginSmall;
+
+  /// No description provided for @namePhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'Fotos {stamp}'**
+  String namePhotos(String stamp);
+
+  /// No description provided for @nameReduced.
+  ///
+  /// In es, this message translates to:
+  /// **'{stem} (reducido)'**
+  String nameReduced(String stem);
+
+  /// No description provided for @nameScan.
+  ///
+  /// In es, this message translates to:
+  /// **'Escaneo {stamp}'**
+  String nameScan(String stamp);
+
+  /// No description provided for @nextReduce.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustar tamaño'**
+  String get nextReduce;
+
+  /// No description provided for @originalUnchanged.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu archivo original no cambia.'**
+  String get originalUnchanged;
+
+  /// No description provided for @pageSize.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño de página'**
+  String get pageSize;
+
+  /// No description provided for @pageAuto.
+  ///
+  /// In es, this message translates to:
+  /// **'Automático'**
+  String get pageAuto;
+
+  /// No description provided for @pageAutoNamed.
+  ///
+  /// In es, this message translates to:
+  /// **'Automático ({name})'**
+  String pageAutoNamed(String name);
+
+  /// No description provided for @pageAutoShort.
+  ///
+  /// In es, this message translates to:
+  /// **'{name} · automático'**
+  String pageAutoShort(String name);
+
+  /// No description provided for @pageLetter.
+  ///
+  /// In es, this message translates to:
+  /// **'Carta'**
+  String get pageLetter;
+
+  /// No description provided for @pageOficio.
+  ///
+  /// In es, this message translates to:
+  /// **'Oficio (216 × 330 mm)'**
+  String get pageOficio;
+
+  /// No description provided for @pageFitImage.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustar a la foto'**
+  String get pageFitImage;
+
+  /// No description provided for @pageFitImageHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'Cada página mide lo que la foto'**
+  String get pageFitImageHelp;
+
+  /// No description provided for @photoQuality.
+  ///
+  /// In es, this message translates to:
+  /// **'Calidad'**
+  String get photoQuality;
+
+  /// No description provided for @photoLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Foto {position} de {count}'**
+  String photoLabel(int position, int count);
+
+  /// No description provided for @photoLabelUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'Foto {position} de {count}, no se pudo leer'**
+  String photoLabelUnreadable(int position, int count);
+
+  /// No description provided for @photoRemoved.
+  ///
+  /// In es, this message translates to:
+  /// **'Se quitó la foto {position}'**
+  String photoRemoved(int position);
+
+  /// No description provided for @photoUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo leer'**
+  String get photoUnreadable;
+
+  /// No description provided for @rotatePhoto.
+  ///
+  /// In es, this message translates to:
+  /// **'Girar foto {position}'**
+  String rotatePhoto(int position);
+
+  /// No description provided for @removePhoto.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar foto {position}'**
+  String removePhoto(int position);
+
+  /// No description provided for @photosCount.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{1 foto} other{{count} fotos}} · mantén presionada una foto para moverla'**
+  String photosCount(int count);
+
+  /// No description provided for @photosEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige las fotos que quieres juntar en un PDF.'**
+  String get photosEmpty;
+
+  /// No description provided for @photosEstimate.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño estimado: unos {size}'**
+  String photosEstimate(String size);
+
+  /// No description provided for @photosSkipped.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{Se omite 1 foto que no se pudo leer.} other{Se omiten {count} fotos que no se pudieron leer.}}'**
+  String photosSkipped(int count);
+
+  /// No description provided for @photosTooMany.
+  ///
+  /// In es, this message translates to:
+  /// **'Puedes juntar hasta {max} fotos en un PDF.'**
+  String photosTooMany(int max);
+
+  /// No description provided for @processingFit.
+  ///
+  /// In es, this message translates to:
+  /// **'Ajustando a {size}…'**
+  String processingFit(String size);
+
+  /// No description provided for @processingReduce.
+  ///
+  /// In es, this message translates to:
+  /// **'Reduciendo…'**
+  String get processingReduce;
+
+  /// No description provided for @processingPhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'Creando el PDF…'**
+  String get processingPhotos;
+
+  /// No description provided for @reduceEmpty.
+  ///
+  /// In es, this message translates to:
+  /// **'Elige el PDF que quieres hacer más liviano.'**
+  String get reduceEmpty;
+
+  /// No description provided for @reduceHasImages.
+  ///
+  /// In es, this message translates to:
+  /// **'Tiene imágenes: se puede reducir bastante'**
+  String get reduceHasImages;
+
+  /// No description provided for @reduceTextOnly.
+  ///
+  /// In es, this message translates to:
+  /// **'Este PDF es casi todo texto: la reducción será pequeña'**
+  String get reduceTextOnly;
+
+  /// No description provided for @reduceBig.
+  ///
+  /// In es, this message translates to:
+  /// **'Es un archivo grande: puede tardar unos minutos.'**
+  String get reduceBig;
+
+  /// No description provided for @reduceTooBig.
+  ///
+  /// In es, this message translates to:
+  /// **'Este PDF supera el máximo ({pages} páginas o {size}). Sepáralo en partes y reduce cada una.'**
+  String reduceTooBig(int pages, String size);
+
+  /// No description provided for @reduceSplitInstead.
+  ///
+  /// In es, this message translates to:
+  /// **'Separar en partes'**
+  String get reduceSplitInstead;
+
+  /// No description provided for @reduceHow.
+  ///
+  /// In es, this message translates to:
+  /// **'¿Cómo quieres reducirlo?'**
+  String get reduceHow;
+
+  /// No description provided for @reduceModeSize.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño máximo'**
+  String get reduceModeSize;
+
+  /// No description provided for @reduceModeQuality.
+  ///
+  /// In es, this message translates to:
+  /// **'Calidad'**
+  String get reduceModeQuality;
+
+  /// No description provided for @reduceSizeHelp.
+  ///
+  /// In es, this message translates to:
+  /// **'El límite que pide el portal o el correo'**
+  String get reduceSizeHelp;
+
+  /// No description provided for @reduceOther.
+  ///
+  /// In es, this message translates to:
+  /// **'Otro…'**
+  String get reduceOther;
+
+  /// No description provided for @reduceOtherTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño máximo'**
+  String get reduceOtherTitle;
+
+  /// No description provided for @reduceOtherLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Megabytes'**
+  String get reduceOtherLabel;
+
+  /// No description provided for @reduceSizeExplain.
+  ///
+  /// In es, this message translates to:
+  /// **'Buscamos la mejor calidad que quepa en {size}. Si no se puede, te mostramos el resultado más cercano y te lo decimos.'**
+  String reduceSizeExplain(String size);
+
+  /// No description provided for @reduceExpected.
+  ///
+  /// In es, this message translates to:
+  /// **'Resultado'**
+  String get reduceExpected;
+
+  /// No description provided for @reduceExpectedSize.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño'**
+  String get reduceExpectedSize;
+
+  /// No description provided for @reduceExpectedUnder.
+  ///
+  /// In es, this message translates to:
+  /// **'{before} → máximo {target}'**
+  String reduceExpectedUnder(String before, String target);
+
+  /// No description provided for @reduceSelectableText.
+  ///
+  /// In es, this message translates to:
+  /// **'Texto seleccionable'**
+  String get reduceSelectableText;
+
+  /// No description provided for @reduceKept.
+  ///
+  /// In es, this message translates to:
+  /// **'Se conserva'**
+  String get reduceKept;
+
+  /// No description provided for @reduceToButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducir a {size}'**
+  String reduceToButton(String size);
+
+  /// No description provided for @reduceButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducir'**
+  String get reduceButton;
+
+  /// No description provided for @resultReduced.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducido un {percent} %'**
+  String resultReduced(int percent);
+
+  /// No description provided for @resultUnder.
+  ///
+  /// In es, this message translates to:
+  /// **'Quedó bajo {target}'**
+  String resultUnder(String target);
+
+  /// No description provided for @resultMissed.
+  ///
+  /// In es, this message translates to:
+  /// **'Quedó en {size}: no alcanzó {target}'**
+  String resultMissed(String size, String target);
+
+  /// No description provided for @resultMissedHint.
+  ///
+  /// In es, this message translates to:
+  /// **'Es lo más liviano que se pudo sin dañar el texto. Separa el documento en partes y reduce cada una.'**
+  String get resultMissedHint;
+
+  /// No description provided for @resultScanned.
+  ///
+  /// In es, this message translates to:
+  /// **'Escaneo listo'**
+  String get resultScanned;
+
+  /// No description provided for @resultPhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{PDF creado con 1 foto} other{PDF creado con {count} fotos}}'**
+  String resultPhotos(int count);
+
+  /// No description provided for @scanTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Escanear documento'**
+  String get scanTitle;
+
+  /// No description provided for @scanSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Recorte automático y varias páginas'**
+  String get scanSubtitle;
+
+  /// No description provided for @scanButton.
+  ///
+  /// In es, this message translates to:
+  /// **'Escanear'**
+  String get scanButton;
+
+  /// No description provided for @scanOfflineTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'El escáner necesita conexión la primera vez'**
+  String get scanOfflineTitle;
+
+  /// No description provided for @scanOfflineBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Tu teléfono descarga el escáner una sola vez. Después funciona sin internet. Mientras tanto, puedes crear un PDF con fotos que ya tengas.'**
+  String get scanOfflineBody;
+
+  /// No description provided for @scanUnsupportedTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'El escáner no está disponible en este teléfono'**
+  String get scanUnsupportedTitle;
+
+  /// No description provided for @scanUnsupportedBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Necesita Google Play services y al menos 1,7 GB de memoria. Puedes sacar fotos con la cámara y crear un PDF con ellas.'**
+  String get scanUnsupportedBody;
+
+  /// No description provided for @scanUsePhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'Crear PDF con fotos'**
+  String get scanUsePhotos;
+
+  /// No description provided for @understood.
+  ///
+  /// In es, this message translates to:
+  /// **'Entendido'**
+  String get understood;
+
+  /// No description provided for @tagReduced.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducido'**
+  String get tagReduced;
+
+  /// No description provided for @tagScanned.
+  ///
+  /// In es, this message translates to:
+  /// **'Escaneo'**
+  String get tagScanned;
+
+  /// No description provided for @tagPhotos.
+  ///
+  /// In es, this message translates to:
+  /// **'Fotos a PDF'**
+  String get tagPhotos;
+
+  /// No description provided for @toolReduceTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Reducir tamaño'**
+  String get toolReduceTitle;
+
+  /// No description provided for @toolReduceSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Deja tu PDF bajo 1, 2 o 10 MB para subirlo donde te lo piden'**
+  String get toolReduceSubtitle;
+
+  /// No description provided for @toolPhotosTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Fotos a PDF'**
+  String get toolPhotosTitle;
+
+  /// No description provided for @toolPhotosSubtitle.
+  ///
+  /// In es, this message translates to:
+  /// **'JPG, PNG, HEIC'**
+  String get toolPhotosSubtitle;
+
+  /// No description provided for @errImagesUnreadable.
+  ///
+  /// In es, this message translates to:
+  /// **'{count, plural, one{No pudimos leer esa foto. Puede estar dañada o en un formato que el teléfono no abre.} other{No pudimos leer {count} fotos. Pueden estar dañadas o en un formato que el teléfono no abre.}}'**
+  String errImagesUnreadable(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

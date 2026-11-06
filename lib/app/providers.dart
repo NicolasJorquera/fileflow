@@ -4,10 +4,14 @@ import 'package:pdf_engine/pdf_engine.dart';
 import '../core/domain/files.dart';
 import '../core/domain/pdf.dart';
 import '../core/domain/recents.dart';
+import '../core/domain/scanner.dart';
 import '../core/domain/settings.dart';
 import '../core/jobs/jobs.dart';
 import '../features/tools/merge/domain/merge_documents.dart';
 import '../features/tools/organize/domain/organize_document.dart';
+import '../features/tools/photos/domain/photos_to_pdf.dart';
+import '../features/tools/reduce/domain/reduce_document.dart';
+import '../features/tools/scan/domain/scan_document.dart';
 import '../features/tools/to_image/domain/export_images.dart';
 import 'flavor.dart';
 
@@ -23,6 +27,7 @@ final imageCodecProvider = Provider<ImageCodec>((ref) => _missing('imageCodecPro
 final jobWorkspaceProvider = Provider<JobWorkspace>((ref) => _missing('jobWorkspaceProvider'));
 final pdfEngineProvider = Provider<PdfEngine>((ref) => const PdfiumEngine());
 final pdfServiceProvider = Provider<PdfService>((ref) => _missing('pdfServiceProvider'));
+final scannerGatewayProvider = Provider<ScannerGateway>((ref) => _missing('scannerGatewayProvider'));
 final thumbnailSourceProvider = Provider<ThumbnailSource>((ref) => _missing('thumbnailSourceProvider'));
 final recentsRepositoryProvider = Provider<RecentsRepository>((ref) => _missing('recentsRepositoryProvider'));
 final jobRunnerProvider = Provider<JobRunner>((ref) => JobRunner());
@@ -40,6 +45,21 @@ final organizeDocumentProvider = Provider<OrganizeDocument>(
 final exportImagesProvider = Provider<ExportImages>(
   (ref) => ExportImages(pdf: ref.watch(pdfServiceProvider), recents: ref.watch(recentsRepositoryProvider)),
 );
+
+final reduceDocumentProvider = Provider<ReduceDocument>(
+  (ref) => ReduceDocument(pdf: ref.watch(pdfServiceProvider), recents: ref.watch(recentsRepositoryProvider)),
+);
+
+final photosToPdfProvider = Provider<PhotosToPdf>(
+  (ref) => PhotosToPdf(pdf: ref.watch(pdfServiceProvider), recents: ref.watch(recentsRepositoryProvider)),
+);
+
+final scanDocumentProvider = Provider<ScanDocument>(
+  (ref) => ScanDocument(scanner: ref.watch(scannerGatewayProvider), recents: ref.watch(recentsRepositoryProvider)),
+);
+
+/// Country of the device locale, for the automatic page size of Fotos a PDF.
+final regionProvider = Provider<String?>((ref) => null);
 
 final mergeDocumentsProvider = Provider<MergeDocuments>(
   (ref) => MergeDocuments(pdf: ref.watch(pdfServiceProvider), recents: ref.watch(recentsRepositoryProvider)),

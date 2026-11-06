@@ -62,9 +62,20 @@ class JsonRecentsRepository implements RecentsRepository {
   List<RecentItem> get current => List.unmodifiable(_items);
 
   @override
-  Stream<List<RecentItem>> watch() async* {
-    yield current;
-    yield* _changes.stream;
+  Stream<List<RecentItem>> watch() {
+    // Subscribed to changes in onListen, before anything can happen: an
+    // async* generator would miss a change made between its first yield and
+    // its subscription.
+    StreamSubscription<List<RecentItem>>? changes;
+    late final StreamController<List<RecentItem>> out;
+    out = StreamController<List<RecentItem>>(
+      onListen: () {
+        out.add(current);
+        changes = _changes.stream.listen(out.add);
+      },
+      onCancel: () => changes?.cancel(),
+    );
+    return out.stream;
   }
 
   @override
@@ -81,6 +92,7 @@ class JsonRecentsRepository implements RecentsRepository {
     required ResultKind kind,
     required int pages,
     int? inputBytes,
+    int? targetBytes,
     List<String>? files,
   }) async {
     final names = files ?? [slot.name];
@@ -97,6 +109,7 @@ class JsonRecentsRepository implements RecentsRepository {
       pages: pages,
       sizeBytes: size,
       inputBytes: inputBytes,
+      targetBytes: targetBytes,
       createdAt: _clock(),
     );
     _items = [item, ..._items];
@@ -209,6 +222,7 @@ class JsonRecentsRepository implements RecentsRepository {
     'pages': i.pages,
     'sizeBytes': i.sizeBytes,
     'inputBytes': i.inputBytes,
+    'targetBytes': i.targetBytes,
     'createdAt': i.createdAt.toUtc().toIso8601String(),
   };
 
@@ -224,6 +238,7 @@ class JsonRecentsRepository implements RecentsRepository {
     pages: j['pages']! as int,
     sizeBytes: j['sizeBytes']! as int,
     inputBytes: j['inputBytes'] as int?,
+    targetBytes: j['targetBytes'] as int?,
     createdAt: DateTime.parse(j['createdAt']! as String).toLocal(),
   );
 }

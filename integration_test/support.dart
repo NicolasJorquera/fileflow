@@ -79,8 +79,16 @@ Future<String> textPdf(String dir, String label, int pages) async {
 
 /// A scan-like PDF of [pages] noisy photos, built with the engine and the
 /// platform JPEG codec (as «Fotos a PDF» will).
-Future<String> scanPdf(String dir, String name, int pages, ImageCodec codec, PdfEngine engine) async {
-  const w = 1000, h = 1414;
+Future<String> scanPdf(
+  String dir,
+  String name,
+  int pages,
+  ImageCodec codec,
+  PdfEngine engine, {
+  int width = 1000,
+  int height = 1414,
+}) async {
+  final w = width, h = height;
   final rgba = Uint8List(w * h * 4);
   final random = Random(7);
   for (var i = 0; i < rgba.length; i += 4) {

@@ -43,6 +43,7 @@ object ErrorCodes {
     const val NO_APP = "no_app"
     const val BAD_ARGS = "bad_args"
     const val ENCODE_FAILED = "encode_failed"
+    const val IMAGE_UNREADABLE = "image_unreadable"
 }
 
 /** Maps a failure while reading a picked URI or writing a file to an error code. */

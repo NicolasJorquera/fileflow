@@ -65,13 +65,13 @@ Future<void> saveResult(BuildContext context, WidgetRef ref, RecentItem item) {
 Future<void> showToolChooser(BuildContext context, ToolArgs args) => showModalBottomSheet<void>(
   context: context,
   showDragHandle: true,
+  isScrollControlled: true,
   builder: (sheetContext) {
     final l10n = AppLocalizations.of(sheetContext);
     final palette = sheetContext.palette;
     return SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(Space.l, 0, Space.l, Space.s),
@@ -80,7 +80,7 @@ Future<void> showToolChooser(BuildContext context, ToolArgs args) => showModalBo
               child: Text(l10n.chooseToolTitle, style: Theme.of(sheetContext).textTheme.titleLarge),
             ),
           ),
-          for (final tool in tools)
+          for (final tool in pdfTools)
             ListTile(
               leading: Icon(tool.icon, color: palette.tools[tool.tint]!.$2),
               title: Text(tool.title(l10n)),

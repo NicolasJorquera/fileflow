@@ -169,6 +169,7 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
   Widget _failed(BuildContext context, AppFailure failure) {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
+    if (failure is AlreadyOptimized) return _alreadyOptimized(context);
     return Padding(
       padding: const EdgeInsets.all(Space.xl),
       child: Column(
@@ -186,6 +187,36 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(l10n.back),
           ),
+        ],
+      ),
+    );
+  }
+
+  /// RN-03: not an error. Nothing was created; the original is the best file.
+  Widget _alreadyOptimized(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final text = Theme.of(context).textTheme;
+    return Padding(
+      padding: const EdgeInsets.all(Space.xl),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const Spacer(),
+          Icon(Icons.verified_outlined, size: 48, color: palette.success),
+          const SizedBox(height: Space.l),
+          Semantics(
+            liveRegion: true,
+            child: Text(l10n.alreadyOptimizedTitle, textAlign: TextAlign.center, style: text.titleLarge),
+          ),
+          const SizedBox(height: Space.s),
+          Text(
+            l10n.alreadyOptimizedBody,
+            textAlign: TextAlign.center,
+            style: text.bodyMedium?.copyWith(color: palette.muted),
+          ),
+          const Spacer(),
+          FilledButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.back)),
         ],
       ),
     );

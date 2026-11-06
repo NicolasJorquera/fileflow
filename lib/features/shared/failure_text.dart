@@ -17,7 +17,11 @@ extension FailureText on AppLocalizations {
     LimitExceeded(limit: Limit.pages, :final actual, :final max) => errTooManyPages(actual, max),
     LimitExceeded(limit: Limit.files, :final max) => mergeTooManyFiles(max),
     NoAppAvailable() => errNoApp,
+    ImagesUnreadable(:final count) => errImagesUnreadable(count),
+    ScannerUnavailable(reason: ScannerIssue.moduleNotDownloaded) => scanOfflineBody,
+    ScannerUnavailable(reason: ScannerIssue.deviceNotSupported) => scanUnsupportedBody,
+    AlreadyOptimized() => alreadyOptimizedTitle,
     Cancelled() => '',
-    ImagesUnreadable() || LimitExceeded() || ScannerUnavailable() || Unexpected() => errGeneric,
+    LimitExceeded() || Unexpected() => errGeneric,
   };
 }

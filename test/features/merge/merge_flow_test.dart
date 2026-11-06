@@ -84,6 +84,7 @@ void main() {
     await tester.tap(find.byTooltip('Cerrar'));
     await tester.pumpAndSettle();
     expect(find.byType(HomeScreen), findsOneWidget);
+    await tester.scrollUntilVisible(find.text(recents.current.single.name), 200);
     expect(find.text(recents.current.single.name), findsOneWidget);
     expect(workspace.deleted, [workspace.created.single.id]);
   });

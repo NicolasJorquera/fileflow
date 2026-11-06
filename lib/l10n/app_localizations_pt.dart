@@ -727,4 +727,353 @@ class AppLocalizationsPt extends AppLocalizations {
   String errTooManyPages(int pages, int max) {
     return 'São $pages páginas. O máximo é $max.';
   }
+
+  @override
+  String get add => 'Adicionar';
+
+  @override
+  String get before => 'Antes';
+
+  @override
+  String get after => 'Agora';
+
+  @override
+  String beforeAfter(String before, String after, int percent) {
+    return '$before → $after · $percent% menor';
+  }
+
+  @override
+  String get alreadyOptimizedTitle => 'Este PDF já está otimizado';
+
+  @override
+  String get alreadyOptimizedBody =>
+      'Reduzi-lo não o deixaria menor, então não criamos um arquivo novo. Seu original serve como está.';
+
+  @override
+  String get choosePhotos => 'Escolher fotos';
+
+  @override
+  String createPdfButton(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Criar PDF · $count páginas',
+      one: 'Criar PDF · 1 página',
+      zero: 'Criar PDF',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get levelHigh => 'Alta';
+
+  @override
+  String get levelHighHelp => 'Para imprimir ou ampliar. Reduz menos.';
+
+  @override
+  String get levelBalanced => 'Equilibrada';
+
+  @override
+  String get levelBalancedHelp => 'Fica legível na tela e impresso.';
+
+  @override
+  String get levelMinimal => 'Mínima';
+
+  @override
+  String get levelMinimalHelp => 'O arquivo mais leve; as fotos perdem detalhes.';
+
+  @override
+  String get margins => 'Margens';
+
+  @override
+  String get marginNone => 'Sem margem';
+
+  @override
+  String get marginSmall => 'Pequena';
+
+  @override
+  String namePhotos(String stamp) {
+    return 'Fotos $stamp';
+  }
+
+  @override
+  String nameReduced(String stem) {
+    return '$stem (reduzido)';
+  }
+
+  @override
+  String nameScan(String stamp) {
+    return 'Digitalização $stamp';
+  }
+
+  @override
+  String get nextReduce => 'Ajustar tamanho';
+
+  @override
+  String get originalUnchanged => 'Seu arquivo original não muda.';
+
+  @override
+  String get pageSize => 'Tamanho da página';
+
+  @override
+  String get pageAuto => 'Automático';
+
+  @override
+  String pageAutoNamed(String name) {
+    return 'Automático ($name)';
+  }
+
+  @override
+  String pageAutoShort(String name) {
+    return '$name · automático';
+  }
+
+  @override
+  String get pageLetter => 'Carta';
+
+  @override
+  String get pageOficio => 'Ofício (216 × 330 mm)';
+
+  @override
+  String get pageFitImage => 'Ajustar à foto';
+
+  @override
+  String get pageFitImageHelp => 'Cada página tem o tamanho da foto';
+
+  @override
+  String get photoQuality => 'Qualidade';
+
+  @override
+  String photoLabel(int position, int count) {
+    return 'Foto $position de $count';
+  }
+
+  @override
+  String photoLabelUnreadable(int position, int count) {
+    return 'Foto $position de $count, não foi possível ler';
+  }
+
+  @override
+  String photoRemoved(int position) {
+    return 'Foto $position removida';
+  }
+
+  @override
+  String get photoUnreadable => 'Não foi possível ler';
+
+  @override
+  String rotatePhoto(int position) {
+    return 'Girar foto $position';
+  }
+
+  @override
+  String removePhoto(int position) {
+    return 'Remover foto $position';
+  }
+
+  @override
+  String photosCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count fotos', one: '1 foto');
+    return '$_temp0 · mantenha uma foto pressionada para movê-la';
+  }
+
+  @override
+  String get photosEmpty => 'Escolha as fotos que você quer juntar em um PDF.';
+
+  @override
+  String photosEstimate(String size) {
+    return 'Tamanho estimado: cerca de $size';
+  }
+
+  @override
+  String photosSkipped(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count fotos que não puderam ser lidas serão ignoradas.',
+      one: '1 foto que não pôde ser lida será ignorada.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String photosTooMany(int max) {
+    return 'Você pode juntar até $max fotos em um PDF.';
+  }
+
+  @override
+  String processingFit(String size) {
+    return 'Ajustando para $size…';
+  }
+
+  @override
+  String get processingReduce => 'Reduzindo…';
+
+  @override
+  String get processingPhotos => 'Criando o PDF…';
+
+  @override
+  String get reduceEmpty => 'Escolha o PDF que você quer deixar mais leve.';
+
+  @override
+  String get reduceHasImages => 'Tem imagens: pode ficar bem menor';
+
+  @override
+  String get reduceTextOnly => 'Este PDF é quase todo texto: a redução será pequena';
+
+  @override
+  String get reduceBig => 'É um arquivo grande: pode levar alguns minutos.';
+
+  @override
+  String reduceTooBig(int pages, String size) {
+    return 'Este PDF passa do limite ($pages páginas ou $size). Separe-o em partes e reduza cada uma.';
+  }
+
+  @override
+  String get reduceSplitInstead => 'Separar em partes';
+
+  @override
+  String get reduceHow => 'Como você quer reduzi-lo?';
+
+  @override
+  String get reduceModeSize => 'Tamanho máximo';
+
+  @override
+  String get reduceModeQuality => 'Qualidade';
+
+  @override
+  String get reduceSizeHelp => 'O limite que o portal ou o e-mail pede';
+
+  @override
+  String get reduceOther => 'Outro…';
+
+  @override
+  String get reduceOtherTitle => 'Tamanho máximo';
+
+  @override
+  String get reduceOtherLabel => 'Megabytes';
+
+  @override
+  String reduceSizeExplain(String size) {
+    return 'Buscamos a melhor qualidade que caiba em $size. Se não der, mostramos o resultado mais próximo e avisamos.';
+  }
+
+  @override
+  String get reduceExpected => 'Resultado';
+
+  @override
+  String get reduceExpectedSize => 'Tamanho';
+
+  @override
+  String reduceExpectedUnder(String before, String target) {
+    return '$before → no máximo $target';
+  }
+
+  @override
+  String get reduceSelectableText => 'Texto selecionável';
+
+  @override
+  String get reduceKept => 'Mantido';
+
+  @override
+  String reduceToButton(String size) {
+    return 'Reduzir para $size';
+  }
+
+  @override
+  String get reduceButton => 'Reduzir';
+
+  @override
+  String resultReduced(int percent) {
+    return 'Reduzido em $percent%';
+  }
+
+  @override
+  String resultUnder(String target) {
+    return 'Ficou abaixo de $target';
+  }
+
+  @override
+  String resultMissed(String size, String target) {
+    return 'Ficou com $size: não chegou a $target';
+  }
+
+  @override
+  String get resultMissedHint =>
+      'É o menor possível sem prejudicar o texto. Separe o documento em partes e reduza cada uma.';
+
+  @override
+  String get resultScanned => 'Digitalização pronta';
+
+  @override
+  String resultPhotos(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'PDF criado com $count fotos',
+      one: 'PDF criado com 1 foto',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get scanTitle => 'Digitalizar documento';
+
+  @override
+  String get scanSubtitle => 'Corte automático e várias páginas';
+
+  @override
+  String get scanButton => 'Digitalizar';
+
+  @override
+  String get scanOfflineTitle => 'O scanner precisa de conexão na primeira vez';
+
+  @override
+  String get scanOfflineBody =>
+      'Seu celular baixa o scanner uma única vez. Depois funciona sem internet. Enquanto isso, você pode criar um PDF com fotos que já tem.';
+
+  @override
+  String get scanUnsupportedTitle => 'O scanner não está disponível neste celular';
+
+  @override
+  String get scanUnsupportedBody =>
+      'Ele precisa do Google Play services e de pelo menos 1,7 GB de memória. Você pode tirar fotos com a câmera e criar um PDF com elas.';
+
+  @override
+  String get scanUsePhotos => 'Criar PDF com fotos';
+
+  @override
+  String get understood => 'Entendi';
+
+  @override
+  String get tagReduced => 'Reduzido';
+
+  @override
+  String get tagScanned => 'Digitalização';
+
+  @override
+  String get tagPhotos => 'Fotos para PDF';
+
+  @override
+  String get toolReduceTitle => 'Reduzir tamanho';
+
+  @override
+  String get toolReduceSubtitle => 'Deixe seu PDF abaixo de 1, 2 ou 10 MB para enviá-lo onde pedem';
+
+  @override
+  String get toolPhotosTitle => 'Fotos para PDF';
+
+  @override
+  String get toolPhotosSubtitle => 'JPG, PNG, HEIC';
+
+  @override
+  String errImagesUnreadable(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Não conseguimos ler $count fotos. Elas podem estar danificadas ou num formato que o celular não abre.',
+      one: 'Não conseguimos ler essa foto. Ela pode estar danificada ou num formato que o celular não abre.',
+    );
+    return '$_temp0';
+  }
 }

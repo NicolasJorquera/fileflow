@@ -14,3 +14,7 @@ String formatBytes(int bytes, String locale) {
   }
   return '${NumberFormat.decimalPattern(locale).format(bytes)} B';
 }
+
+/// A size goal as people say it: «2 MB», «1,5 MB» (no trailing «,0»).
+String formatSizeGoal(int bytes, String locale) =>
+    '${NumberFormat('#,##0.#', locale).format(bytes / (1024 * 1024))} MB';
