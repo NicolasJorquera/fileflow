@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../app/providers.dart';
 import '../../app/router.dart';
+import '../../core/domain/ads.dart';
 import '../../core/domain/files.dart';
 import '../../core/domain/recents.dart';
 import '../../core/format/sizes.dart';
@@ -120,7 +121,7 @@ class _Body extends ConsumerWidget {
         ],
         const SizedBox(height: Space.xl),
         if (item.isSingleFile) ...[
-          if (item.kind.isSinglePdf) ...[_Preview(path: item.path), const SizedBox(height: Space.l)],
+          if (item.kind.isSinglePdf) ...[_PreviewToggle(path: item.path), const SizedBox(height: Space.l)],
           _NameField(item: item),
           const SizedBox(height: Space.s),
           Text(l10n.resultMeta(item.pages, size), style: text.bodySmall?.copyWith(color: palette.muted)),
@@ -181,6 +182,8 @@ class _Body extends ConsumerWidget {
           ),
         ],
         const SizedBox(height: Space.xl),
+        ref.watch(adBannerProvider)(AdPlacement.result),
+        const SizedBox(height: Space.l),
         Text(
           retention.period == null ? l10n.recentsNoteForever : l10n.recentsNote(retentionLabel(l10n, retention)),
           style: text.bodySmall?.copyWith(color: palette.muted),
@@ -191,6 +194,39 @@ class _Body extends ConsumerWidget {
 }
 
 /// First page of the result (PRD RF-03), from the thumbnail cache.
+/// «Ver primera página» (PRD RF-03, RN-08): the preview is opt-in because it
+/// shows the content of the document, and no ad can appear next to it.
+class _PreviewToggle extends StatefulWidget {
+  const _PreviewToggle({required this.path});
+
+  final String path;
+
+  @override
+  State<_PreviewToggle> createState() => _PreviewToggleState();
+}
+
+class _PreviewToggleState extends State<_PreviewToggle> {
+  bool _open = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Column(
+      children: [
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: TextButton.icon(
+            onPressed: () => setState(() => _open = !_open),
+            icon: Icon(_open ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+            label: Text(_open ? l10n.hideFirstPage : l10n.showFirstPage),
+          ),
+        ),
+        if (_open) ...[_Preview(path: widget.path), const SizedBox(height: Space.l)],
+      ],
+    );
+  }
+}
+
 class _Preview extends ConsumerWidget {
   const _Preview({required this.path});
 

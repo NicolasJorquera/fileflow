@@ -28,6 +28,16 @@ abstract interface class SettingsRepository {
   String? get language;
   Future<void> setLanguage(String? tag);
 
+  /// Completed tasks in total (RN-09 counts them).
+  int get completedTasks;
+  Future<void> setCompletedTasks(int value);
+
+  /// Task count and time of the last interstitial.
+  int? get interstitialAtTask;
+  Future<void> setInterstitialAtTask(int? value);
+  DateTime? get interstitialAt;
+  Future<void> setInterstitialAt(DateTime value);
+
   /// Page size Fotos a PDF starts with.
   PagePreset get defaultPage;
   Future<void> setDefaultPage(PagePreset value);

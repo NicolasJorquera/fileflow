@@ -22,42 +22,59 @@ extension ResultFiles on RecentItem {
   ];
 }
 
-/// Runs [action] and reports its outcome in a snackbar: [done] on success
-/// with a value, the failure's message otherwise. A cancelled picker says
-/// nothing.
-Future<void> reportOutcome(BuildContext context, Future<Result<Object?>> Function() action, {String? done}) async {
+/// Runs [action] and reports its outcome in a snackbar: [done] on success,
+/// the failure's message otherwise. A cancelled picker says nothing. Returns
+/// whether it succeeded (with [requireValue], only when the action returned a
+/// value: saving returns null when the user cancels).
+Future<bool> reportOutcome(
+  BuildContext context,
+  Future<Result<Object?>> Function() action, {
+  String? done,
+  bool requireValue = false,
+}) async {
   final messenger = ScaffoldMessenger.of(context);
   final l10n = AppLocalizations.of(context);
-  final text = switch (await action()) {
+  final result = await action();
+  final text = switch (result) {
     Ok(:final value) when value != null => done,
     Ok() => null,
     Err(:final failure) => l10n.failureText(failure),
   };
-  if (text == null || text.isEmpty) return;
-  messenger
-    ..hideCurrentSnackBar()
-    ..showSnackBar(SnackBar(content: Text(text)));
+  if (text != null && text.isNotEmpty) {
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+  return switch (result) {
+    Ok(:final value) => !requireValue || value != null,
+    Err() => false,
+  };
 }
 
-Future<void> shareResult(BuildContext context, WidgetRef ref, RecentItem item) =>
-    reportOutcome(context, () => ref.read(fileGatewayProvider).share(item.localFiles));
+/// Compartir: the sheet opened, so a full-screen ad may follow (RN-09).
+Future<void> shareResult(BuildContext context, WidgetRef ref, RecentItem item) async {
+  final shared = await reportOutcome(context, () => ref.read(fileGatewayProvider).share(item.localFiles));
+  if (shared && context.mounted) await ref.read(interstitialProvider).afterSaveOrShare();
+}
 
 /// «Guardar en…» for one file; a folder for several (PRD RF-04).
-Future<void> saveResult(BuildContext context, WidgetRef ref, RecentItem item) {
+Future<void> saveResult(BuildContext context, WidgetRef ref, RecentItem item) async {
   final l10n = AppLocalizations.of(context);
   final files = ref.read(fileGatewayProvider);
-  if (item.isSingleFile) {
-    return reportOutcome(
-      context,
-      () => files.saveAs(item.localFiles.single, suggestedName: item.name),
-      done: l10n.savedSnack,
-    );
-  }
-  return reportOutcome(
-    context,
-    () => files.saveAllToFolder(item.localFiles, names: item.files),
-    done: l10n.savedFolderSnack(item.files.length),
-  );
+  final saved = item.isSingleFile
+      ? await reportOutcome(
+          context,
+          () => files.saveAs(item.localFiles.single, suggestedName: item.name),
+          done: l10n.savedSnack,
+          requireValue: true,
+        )
+      : await reportOutcome(
+          context,
+          () => files.saveAllToFolder(item.localFiles, names: item.files),
+          done: l10n.savedFolderSnack(item.files.length),
+          requireValue: true,
+        );
+  if (saved && context.mounted) await ref.read(interstitialProvider).afterSaveOrShare();
 }
 
 /// «Elegir un PDF», «Usar en otra herramienta»: a sheet with the tools that

@@ -273,5 +273,9 @@
   "privacyScanner": "The scanner is Google Play services’ own and works on the phone: what you scan stays on it.",
   "privacyAds": "The app is paid for by ads when there is a connection. Ads never see your documents or appear on screens that show them.",
   "aboutTitle": "About FileFlow",
-  "aboutVersion": "Version {version} · open source licenses"
+  "aboutVersion": "Version {version} · open source licenses",
+  "showFirstPage": "Show first page",
+  "hideFirstPage": "Hide first page",
+  "adsOptionsTitle": "Ad options",
+  "adsOptionsBody": "Consent and personalised ads"
 }

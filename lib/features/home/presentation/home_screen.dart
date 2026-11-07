@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
+import '../../../core/domain/ads.dart';
 import '../../../core/format/sizes.dart';
 import '../../../design_system/theme.dart';
 import '../../../design_system/tokens.dart';
@@ -99,6 +100,8 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ],
+          const SizedBox(height: Space.l),
+          ref.watch(adBannerProvider)(AdPlacement.home),
         ],
       ),
     );

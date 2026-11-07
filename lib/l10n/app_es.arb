@@ -915,5 +915,9 @@
         "type": "String"
       }
     }
-  }
+  },
+  "showFirstPage": "Ver primera página",
+  "hideFirstPage": "Ocultar primera página",
+  "adsOptionsTitle": "Opciones de anuncios",
+  "adsOptionsBody": "Consentimiento y anuncios personalizados"
 }

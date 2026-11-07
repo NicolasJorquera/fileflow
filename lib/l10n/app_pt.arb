@@ -273,5 +273,9 @@
   "privacyScanner": "O scanner é o do Google Play services e funciona no celular: o que você digitaliza não sai dele.",
   "privacyAds": "O app é financiado por anúncios quando há conexão. Os anúncios nunca veem seus documentos nem aparecem em telas que os mostram.",
   "aboutTitle": "Sobre o FileFlow",
-  "aboutVersion": "Versão {version} · licenças de código aberto"
+  "aboutVersion": "Versão {version} · licenças de código aberto",
+  "showFirstPage": "Ver primeira página",
+  "hideFirstPage": "Ocultar primeira página",
+  "adsOptionsTitle": "Opções de anúncios",
+  "adsOptionsBody": "Consentimento e anúncios personalizados"
 }

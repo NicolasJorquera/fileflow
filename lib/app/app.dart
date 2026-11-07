@@ -30,6 +30,8 @@ class _FileFlowAppState extends ConsumerState<FileFlowApp> {
   void initState() {
     super.initState();
     _lifecycle = AppLifecycleListener(onResume: () => ref.read(purgeRecentsProvider)());
+    // Consent and the ads SDK start after the first frame: the app never waits on them.
+    WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(adsBootProvider));
     _shares = ref.read(fileGatewayProvider).incomingShares().listen(_openShared);
   }
 

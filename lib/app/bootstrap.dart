@@ -8,6 +8,8 @@ import 'package:pdf_engine/pdf_engine.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:platform_files/platform_files.dart';
 
+import '../core/domain/ads.dart';
+import '../data/ads/admob.dart';
 import '../data/files/disk_job_workspace.dart';
 import '../data/files/platform_file_gateway.dart';
 import '../data/pdf/engine_pdf_service.dart';
@@ -39,9 +41,20 @@ Future<void> bootstrap(Flavor flavor) async {
   await recents.purgeExpired(DateTime.now(), settings.retention.period);
   final thumbnails = EngineThumbnailSource(const PdfiumEngine(), gateway, cacheDir: cache.path);
   await thumbnails.sweep();
+  final units = AdUnits.forFlavor(flavor);
+  final consent = UmpConsentGateway(debugEea: flavor == Flavor.dev && const bool.fromEnvironment('UMP_DEBUG_EEA'));
+  final ads = AdMobAdsGateway(units, consent);
   runApp(
     ProviderScope(
       overrides: [
+        adsGatewayProvider.overrideWithValue(ads),
+        consentGatewayProvider.overrideWithValue(consent),
+        // RN-08 is enforced here, not only by the screens that ask for a banner.
+        adBannerProvider.overrideWithValue(
+          (placement) => bannerAllowed(placement) && units.banner != null
+              ? AdMobBanner(adUnitId: units.banner!)
+              : const SizedBox.shrink(),
+        ),
         flavorProvider.overrideWithValue(flavor),
         settingsRepositoryProvider.overrideWithValue(settings),
         jobWorkspaceProvider.overrideWithValue(workspace),

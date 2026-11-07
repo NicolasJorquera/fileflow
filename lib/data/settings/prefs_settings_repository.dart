@@ -15,6 +15,9 @@ class PrefsSettingsRepository implements SettingsRepository {
   static const _retentionKey = 'recents_retention';
   static const _languageKey = 'language';
   static const _pageKey = 'default_page';
+  static const _completedKey = 'completed_tasks';
+  static const _interstitialTaskKey = 'interstitial_task';
+  static const _interstitialAtKey = 'interstitial_at';
 
   final SharedPreferences _prefs;
 
@@ -38,6 +41,25 @@ class PrefsSettingsRepository implements SettingsRepository {
   @override
   Future<void> setLanguage(String? tag) =>
       tag == null ? _prefs.remove(_languageKey) : _prefs.setString(_languageKey, tag);
+
+  @override
+  int get completedTasks => _prefs.getInt(_completedKey) ?? 0;
+
+  @override
+  Future<void> setCompletedTasks(int value) => _prefs.setInt(_completedKey, value);
+
+  @override
+  int? get interstitialAtTask => _prefs.getInt(_interstitialTaskKey);
+
+  @override
+  Future<void> setInterstitialAtTask(int? value) =>
+      value == null ? _prefs.remove(_interstitialTaskKey) : _prefs.setInt(_interstitialTaskKey, value);
+
+  @override
+  DateTime? get interstitialAt => DateTime.tryParse(_prefs.getString(_interstitialAtKey) ?? '');
+
+  @override
+  Future<void> setInterstitialAt(DateTime value) => _prefs.setString(_interstitialAtKey, value.toIso8601String());
 
   @override
   PagePreset get defaultPage => PagePreset.values.asNameMap()[_prefs.getString(_pageKey)] ?? PagePreset.auto;

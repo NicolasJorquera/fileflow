@@ -1094,4 +1094,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String aboutVersion(String version) {
     return 'Version $version · open source licenses';
   }
+
+  @override
+  String get showFirstPage => 'Show first page';
+
+  @override
+  String get hideFirstPage => 'Hide first page';
+
+  @override
+  String get adsOptionsTitle => 'Ad options';
+
+  @override
+  String get adsOptionsBody => 'Consent and personalised ads';
 }

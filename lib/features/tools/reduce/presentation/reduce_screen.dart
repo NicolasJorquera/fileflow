@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/providers.dart';
 import '../../../../app/router.dart';
+import '../../../../core/domain/ads.dart';
 import '../../../../core/domain/files.dart';
 import '../../../../core/domain/pdf.dart';
 import '../../../../core/domain/tools.dart';
@@ -229,6 +231,8 @@ class _Options extends ConsumerWidget {
             ),
           ),
         _Fact(label: l10n.reduceSelectableText, value: l10n.reduceKept),
+        const SizedBox(height: Space.l),
+        ref.watch(adBannerProvider)(AdPlacement.reduceOptions),
       ],
     );
   }
