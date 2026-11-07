@@ -95,6 +95,13 @@ class SettingsScreen extends ConsumerWidget {
               ),
               const Divider(indent: Space.l, endIndent: Space.l),
               ListTile(
+                leading: const Icon(Icons.tune_outlined),
+                title: Text(l10n.adsOptionsTitle),
+                subtitle: Text(l10n.adsOptionsBody),
+                onTap: () => ref.read(consentGatewayProvider).showPrivacyOptions(),
+              ),
+              const Divider(indent: Space.l, endIndent: Space.l),
+              ListTile(
                 leading: const Icon(Icons.info_outline),
                 title: Text(l10n.aboutTitle),
                 subtitle: Text(l10n.aboutVersion(appVersion)),

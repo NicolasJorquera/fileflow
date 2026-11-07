@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:fileflow/app/providers.dart';
 import 'package:fileflow/core/domain/failures.dart';
+import 'package:fileflow/core/domain/ads.dart';
 import 'package:fileflow/core/domain/files.dart';
 import 'package:fileflow/core/domain/pdf.dart';
 import 'package:fileflow/core/domain/recents.dart';
@@ -38,6 +39,60 @@ class MemorySettings implements SettingsRepository {
 
   @override
   Future<void> setDefaultPage(PagePreset value) async => defaultPage = value;
+
+  @override
+  int completedTasks = 0;
+
+  @override
+  Future<void> setCompletedTasks(int value) async => completedTasks = value;
+
+  @override
+  int? interstitialAtTask;
+
+  @override
+  Future<void> setInterstitialAtTask(int? value) async => interstitialAtTask = value;
+
+  @override
+  DateTime? interstitialAt;
+
+  @override
+  Future<void> setInterstitialAt(DateTime value) async => interstitialAt = value;
+}
+
+/// Ads that never load: records interstitial requests.
+class FakeAds implements AdsGateway {
+  FakeAds({this.isEnabled = true, this.willShow = true});
+
+  final bool isEnabled, willShow;
+  int shown = 0, requested = 0;
+  bool started = false;
+
+  @override
+  bool get enabled => isEnabled;
+
+  @override
+  Future<void> start() async => started = true;
+
+  @override
+  Future<bool> showInterstitial() async {
+    requested++;
+    if (willShow) shown++;
+    return willShow;
+  }
+}
+
+class FakeConsent implements ConsentGateway {
+  bool canRequest = true;
+  int optionsOpened = 0;
+
+  @override
+  Future<void> gather() async {}
+
+  @override
+  Future<bool> canRequestAds() async => canRequest;
+
+  @override
+  Future<void> showPrivacyOptions() async => optionsOpened++;
 }
 
 class FakeWorkspace implements JobWorkspace {
@@ -470,6 +525,7 @@ List<Override> fakeOverrides({
   FakeWorkspace? workspace,
   int interrupted = 0,
   FakeScanner? scanner,
+  FakeAds? ads,
   FakeImageCodec? codec,
   String? region = 'CL',
 }) => [
@@ -480,6 +536,8 @@ List<Override> fakeOverrides({
   jobWorkspaceProvider.overrideWithValue(workspace ?? FakeWorkspace()),
   interruptedJobsProvider.overrideWithValue(interrupted),
   thumbnailSourceProvider.overrideWithValue(FakeThumbnailSource()),
+  adsGatewayProvider.overrideWithValue(ads ?? FakeAds(isEnabled: false)),
+  consentGatewayProvider.overrideWithValue(FakeConsent()),
   scannerGatewayProvider.overrideWithValue(scanner ?? FakeScanner()),
   imageCodecProvider.overrideWithValue(codec ?? FakeImageCodec()),
   regionProvider.overrideWithValue(region),

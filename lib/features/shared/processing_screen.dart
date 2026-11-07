@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../app/providers.dart';
 import '../../app/router.dart';
 import '../../core/domain/failures.dart';
 import '../../core/domain/recents.dart';
@@ -61,8 +63,10 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       case JobProgress():
         setState(() => _progress = event);
       case JobCompleted(:final output) when output is RecentItem:
+        _countTask();
         context.go(Routes.result(output.id));
       case JobCompleted():
+        _countTask();
         Navigator.of(context).pop();
       case JobFailed(failure: Cancelled()):
         break;
@@ -70,6 +74,9 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
         setState(() => _failure = failure);
     }
   }
+
+  void _countTask() =>
+      ProviderScope.containerOf(context, listen: false).read(interstitialProvider).recordCompletedTask();
 
   Future<void> _cancel() async {
     final l10n = AppLocalizations.of(context);

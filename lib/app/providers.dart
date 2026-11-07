@@ -1,6 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pdf_engine/pdf_engine.dart';
 
+import '../core/domain/ads.dart';
 import '../core/domain/files.dart';
 import '../core/domain/pdf.dart';
 import '../core/domain/recents.dart';
@@ -19,6 +21,31 @@ import 'flavor.dart';
 // tests with fakes. Presentation reads them here and never builds adapters.
 
 Never _missing(String name) => throw UnimplementedError('$name must be overridden in bootstrap');
+
+final adsGatewayProvider = Provider<AdsGateway>((ref) => _missing('adsGatewayProvider'));
+final consentGatewayProvider = Provider<ConsentGateway>((ref) => _missing('consentGatewayProvider'));
+
+/// Banner for a screen. The default shows nothing; bootstrap installs AdMob.
+final adBannerProvider = Provider<Widget Function(AdPlacement)>(
+  (ref) =>
+      (_) => const SizedBox.shrink(),
+);
+
+final interstitialProvider = Provider<InterstitialCoordinator>(
+  (ref) => InterstitialCoordinator(
+    ads: ref.watch(adsGatewayProvider),
+    settings: ref.watch(settingsRepositoryProvider),
+    clock: ref.watch(clockProvider),
+  ),
+);
+
+/// Consent, then the SDK. Failures are ignored: the app works without ads.
+final adsBootProvider = FutureProvider<void>((ref) async {
+  try {
+    await ref.read(consentGatewayProvider).gather();
+    await ref.read(adsGatewayProvider).start();
+  } catch (_) {}
+});
 
 final flavorProvider = Provider<Flavor>((ref) => Flavor.prod);
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) => _missing('settingsRepositoryProvider'));

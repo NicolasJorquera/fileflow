@@ -15,6 +15,7 @@ android {
     }
 
     defaultConfig {
+        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
         // Provisional: the final application id is fixed together with the product
         // name (trademark search pending) before the first Play upload (H10).
         applicationId = "io.github.nicolasjorquera.fileflow"

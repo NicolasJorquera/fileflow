@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:fileflow/app/app.dart';
 import 'package:fileflow/app/providers.dart';
+import 'package:fileflow/core/domain/ads.dart';
 import 'package:fileflow/core/domain/files.dart';
 import 'package:fileflow/core/domain/result.dart';
 import 'package:fileflow/core/domain/pdf.dart';
@@ -176,6 +177,9 @@ class DeviceEnv {
           pdfServiceProvider.overrideWithValue(EnginePdfService(engine, real)),
           recentsRepositoryProvider.overrideWithValue(recents),
           thumbnailSourceProvider.overrideWithValue(thumbnails),
+          // No ads in device tests: they would need network and real units.
+          adsGatewayProvider.overrideWithValue(const _NoAds()),
+          consentGatewayProvider.overrideWithValue(const _NoConsent()),
         ],
         child: const FileFlowApp(),
       ),
@@ -200,6 +204,24 @@ class TestSettings implements SettingsRepository {
   ThemePreference theme = ThemePreference.light;
 
   @override
+  int completedTasks = 0;
+
+  @override
+  Future<void> setCompletedTasks(int value) async => completedTasks = value;
+
+  @override
+  int? interstitialAtTask;
+
+  @override
+  Future<void> setInterstitialAtTask(int? value) async => interstitialAtTask = value;
+
+  @override
+  DateTime? interstitialAt;
+
+  @override
+  Future<void> setInterstitialAt(DateTime value) async => interstitialAt = value;
+
+  @override
   Future<void> setTheme(ThemePreference value) async => theme = value;
 
   @override
@@ -219,4 +241,30 @@ class TestSettings implements SettingsRepository {
 
   @override
   Future<void> setDefaultPage(PagePreset value) async => defaultPage = value;
+}
+
+class _NoAds implements AdsGateway {
+  const _NoAds();
+
+  @override
+  bool get enabled => false;
+
+  @override
+  Future<void> start() async {}
+
+  @override
+  Future<bool> showInterstitial() async => false;
+}
+
+class _NoConsent implements ConsentGateway {
+  const _NoConsent();
+
+  @override
+  Future<void> gather() async {}
+
+  @override
+  Future<bool> canRequestAds() async => false;
+
+  @override
+  Future<void> showPrivacyOptions() async {}
 }

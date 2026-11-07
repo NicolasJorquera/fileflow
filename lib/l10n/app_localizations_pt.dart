@@ -1122,4 +1122,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String aboutVersion(String version) {
     return 'Versão $version · licenças de código aberto';
   }
+
+  @override
+  String get showFirstPage => 'Ver primeira página';
+
+  @override
+  String get hideFirstPage => 'Ocultar primeira página';
+
+  @override
+  String get adsOptionsTitle => 'Opções de anúncios';
+
+  @override
+  String get adsOptionsBody => 'Consentimento e anúncios personalizados';
 }

@@ -1110,6 +1110,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String aboutVersion(String version) {
     return 'Versión $version · licencias de código abierto';
   }
+
+  @override
+  String get showFirstPage => 'Ver primera página';
+
+  @override
+  String get hideFirstPage => 'Ocultar primera página';
+
+  @override
+  String get adsOptionsTitle => 'Opciones de anuncios';
+
+  @override
+  String get adsOptionsBody => 'Consentimiento y anuncios personalizados';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).

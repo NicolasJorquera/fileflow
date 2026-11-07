@@ -1736,6 +1736,30 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Versión {version} · licencias de código abierto'**
   String aboutVersion(String version);
+
+  /// No description provided for @showFirstPage.
+  ///
+  /// In es, this message translates to:
+  /// **'Ver primera página'**
+  String get showFirstPage;
+
+  /// No description provided for @hideFirstPage.
+  ///
+  /// In es, this message translates to:
+  /// **'Ocultar primera página'**
+  String get hideFirstPage;
+
+  /// No description provided for @adsOptionsTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Opciones de anuncios'**
+  String get adsOptionsTitle;
+
+  /// No description provided for @adsOptionsBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Consentimiento y anuncios personalizados'**
+  String get adsOptionsBody;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
