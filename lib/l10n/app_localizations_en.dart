@@ -1050,4 +1050,48 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get languageLabel => 'Language';
+
+  @override
+  String get languageSystem => 'Same as the phone';
+
+  @override
+  String get settingsDocuments => 'Documents';
+
+  @override
+  String get defaultPageLabel => 'Page size for photos';
+
+  @override
+  String get settingsPrivacy => 'Privacy';
+
+  @override
+  String get privacyTitle => 'How we handle your files';
+
+  @override
+  String get privacyLocal => 'Everything is processed on your phone. Your documents and photos are never uploaded.';
+
+  @override
+  String get privacyNoAccount =>
+      'There are no accounts or servers: we don’t ask for your email or keep anything off your phone.';
+
+  @override
+  String get privacyRecents => 'Results stay in Recent for as long as you choose and are left out of Google’s backup.';
+
+  @override
+  String get privacyScanner =>
+      'The scanner is Google Play services’ own and works on the phone: what you scan stays on it.';
+
+  @override
+  String get privacyAds =>
+      'The app is paid for by ads when there is a connection. Ads never see your documents or appear on screens that show them.';
+
+  @override
+  String get aboutTitle => 'About FileFlow';
+
+  @override
+  String aboutVersion(String version) {
+    return 'Version $version · open source licenses';
+  }
 }

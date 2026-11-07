@@ -101,7 +101,7 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       },
       child: Scaffold(
         appBar: AppBar(automaticallyImplyLeading: false, title: Text(widget.args.title)),
-        body: failure == null ? _running(context) : _failed(context, failure),
+        body: _FitOrScroll(child: failure == null ? _running(context) : _failed(context, failure)),
       ),
     );
   }
@@ -221,4 +221,22 @@ class _ProcessingScreenState extends State<ProcessingScreen> {
       ),
     );
   }
+}
+
+/// Keeps the spaced-out layout on normal screens and scrolls when it does not
+/// fit (large text, small phones).
+class _FitOrScroll extends StatelessWidget {
+  const _FitOrScroll({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) => SingleChildScrollView(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: constraints.maxHeight),
+        child: IntrinsicHeight(child: child),
+      ),
+    ),
+  );
 }

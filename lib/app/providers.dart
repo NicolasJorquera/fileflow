@@ -83,6 +83,32 @@ final themePreferenceProvider = NotifierProvider<ThemePreferenceController, Them
   ThemePreferenceController.new,
 );
 
+/// App language tag, null for the phone's (Ajustes).
+final languageProvider = NotifierProvider<LanguageController, String?>(LanguageController.new);
+
+class LanguageController extends Notifier<String?> {
+  @override
+  String? build() => ref.read(settingsRepositoryProvider).language;
+
+  Future<void> select(String? tag) async {
+    state = tag;
+    await ref.read(settingsRepositoryProvider).setLanguage(tag);
+  }
+}
+
+/// Page size Fotos a PDF starts with (Ajustes).
+final defaultPageProvider = NotifierProvider<DefaultPageController, PagePreset>(DefaultPageController.new);
+
+class DefaultPageController extends Notifier<PagePreset> {
+  @override
+  PagePreset build() => ref.read(settingsRepositoryProvider).defaultPage;
+
+  Future<void> select(PagePreset value) async {
+    state = value;
+    await ref.read(settingsRepositoryProvider).setDefaultPage(value);
+  }
+}
+
 /// How long results stay in Recientes (Ajustes).
 final retentionProvider = NotifierProvider<RetentionController, RecentsRetention>(RetentionController.new);
 

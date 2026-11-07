@@ -260,5 +260,18 @@
   "toolReduceSubtitle": "Deixe seu PDF abaixo de 1, 2 ou 10 MB para enviá-lo onde pedem",
   "toolPhotosTitle": "Fotos para PDF",
   "toolPhotosSubtitle": "JPG, PNG, HEIC",
-  "errImagesUnreadable": "{count, plural, one{Não conseguimos ler essa foto. Ela pode estar danificada ou num formato que o celular não abre.} other{Não conseguimos ler {count} fotos. Elas podem estar danificadas ou num formato que o celular não abre.}}"
+  "errImagesUnreadable": "{count, plural, one{Não conseguimos ler essa foto. Ela pode estar danificada ou num formato que o celular não abre.} other{Não conseguimos ler {count} fotos. Elas podem estar danificadas ou num formato que o celular não abre.}}",
+  "languageLabel": "Idioma",
+  "languageSystem": "Igual ao celular",
+  "settingsDocuments": "Documentos",
+  "defaultPageLabel": "Tamanho da página para fotos",
+  "settingsPrivacy": "Privacidade",
+  "privacyTitle": "Como processamos seus arquivos",
+  "privacyLocal": "Tudo é processado no seu celular. Seus documentos e fotos nunca são enviados para a internet.",
+  "privacyNoAccount": "Não há contas nem servidores: não pedimos seu e-mail nem guardamos nada fora do celular.",
+  "privacyRecents": "Os resultados ficam em Recentes pelo tempo que você escolher e não entram no backup do Google.",
+  "privacyScanner": "O scanner é o do Google Play services e funciona no celular: o que você digitaliza não sai dele.",
+  "privacyAds": "O app é financiado por anúncios quando há conexão. Os anúncios nunca veem seus documentos nem aparecem em telas que os mostram.",
+  "aboutTitle": "Sobre o FileFlow",
+  "aboutVersion": "Versão {version} · licenças de código aberto"
 }

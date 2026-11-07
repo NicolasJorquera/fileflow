@@ -26,6 +26,18 @@ class MemorySettings implements SettingsRepository {
 
   @override
   Future<void> setRetention(RecentsRetention value) async => retention = value;
+
+  @override
+  String? language;
+
+  @override
+  Future<void> setLanguage(String? tag) async => language = tag;
+
+  @override
+  PagePreset defaultPage = PagePreset.auto;
+
+  @override
+  Future<void> setDefaultPage(PagePreset value) async => defaultPage = value;
 }
 
 class FakeWorkspace implements JobWorkspace {

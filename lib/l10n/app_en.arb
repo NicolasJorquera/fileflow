@@ -260,5 +260,18 @@
   "toolReduceSubtitle": "Get your PDF under 1, 2 or 10 MB to upload it wherever it’s required",
   "toolPhotosTitle": "Photos to PDF",
   "toolPhotosSubtitle": "JPG, PNG, HEIC",
-  "errImagesUnreadable": "{count, plural, one{We couldn’t read that photo. It may be damaged or in a format the phone can’t open.} other{We couldn’t read {count} photos. They may be damaged or in a format the phone can’t open.}}"
+  "errImagesUnreadable": "{count, plural, one{We couldn’t read that photo. It may be damaged or in a format the phone can’t open.} other{We couldn’t read {count} photos. They may be damaged or in a format the phone can’t open.}}",
+  "languageLabel": "Language",
+  "languageSystem": "Same as the phone",
+  "settingsDocuments": "Documents",
+  "defaultPageLabel": "Page size for photos",
+  "settingsPrivacy": "Privacy",
+  "privacyTitle": "How we handle your files",
+  "privacyLocal": "Everything is processed on your phone. Your documents and photos are never uploaded.",
+  "privacyNoAccount": "There are no accounts or servers: we don’t ask for your email or keep anything off your phone.",
+  "privacyRecents": "Results stay in Recent for as long as you choose and are left out of Google’s backup.",
+  "privacyScanner": "The scanner is Google Play services’ own and works on the phone: what you scan stays on it.",
+  "privacyAds": "The app is paid for by ads when there is a connection. Ads never see your documents or appear on screens that show them.",
+  "aboutTitle": "About FileFlow",
+  "aboutVersion": "Version {version} · open source licenses"
 }

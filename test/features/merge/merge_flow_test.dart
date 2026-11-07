@@ -145,19 +145,23 @@ void main() {
     files.openFailure = const NoAppAvailable();
     await _pumpApp(tester, overrides(), at: Routes.result('r1'));
 
+    await tester.scrollUntilVisible(find.text('Compartir'), 100, scrollable: _resultList());
     await tester.tap(find.text('Compartir'));
     await tester.pumpAndSettle();
     expect(files.shared.single.single.name, 'Documento unido 2026-11-03.pdf');
 
+    await tester.scrollUntilVisible(find.text('Guardar en…'), 100, scrollable: _resultList());
     await tester.tap(find.text('Guardar en…'));
     await tester.pumpAndSettle();
     expect(files.savedAs, ['Documento unido 2026-11-03.pdf']);
     expect(find.text('Guardado'), findsOneWidget);
 
+    await tester.scrollUntilVisible(find.text('Abrir con otra app'), 100, scrollable: _resultList());
     await tester.tap(find.text('Abrir con otra app'));
     await tester.pumpAndSettle();
     expect(find.text('No hay una app para abrir este archivo.'), findsOneWidget);
 
+    await tester.scrollUntilVisible(find.byType(TextField), -100, scrollable: _resultList());
     await tester.enterText(find.byType(TextField), 'Postulación beca');
     await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
@@ -277,3 +281,5 @@ void main() {
     handle.dispose();
   });
 }
+
+Finder _resultList() => find.descendant(of: find.byType(ResultScreen), matching: find.byType(Scrollable)).first;

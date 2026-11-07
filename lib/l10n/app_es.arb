@@ -895,5 +895,25 @@
         "type": "int"
       }
     }
+  },
+  "languageLabel": "Idioma",
+  "languageSystem": "Igual que el teléfono",
+  "settingsDocuments": "Documentos",
+  "defaultPageLabel": "Tamaño de página para fotos",
+  "settingsPrivacy": "Privacidad",
+  "privacyTitle": "Cómo procesamos tus archivos",
+  "privacyLocal": "Todo se procesa en tu teléfono. Tus documentos y fotos nunca se suben a internet.",
+  "privacyNoAccount": "No hay cuentas ni servidores: no pedimos tu correo ni guardamos nada fuera del teléfono.",
+  "privacyRecents": "Los resultados quedan en Recientes el tiempo que elijas y no se incluyen en la copia de seguridad de Google.",
+  "privacyScanner": "El escáner es el de Google Play services y funciona en el teléfono: lo que escaneas no sale de él.",
+  "privacyAds": "La app se financia con anuncios cuando hay conexión. Los anuncios nunca ven tus documentos ni aparecen en pantallas que los muestran.",
+  "aboutTitle": "Acerca de FileFlow",
+  "aboutVersion": "Versión {version} · licencias de código abierto",
+  "@aboutVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
   }
 }

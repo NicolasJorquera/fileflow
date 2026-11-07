@@ -11,6 +11,7 @@ import '../../design_system/theme.dart';
 import '../../design_system/tokens.dart';
 import '../../l10n/app_localizations.dart';
 import '../tools/registry.dart';
+import '../tools/shared/presentation/page_thumbnail.dart';
 import '../tools/shared/presentation/tool_args.dart';
 import 'result_actions.dart';
 import 'retention_label.dart';
@@ -119,6 +120,7 @@ class _Body extends ConsumerWidget {
         ],
         const SizedBox(height: Space.xl),
         if (item.isSingleFile) ...[
+          if (item.kind.isSinglePdf) ...[_Preview(path: item.path), const SizedBox(height: Space.l)],
           _NameField(item: item),
           const SizedBox(height: Space.s),
           Text(l10n.resultMeta(item.pages, size), style: text.bodySmall?.copyWith(color: palette.muted)),
@@ -186,6 +188,29 @@ class _Body extends ConsumerWidget {
       ],
     );
   }
+}
+
+/// First page of the result (PRD RF-03), from the thumbnail cache.
+class _Preview extends ConsumerWidget {
+  const _Preview({required this.path});
+
+  final String path;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) => Center(
+    child: SizedBox(
+      height: 180,
+      child: AspectRatio(
+        aspectRatio: 0.72,
+        child: DecoratedBox(
+          decoration: BoxDecoration(border: Border.all(color: context.palette.line)),
+          child: ExcludeSemantics(
+            child: PageThumbnail(thumbnails: ref.watch(thumbnailsProvider(path)).value, index: 0, label: '1'),
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 /// «Antes → Ahora» (UX v1.0): the bars are decorative, the figures are text.

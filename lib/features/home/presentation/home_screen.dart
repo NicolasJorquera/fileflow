@@ -209,34 +209,46 @@ class _ScanCard extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     final palette = context.palette;
     final text = Theme.of(context).textTheme;
+    final button = FilledButton(
+      style: FilledButton.styleFrom(minimumSize: const Size(0, Touch.minTarget)),
+      onPressed: () => startScan(context, ref),
+      child: Text(l10n.scanButton),
+    );
+    // Large text (or a narrow phone): the button goes under the text.
+    final stacked = MediaQuery.textScalerOf(context).scale(1) > 1.3;
+    final intro = Row(
+      children: [
+        Icon(Icons.document_scanner_outlined, size: 36, color: palette.primary),
+        const SizedBox(width: Space.l),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.scanTitle,
+                style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: palette.fg),
+              ),
+              Text(l10n.scanSubtitle, style: text.bodySmall?.copyWith(color: palette.fg)),
+            ],
+          ),
+        ),
+        if (!stacked) ...[const SizedBox(width: Space.s), button],
+      ],
+    );
     return DecoratedBox(
       decoration: BoxDecoration(color: palette.primarySoft, borderRadius: BorderRadius.circular(Radii.hero)),
       child: Padding(
         padding: const EdgeInsets.all(Space.l),
-        child: Row(
-          children: [
-            Icon(Icons.document_scanner_outlined, size: 36, color: palette.primary),
-            const SizedBox(width: Space.l),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: stacked
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    l10n.scanTitle,
-                    style: text.titleMedium?.copyWith(fontWeight: FontWeight.w700, color: palette.fg),
-                  ),
-                  Text(l10n.scanSubtitle, style: text.bodySmall?.copyWith(color: palette.fg)),
+                  intro,
+                  const SizedBox(height: Space.m),
+                  button,
                 ],
-              ),
-            ),
-            const SizedBox(width: Space.s),
-            FilledButton(
-              style: FilledButton.styleFrom(minimumSize: const Size(0, Touch.minTarget)),
-              onPressed: () => startScan(context, ref),
-              child: Text(l10n.scanButton),
-            ),
-          ],
-        ),
+              )
+            : intro,
       ),
     );
   }

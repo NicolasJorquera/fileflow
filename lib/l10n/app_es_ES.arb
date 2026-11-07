@@ -6,5 +6,9 @@
   "resolutionHelp": "150 ppp: se ve bien en pantalla y en WhatsApp. 300 ppp: para imprimir.",
   "scanOfflineBody": "Tu móvil descarga el escáner una sola vez. Después funciona sin internet. Mientras tanto, puedes crear un PDF con fotos que ya tengas.",
   "scanUnsupportedTitle": "El escáner no está disponible en este móvil",
-  "pageOficio": "Folio (216 × 330 mm)"
+  "pageOficio": "Folio (216 × 330 mm)",
+  "privacyLocal": "Todo se procesa en tu móvil. Tus documentos y fotos nunca se suben a internet.",
+  "languageSystem": "Igual que el móvil",
+  "privacyScanner": "El escáner es el de Google Play services y funciona en el móvil: lo que escaneas no sale de él.",
+  "privacyNoAccount": "No hay cuentas ni servidores: no pedimos tu correo ni guardamos nada fuera del móvil."
 }

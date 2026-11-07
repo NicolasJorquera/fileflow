@@ -180,7 +180,7 @@ class _PickPrompt extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(Space.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -221,6 +221,7 @@ class _Editor extends ConsumerWidget {
           child: Row(
             children: [
               Expanded(
+                flex: 3,
                 child: Semantics(
                   liveRegion: true,
                   child: Text(
@@ -232,9 +233,15 @@ class _Editor extends ConsumerWidget {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: count == state.pages.length ? controller.clearSelection : onSelectAll,
-                child: Text(count == state.pages.length ? l10n.clearSelection : l10n.selectAll),
+              Flexible(
+                flex: 2,
+                child: TextButton(
+                  onPressed: count == state.pages.length ? controller.clearSelection : onSelectAll,
+                  child: Text(
+                    count == state.pages.length ? l10n.clearSelection : l10n.selectAll,
+                    textAlign: TextAlign.end,
+                  ),
+                ),
               ),
             ],
           ),
@@ -474,14 +481,20 @@ class _Actions extends StatelessWidget {
                   PopupMenuItem(value: () => onMove(-1), enabled: hasSelection, child: Text(l10n.moveBefore)),
                   PopupMenuItem(value: () => onMove(1), enabled: hasSelection, child: Text(l10n.moveAfter)),
                 ],
-                child: SizedBox(
-                  height: 64,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 64),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.more_horiz, color: palette.fg),
                       const SizedBox(height: 2),
-                      Text(l10n.more, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: palette.fg)),
+                      Text(
+                        l10n.more,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(color: palette.fg),
+                      ),
                     ],
                   ),
                 ),
