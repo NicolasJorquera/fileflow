@@ -6,8 +6,8 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../app/flavor.dart';
 import '../../core/domain/ads.dart';
 
-/// Ad unit IDs. Dev always uses Google's test units. Prod reads its own with
-/// --dart-define and shows no ads until they are given (before H10).
+/// Ad unit IDs. Dev always uses Google's test units. Prod uses the FileFlow
+/// units by default; --dart-define can override them.
 class AdUnits {
   const AdUnits({this.banner, this.interstitial});
 
@@ -20,8 +20,12 @@ class AdUnits {
   static AdUnits forFlavor(Flavor flavor) => switch (flavor) {
     Flavor.dev => test,
     Flavor.prod => AdUnits(
-      banner: _nonEmpty(const String.fromEnvironment('ADMOB_BANNER')),
-      interstitial: _nonEmpty(const String.fromEnvironment('ADMOB_INTERSTITIAL')),
+      banner: _nonEmpty(
+        const String.fromEnvironment('ADMOB_BANNER', defaultValue: 'ca-app-pub-3038495459046159/7704175634'),
+      ),
+      interstitial: _nonEmpty(
+        const String.fromEnvironment('ADMOB_INTERSTITIAL', defaultValue: 'ca-app-pub-3038495459046159/3828509807'),
+      ),
     ),
   };
 

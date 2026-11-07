@@ -15,7 +15,6 @@ android {
     }
 
     defaultConfig {
-        manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
         // Provisional: the final application id is fixed together with the product
         // name (trademark search pending) before the first Play upload (H10).
         applicationId = "io.github.nicolasjorquera.fileflow"
@@ -41,11 +40,14 @@ android {
         create("dev") {
             dimension = "env"
             applicationIdSuffix = ".dev"
+            // Google's test app ID for dev: never serves real ads.
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
             resValue("string", "app_name", "FileFlow dev")
         }
         create("prod") {
             dimension = "env"
             resValue("string", "app_name", "FileFlow")
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3038495459046159~7710100406"
         }
     }
 
