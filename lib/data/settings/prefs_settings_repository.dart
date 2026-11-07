@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/domain/pdf.dart';
 import '../../core/domain/settings.dart';
 
 /// Settings stored with shared_preferences. Unlike documents, preferences may be
@@ -12,6 +13,8 @@ class PrefsSettingsRepository implements SettingsRepository {
 
   static const _themeKey = 'theme';
   static const _retentionKey = 'recents_retention';
+  static const _languageKey = 'language';
+  static const _pageKey = 'default_page';
 
   final SharedPreferences _prefs;
 
@@ -28,4 +31,17 @@ class PrefsSettingsRepository implements SettingsRepository {
 
   @override
   Future<void> setRetention(RecentsRetention value) => _prefs.setString(_retentionKey, value.name);
+
+  @override
+  String? get language => _prefs.getString(_languageKey);
+
+  @override
+  Future<void> setLanguage(String? tag) =>
+      tag == null ? _prefs.remove(_languageKey) : _prefs.setString(_languageKey, tag);
+
+  @override
+  PagePreset get defaultPage => PagePreset.values.asNameMap()[_prefs.getString(_pageKey)] ?? PagePreset.auto;
+
+  @override
+  Future<void> setDefaultPage(PagePreset value) => _prefs.setString(_pageKey, value.name);
 }

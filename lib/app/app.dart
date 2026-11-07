@@ -73,6 +73,12 @@ class _FileFlowAppState extends ConsumerState<FileFlowApp> {
       },
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: switch (ref.watch(languageProvider)?.split('_')) {
+        null => null,
+        [final language] => Locale(language),
+        [final language, final country, ...] => Locale(language, country),
+        _ => null,
+      },
       routerConfig: _router,
     );
   }

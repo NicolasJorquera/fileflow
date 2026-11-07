@@ -6,6 +6,7 @@ import 'package:fileflow/app/providers.dart';
 import 'package:fileflow/core/domain/settings.dart';
 import 'package:fileflow/design_system/theme.dart';
 import 'package:fileflow/features/home/presentation/home_screen.dart';
+import 'package:fileflow/features/settings/presentation/privacy_screen.dart';
 import 'package:fileflow/features/settings/presentation/settings_screen.dart';
 import 'package:fileflow/l10n/app_localizations.dart';
 
@@ -71,6 +72,12 @@ void main() {
           child: _screen(const SettingsScreen(), locale: const Locale('pt')),
         ),
         GoldenTestScenario(name: 'ajustes rtl', constraints: phone, child: _screen(const SettingsScreen(), rtl: true)),
+        GoldenTestScenario(name: 'privacidad', constraints: phone, child: _screen(const PrivacyScreen())),
+        GoldenTestScenario(
+          name: 'privacidad oscuro',
+          constraints: phone,
+          child: _screen(const PrivacyScreen(), brightness: Brightness.dark),
+        ),
       ],
     ),
   );

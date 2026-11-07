@@ -3,6 +3,7 @@ import 'package:fileflow/core/domain/result.dart';
 import 'package:fileflow/core/domain/scanner.dart';
 import 'package:fileflow/features/shared/result_screen.dart';
 import 'package:fileflow/features/tools/photos/presentation/photos_screen.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../support/app_harness.dart';
@@ -34,6 +35,11 @@ void main() {
     expect(find.byType(ResultScreen), findsOneWidget);
     expect(find.text('Escaneo listo'), findsOneWidget);
     expect(recents.current.single.name, startsWith('Escaneo '));
+    await tester.scrollUntilVisible(
+      find.text('Ajustar tamaño'),
+      200,
+      scrollable: find.descendant(of: find.byType(ResultScreen), matching: find.byType(Scrollable)).first,
+    );
     expect(find.text('Ajustar tamaño'), findsOneWidget, reason: 'next step');
   });
 

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../app/flavor.dart';
 import '../../../app/providers.dart';
 import '../../../app/router.dart';
+import '../../../app/version.dart';
+import '../../../core/domain/pdf.dart';
 import '../../../core/domain/settings.dart';
 import '../../../core/format/sizes.dart';
 import '../../../design_system/theme.dart';
@@ -12,8 +14,8 @@ import '../../../design_system/tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/retention_label.dart';
 
-/// Ajustes: theme and how long Recientes keeps results. Language, page size
-/// and privacy rows arrive with their milestones.
+/// Ajustes (UX v1.0): theme, language, default page size, Recientes, privacy
+/// and about.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -55,9 +57,53 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
           ),
+          const SizedBox(height: Space.s),
+          _Card(
+            children: [
+              ListTile(
+                title: Text(l10n.languageLabel),
+                subtitle: Text(_languageName(l10n, ref.watch(languageProvider))),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _chooseLanguage(context, ref),
+              ),
+            ],
+          ),
+          const SizedBox(height: Space.xl),
+          _SectionLabel(l10n.settingsDocuments),
+          _Card(
+            children: [
+              ListTile(
+                title: Text(l10n.defaultPageLabel),
+                subtitle: Text(_pageName(l10n, ref.watch(defaultPageProvider))),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => _choosePage(context, ref),
+              ),
+            ],
+          ),
           const SizedBox(height: Space.xl),
           _SectionLabel(l10n.settingsRecents),
           const _RetentionCard(),
+          const SizedBox(height: Space.xl),
+          _SectionLabel(l10n.settingsPrivacy),
+          _Card(
+            children: [
+              ListTile(
+                leading: Icon(Icons.verified_user_outlined, color: palette.success),
+                title: Text(l10n.privacyTitle),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => context.push(Routes.privacy),
+              ),
+              const Divider(indent: Space.l, endIndent: Space.l),
+              ListTile(
+                leading: const Icon(Icons.info_outline),
+                title: Text(l10n.aboutTitle),
+                subtitle: Text(l10n.aboutVersion(appVersion)),
+                onTap: () =>
+                    showLicensePage(context: context, applicationName: l10n.appName, applicationVersion: appVersion),
+              ),
+            ],
+          ),
+          const SizedBox(height: Space.xl),
           if (ref.watch(flavorProvider) == Flavor.dev) ...[
             const SizedBox(height: Space.xl),
             ListTile(
@@ -153,3 +199,84 @@ class _RetentionCard extends ConsumerWidget {
     );
   }
 }
+
+class _Card extends StatelessWidget {
+  const _Card({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    color: context.palette.surface,
+    clipBehavior: Clip.antiAlias,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(Radii.card),
+      side: BorderSide(color: context.palette.line),
+    ),
+    child: Column(children: children),
+  );
+}
+
+/// The languages of 1.0 (Gate C) by their own names, so anyone can find theirs.
+const _languages = <String?>[null, 'es', 'es_ES', 'en', 'pt'];
+
+String _languageName(AppLocalizations l10n, String? tag) => switch (tag) {
+  null => l10n.languageSystem,
+  'es' => 'Español (Latinoamérica)',
+  'es_ES' => 'Español (España)',
+  'en' => 'English',
+  'pt' => 'Português (Brasil)',
+  _ => tag,
+};
+
+String _pageName(AppLocalizations l10n, PagePreset preset) => switch (preset) {
+  PagePreset.auto => l10n.pageAuto,
+  PagePreset.a4 => 'A4',
+  PagePreset.letter => l10n.pageLetter,
+  PagePreset.oficio => l10n.pageOficio,
+  PagePreset.fitImage => l10n.pageFitImage,
+};
+
+Future<void> _chooseLanguage(BuildContext context, WidgetRef ref) => _chooseFrom<String?>(
+  context,
+  values: _languages,
+  current: ref.read(languageProvider),
+  label: (l10n, tag) => _languageName(l10n, tag),
+  onSelected: ref.read(languageProvider.notifier).select,
+);
+
+Future<void> _choosePage(BuildContext context, WidgetRef ref) => _chooseFrom<PagePreset>(
+  context,
+  values: PagePreset.values,
+  current: ref.read(defaultPageProvider),
+  label: _pageName,
+  onSelected: ref.read(defaultPageProvider.notifier).select,
+);
+
+Future<void> _chooseFrom<T>(
+  BuildContext context, {
+  required List<T> values,
+  required T current,
+  required String Function(AppLocalizations, T) label,
+  required Future<void> Function(T) onSelected,
+}) => showModalBottomSheet<void>(
+  context: context,
+  showDragHandle: true,
+  isScrollControlled: true,
+  builder: (sheetContext) {
+    final l10n = AppLocalizations.of(sheetContext);
+    return SafeArea(
+      child: RadioGroup<T>(
+        groupValue: current,
+        onChanged: (value) {
+          Navigator.of(sheetContext).pop();
+          onSelected(value as T);
+        },
+        child: ListView(
+          shrinkWrap: true,
+          children: [for (final v in values) RadioListTile<T>(value: v, title: Text(label(l10n, v)))],
+        ),
+      ),
+    );
+  },
+);

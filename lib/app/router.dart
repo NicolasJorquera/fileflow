@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/dev_tools/presentation/diagnostics_screen.dart';
 import '../features/home/presentation/home_screen.dart';
+import '../features/settings/presentation/privacy_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import '../features/shared/processing_screen.dart';
 import '../features/shared/result_screen.dart';
@@ -18,6 +19,7 @@ import '../features/tools/to_image/presentation/to_image_screen.dart';
 abstract final class Routes {
   static const home = '/';
   static const settings = '/settings';
+  static const privacy = '/privacy';
   static const recents = '/recents';
   static const merge = '/merge';
   static const reduce = '/reduce';
@@ -72,6 +74,7 @@ GoRouter buildRouter({String initialLocation = Routes.home}) => GoRouter(
       ],
     ),
     GoRoute(path: Routes.settings, builder: (context, state) => const SettingsScreen()),
+    GoRoute(path: Routes.privacy, builder: (context, state) => const PrivacyScreen()),
     GoRoute(path: Routes.diagnostics, builder: (context, state) => const DiagnosticsScreen()),
   ],
 );

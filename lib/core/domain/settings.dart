@@ -1,3 +1,5 @@
+import 'pdf.dart';
+
 /// User preferences that live in the domain (no Flutter types here).
 enum ThemePreference { system, light, dark }
 
@@ -20,4 +22,13 @@ abstract interface class SettingsRepository {
 
   RecentsRetention get retention;
   Future<void> setRetention(RecentsRetention value);
+
+  /// App language as a tag («es», «es_ES», «en», «pt»); null follows the
+  /// phone (and Android 13's per-app language setting).
+  String? get language;
+  Future<void> setLanguage(String? tag);
+
+  /// Page size Fotos a PDF starts with.
+  PagePreset get defaultPage;
+  Future<void> setDefaultPage(PagePreset value);
 }

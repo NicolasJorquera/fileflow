@@ -1658,6 +1658,84 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'{count, plural, one{No pudimos leer esa foto. Puede estar dañada o en un formato que el teléfono no abre.} other{No pudimos leer {count} fotos. Pueden estar dañadas o en un formato que el teléfono no abre.}}'**
   String errImagesUnreadable(int count);
+
+  /// No description provided for @languageLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Idioma'**
+  String get languageLabel;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In es, this message translates to:
+  /// **'Igual que el teléfono'**
+  String get languageSystem;
+
+  /// No description provided for @settingsDocuments.
+  ///
+  /// In es, this message translates to:
+  /// **'Documentos'**
+  String get settingsDocuments;
+
+  /// No description provided for @defaultPageLabel.
+  ///
+  /// In es, this message translates to:
+  /// **'Tamaño de página para fotos'**
+  String get defaultPageLabel;
+
+  /// No description provided for @settingsPrivacy.
+  ///
+  /// In es, this message translates to:
+  /// **'Privacidad'**
+  String get settingsPrivacy;
+
+  /// No description provided for @privacyTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Cómo procesamos tus archivos'**
+  String get privacyTitle;
+
+  /// No description provided for @privacyLocal.
+  ///
+  /// In es, this message translates to:
+  /// **'Todo se procesa en tu teléfono. Tus documentos y fotos nunca se suben a internet.'**
+  String get privacyLocal;
+
+  /// No description provided for @privacyNoAccount.
+  ///
+  /// In es, this message translates to:
+  /// **'No hay cuentas ni servidores: no pedimos tu correo ni guardamos nada fuera del teléfono.'**
+  String get privacyNoAccount;
+
+  /// No description provided for @privacyRecents.
+  ///
+  /// In es, this message translates to:
+  /// **'Los resultados quedan en Recientes el tiempo que elijas y no se incluyen en la copia de seguridad de Google.'**
+  String get privacyRecents;
+
+  /// No description provided for @privacyScanner.
+  ///
+  /// In es, this message translates to:
+  /// **'El escáner es el de Google Play services y funciona en el teléfono: lo que escaneas no sale de él.'**
+  String get privacyScanner;
+
+  /// No description provided for @privacyAds.
+  ///
+  /// In es, this message translates to:
+  /// **'La app se financia con anuncios cuando hay conexión. Los anuncios nunca ven tus documentos ni aparecen en pantallas que los muestran.'**
+  String get privacyAds;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In es, this message translates to:
+  /// **'Acerca de FileFlow'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutVersion.
+  ///
+  /// In es, this message translates to:
+  /// **'Versión {version} · licencias de código abierto'**
+  String aboutVersion(String version);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

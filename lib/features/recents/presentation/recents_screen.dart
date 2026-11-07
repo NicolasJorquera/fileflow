@@ -116,7 +116,17 @@ class _RecentsScreenState extends ConsumerState<RecentsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.recentTitle),
-        actions: [if (items.isNotEmpty) TextButton(onPressed: () => _clearAll(items), child: Text(l10n.clearAll))],
+        actions: [
+          if (items.isNotEmpty)
+            // With large text the label does not fit next to the title.
+            MediaQuery.textScalerOf(context).scale(1) > 1.3
+                ? IconButton(
+                    tooltip: l10n.clearAll,
+                    icon: const Icon(Icons.delete_sweep_outlined),
+                    onPressed: () => _clearAll(items),
+                  )
+                : TextButton(onPressed: () => _clearAll(items), child: Text(l10n.clearAll)),
+        ],
       ),
       body: items.isEmpty
           ? _Empty(onPick: _pickPdf)
@@ -203,7 +213,10 @@ class _Row extends ConsumerWidget {
       title: Text(item.name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: Space.xs),
-        child: Row(
+        child: Wrap(
+          spacing: Space.s,
+          runSpacing: Space.xs,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             DecoratedBox(
               decoration: BoxDecoration(color: tagBg, borderRadius: BorderRadius.circular(Radii.small)),
@@ -212,10 +225,7 @@ class _Row extends ConsumerWidget {
                 child: Text(resultTag(l10n, item.kind), style: text.labelSmall?.copyWith(color: tagFg)),
               ),
             ),
-            const SizedBox(width: Space.s),
-            Expanded(
-              child: Text(meta, style: text.bodySmall?.copyWith(color: palette.muted)),
-            ),
+            Text(meta, style: text.bodySmall?.copyWith(color: palette.muted)),
           ],
         ),
       ),
@@ -252,7 +262,7 @@ class _Empty extends StatelessWidget {
     final palette = context.palette;
     final text = Theme.of(context).textTheme;
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(Space.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,

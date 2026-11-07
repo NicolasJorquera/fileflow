@@ -1065,6 +1065,51 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get languageLabel => 'Idioma';
+
+  @override
+  String get languageSystem => 'Igual que el teléfono';
+
+  @override
+  String get settingsDocuments => 'Documentos';
+
+  @override
+  String get defaultPageLabel => 'Tamaño de página para fotos';
+
+  @override
+  String get settingsPrivacy => 'Privacidad';
+
+  @override
+  String get privacyTitle => 'Cómo procesamos tus archivos';
+
+  @override
+  String get privacyLocal => 'Todo se procesa en tu teléfono. Tus documentos y fotos nunca se suben a internet.';
+
+  @override
+  String get privacyNoAccount =>
+      'No hay cuentas ni servidores: no pedimos tu correo ni guardamos nada fuera del teléfono.';
+
+  @override
+  String get privacyRecents =>
+      'Los resultados quedan en Recientes el tiempo que elijas y no se incluyen en la copia de seguridad de Google.';
+
+  @override
+  String get privacyScanner =>
+      'El escáner es el de Google Play services y funciona en el teléfono: lo que escaneas no sale de él.';
+
+  @override
+  String get privacyAds =>
+      'La app se financia con anuncios cuando hay conexión. Los anuncios nunca ven tus documentos ni aparecen en pantallas que los muestran.';
+
+  @override
+  String get aboutTitle => 'Acerca de FileFlow';
+
+  @override
+  String aboutVersion(String version) {
+    return 'Versión $version · licencias de código abierto';
+  }
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
@@ -1094,4 +1139,18 @@ class AppLocalizationsEsEs extends AppLocalizationsEs {
 
   @override
   String get scanUnsupportedTitle => 'El escáner no está disponible en este móvil';
+
+  @override
+  String get languageSystem => 'Igual que el móvil';
+
+  @override
+  String get privacyLocal => 'Todo se procesa en tu móvil. Tus documentos y fotos nunca se suben a internet.';
+
+  @override
+  String get privacyNoAccount =>
+      'No hay cuentas ni servidores: no pedimos tu correo ni guardamos nada fuera del móvil.';
+
+  @override
+  String get privacyScanner =>
+      'El escáner es el de Google Play services y funciona en el móvil: lo que escaneas no sale de él.';
 }

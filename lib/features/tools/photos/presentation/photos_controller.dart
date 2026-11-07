@@ -110,7 +110,7 @@ class PhotosController extends Notifier<PhotosState> {
       final dir = _dir;
       if (dir != null) _queue.whenComplete(() async => workspace.delete(await dir));
     });
-    return const PhotosState();
+    return PhotosState(preset: ref.read(defaultPageProvider));
   }
 
   /// Opens the Photo Picker for the room left. Returns the failure to show.

@@ -9,6 +9,7 @@ import 'package:fileflow/app/app.dart';
 import 'package:fileflow/app/providers.dart';
 import 'package:fileflow/core/domain/files.dart';
 import 'package:fileflow/core/domain/result.dart';
+import 'package:fileflow/core/domain/pdf.dart';
 import 'package:fileflow/core/domain/settings.dart';
 import 'package:fileflow/core/jobs/jobs.dart';
 import 'package:fileflow/data/files/disk_job_workspace.dart';
@@ -206,4 +207,16 @@ class TestSettings implements SettingsRepository {
 
   @override
   Future<void> setRetention(RecentsRetention value) async => retention = value;
+
+  @override
+  String? language;
+
+  @override
+  Future<void> setLanguage(String? tag) async => language = tag;
+
+  @override
+  PagePreset defaultPage = PagePreset.auto;
+
+  @override
+  Future<void> setDefaultPage(PagePreset value) async => defaultPage = value;
 }

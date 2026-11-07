@@ -53,15 +53,19 @@ class _PagePickerScreenState extends ConsumerState<PagePickerScreen> {
             child: Row(
               children: [
                 Expanded(
+                  flex: 3,
                   child: Text(
                     _selected.isEmpty ? l10n.organizeHint : l10n.selectedCount(_selected.length),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: palette.muted),
                   ),
                 ),
-                TextButton(
-                  onPressed: () =>
-                      setState(() => _selected = all ? {} : {for (var i = 0; i < widget.pageCount; i++) i}),
-                  child: Text(all ? l10n.clearSelection : l10n.selectAll),
+                Flexible(
+                  flex: 2,
+                  child: TextButton(
+                    onPressed: () =>
+                        setState(() => _selected = all ? {} : {for (var i = 0; i < widget.pageCount; i++) i}),
+                    child: Text(all ? l10n.clearSelection : l10n.selectAll, textAlign: TextAlign.end),
+                  ),
                 ),
               ],
             ),
