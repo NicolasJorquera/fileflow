@@ -26,9 +26,8 @@ android {
     }
 
     defaultConfig {
-        // Provisional: the final application id is fixed together with the product
-        // name (trademark search pending) before the first Play upload (H10).
-        applicationId = "io.github.nicolasjorquera.fileflow"
+        // Play package name (cannot change once published). The Kotlin namespace stays.
+        applicationId = "com.gonisoma.fileflow"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // API 24: minimum of the document scanner plugin (PRD RNF-08).

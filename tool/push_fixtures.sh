@@ -5,7 +5,7 @@
 #
 #   tool/push_fixtures.sh            uses $ANDROID_SERIAL
 set -eu
-PKG=io.github.nicolasjorquera.fileflow.dev
+PKG=com.gonisoma.fileflow.dev
 SRC=packages/pdf_engine/test/fixtures
 for f in scan_color_10p.pdf scan_gray_10p.pdf mixed_12p.pdf text_50p.pdf; do
   adb push "$SRC/$f" "/data/local/tmp/$f" >/dev/null
