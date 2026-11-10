@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- PRD RN-07: documents (files/, cache/) never leave the device through backup or
-     device-to-device transfer. Only preferences (theme, language) are kept. -->
+<!-- PRD RN-07 (Android 12+): documents (files/, cache/) never leave the device through
+     backup or device-to-device transfer. Only preferences (theme, language) are kept:
+     once there is an include, everything else is left out. -->
 <data-extraction-rules>
     <cloud-backup>
         <include domain="sharedpref" path="." />
-        <exclude domain="file" path="." />
-        <exclude domain="database" path="." />
-        <exclude domain="root" path="." />
     </cloud-backup>
     <device-transfer>
         <include domain="sharedpref" path="." />
-        <exclude domain="file" path="." />
-        <exclude domain="database" path="." />
-        <exclude domain="root" path="." />
     </device-transfer>
 </data-extraction-rules>
