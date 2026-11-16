@@ -39,3 +39,17 @@ Output: `build/app/outputs/bundle/prodRelease/app-prod-release.aab`.
 3. Store listing: texts in `docs/store/*.md`, graphics above; category Productivity; contact email.
 4. Production › Create release: Play App Signing on (Google manages the app key), upload the AAB, release notes from the listing files, countries, roll out. Review usually takes a few days.
 5. AdMob: in the AdMob app, link it to the Play listing once it is live, and publish `app-ads.txt` on the developer website set in Play (root of that domain).
+
+## Automatic publishing (GitHub Actions)
+`.github/workflows/play-store.yml` builds the prod flavor, signs it and uploads it with the Play service account.
+
+| Trigger | Track | Status |
+|---|---|---|
+| Merge to `main` | internal | completed |
+| `v*` tag (e.g. `v1.0.1`) | `PLAY_TAG_TRACK` variable, `alpha` (closed testing) by default | completed; staged at 20 % when the variable is `production` |
+| Manual run (Actions → "Publish to Play") | any | any |
+
+- **versionName** comes from `pubspec.yaml`; a tag must match it. **versionCode** is the run number plus `VERSION_CODE_OFFSET` (100 by default), so it always grows and stays above the 1 uploaded by hand. The `+N` in `pubspec.yaml` only matters for manual builds.
+- Runs the tests and refuses to upload an AAB signed with the debug key. Keeps the AAB and `mapping.txt` as a run artifact for 30 days.
+- Once Play grants production access (12 testers × 14 days in closed testing), set the `PLAY_TAG_TRACK` variable to `production`.
+- Setup in GitHub → Settings → Environments → `play-store`: secrets `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD` (the values in `android/key.properties`) and `PLAY_SERVICE_ACCOUNT_JSON`.
