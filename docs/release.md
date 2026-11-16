@@ -26,7 +26,7 @@ Output: `build/app/outputs/bundle/prodRelease/app-prod-release.aab`.
 - After re-rendering, strip alpha from the iOS icons (App Store rejects it): `sips` to JPEG and back, as done on 2026-11-10.
 
 ## Play Console, first release
-1. Create app: name «FileFlow: PDF sin internet», default language es-419, app, free.
+1. Create app: name «FileFlow: PDF sin internet», default language es-419, app, free (free apps can sell in-app products; Play shows «Contains ads · In-app purchases»).
 2. Set up your app:
    - Privacy policy: https://nicolasjorquera.github.io/fileflow/privacy/
    - App access: all functionality available without special access.
@@ -39,6 +39,14 @@ Output: `build/app/outputs/bundle/prodRelease/app-prod-release.aab`.
 3. Store listing: texts in `docs/store/*.md`, graphics above; category Productivity; contact email.
 4. Production › Create release: Play App Signing on (Google manages the app key), upload the AAB, release notes from the listing files, countries, roll out. Review usually takes a few days.
 5. AdMob: in the AdMob app, link it to the Play listing once it is live, and publish `app-ads.txt` on the developer website set in Play (root of that domain).
+
+## In-app product «Sin anuncios»
+The app is free with ads and sells one non-consumable product that removes every ad (Google Play Billing, no backend).
+
+1. Play Console › Monetize › Products › In-app products: create `fileflow_remove_ads` (this exact ID), name «Sin anuncios» / «No ads» / «Sem anúncios», price, then Activate. Play needs an uploaded build with the BILLING permission (added by `in_app_purchase`) before it lets you create products.
+2. The app always shows the price Play returns, localized; there is no price in the code. Without the product (or without Play or a connection) the card in Ajustes says Google Play is not available and nothing else changes.
+3. Test with license testers (Play Console › Settings › License testing) on an internal or closed testing build installed from Play: buy, cancel, «slow test card» for a pending purchase, refund from Order management (the app revokes on the next start), «Restaurar compra» after reinstalling.
+4. State: saved in the preferences (`ads_removed`) and checked with Play on every start; when Play answers it wins, offline the saved state stays. Purchases are acknowledged by the app (otherwise Play refunds them after 3 days). There is no server-side validation: a tampered device could unlock it (accepted risk, no backend).
 
 ## Automatic publishing (GitHub Actions)
 `.github/workflows/play-store.yml` builds the prod flavor, signs it and uploads it with the Play service account.

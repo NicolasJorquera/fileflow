@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pdf_engine/pdf_engine.dart';
@@ -5,6 +7,7 @@ import 'package:pdf_engine/pdf_engine.dart';
 import '../core/domain/ads.dart';
 import '../core/domain/files.dart';
 import '../core/domain/pdf.dart';
+import '../core/domain/purchases.dart';
 import '../core/domain/recents.dart';
 import '../core/domain/scanner.dart';
 import '../core/domain/settings.dart';
@@ -24,11 +27,18 @@ Never _missing(String name) => throw UnimplementedError('$name must be overridde
 
 final adsGatewayProvider = Provider<AdsGateway>((ref) => _missing('adsGatewayProvider'));
 final consentGatewayProvider = Provider<ConsentGateway>((ref) => _missing('consentGatewayProvider'));
+final billingGatewayProvider = Provider<BillingGateway>((ref) => _missing('billingGatewayProvider'));
 
-/// Banner for a screen. The default shows nothing; bootstrap installs AdMob.
-final adBannerProvider = Provider<Widget Function(AdPlacement)>(
+/// AdMob banner for a screen. The default shows nothing; bootstrap installs
+/// AdMob. Screens read [adBannerProvider], never this one.
+final adMobBannerProvider = Provider<Widget Function(AdPlacement)>(
   (ref) =>
       (_) => const SizedBox.shrink(),
+);
+
+/// Banner for a screen: nothing at all once «Sin anuncios» is bought.
+final adBannerProvider = Provider<Widget Function(AdPlacement)>(
+  (ref) => ref.watch(adsRemovedProvider) ? (_) => const SizedBox.shrink() : ref.watch(adMobBannerProvider),
 );
 
 final interstitialProvider = Provider<InterstitialCoordinator>(
@@ -36,16 +46,127 @@ final interstitialProvider = Provider<InterstitialCoordinator>(
     ads: ref.watch(adsGatewayProvider),
     settings: ref.watch(settingsRepositoryProvider),
     clock: ref.watch(clockProvider),
+    adsRemoved: () => ref.read(adsRemovedProvider),
   ),
 );
 
-/// Consent, then the SDK. Failures are ignored: the app works without ads.
+/// Play first, then consent, then the SDK. A buyer (also on a new phone, once
+/// Play answers) never sees the consent form or an ad. Failures are ignored:
+/// the app works without ads.
 final adsBootProvider = FutureProvider<void>((ref) async {
   try {
+    await ref.read(removeAdsProvider.notifier).verifyWithStore().timeout(_playTimeout, onTimeout: () {});
+    if (ref.read(adsRemovedProvider)) return;
     await ref.read(consentGatewayProvider).gather();
     await ref.read(adsGatewayProvider).start();
   } catch (_) {}
 });
+
+/// Ads do not wait longer than this for Play at startup; Play's answer still
+/// applies when it comes.
+const _playTimeout = Duration(seconds: 10);
+
+final removeAdsProvider = NotifierProvider<RemoveAdsController, RemoveAdsState>(RemoveAdsController.new);
+
+/// «Sin anuncios» is active: no banner and no interstitial.
+final adsRemovedProvider = Provider<bool>((ref) => ref.watch(removeAdsProvider.select((s) => s.owned)));
+
+/// The one-time purchase «Sin anuncios».
+///
+/// * The state is saved in the settings and read at startup: offline, a buyer
+///   stays without ads.
+/// * At startup Play is asked again ([verifyWithStore]). When Play answers,
+///   its answer wins, also to revoke (a refund, or a backup from another
+///   account). No server: the check runs on the phone.
+/// * A pending purchase keeps the ads until Play confirms it.
+class RemoveAdsController extends Notifier<RemoveAdsState> {
+  BillingGateway get _billing => ref.read(billingGatewayProvider);
+
+  @override
+  RemoveAdsState build() {
+    final sub = ref.watch(billingGatewayProvider).updates.listen(_onUpdate);
+    ref.onDispose(sub.cancel);
+    return RemoveAdsState(owned: ref.read(settingsRepositoryProvider).adsRemoved);
+  }
+
+  /// The price for the card in Ajustes.
+  Future<void> loadProduct() async {
+    final price = await _billing.price();
+    if (ref.mounted && price != null) state = state.copyWith(price: price);
+  }
+
+  /// Opens Play's purchase sheet; the result arrives through the updates.
+  Future<void> buy() async {
+    if (state.owned || state.flow == PurchaseFlow.busy) return;
+    _setFlow(PurchaseFlow.busy);
+    final price = await _billing.price();
+    if (price == null) {
+      _setFlow(PurchaseFlow.unavailable);
+      return;
+    }
+    if (ref.mounted) state = state.copyWith(price: price);
+    switch (await _billing.buy()) {
+      case BuyLaunch.launched:
+        break;
+      case BuyLaunch.unavailable:
+        _setFlow(PurchaseFlow.unavailable);
+      case BuyLaunch.alreadyOwned:
+        await _restore(userInitiated: true);
+      case BuyLaunch.failed:
+        _setFlow(PurchaseFlow.error);
+    }
+  }
+
+  /// «Restaurar compra».
+  Future<void> restore() => _restore(userInitiated: true);
+
+  /// At startup, silently.
+  Future<void> verifyWithStore() => _restore(userInitiated: false);
+
+  Future<void> _restore({required bool userInitiated}) async {
+    if (userInitiated) _setFlow(PurchaseFlow.busy);
+    final ownership = await _billing.ownership();
+    if (ownership == null) {
+      // Offline or no Play: what was saved stays.
+      if (userInitiated) _setFlow(PurchaseFlow.unavailable);
+      return;
+    }
+    await _save(ownership == StoreOwnership.owned);
+    if (userInitiated) {
+      _setFlow(switch (ownership) {
+        StoreOwnership.owned => PurchaseFlow.restored,
+        StoreOwnership.pending => PurchaseFlow.pending,
+        StoreOwnership.none => PurchaseFlow.nothingToRestore,
+      });
+    }
+  }
+
+  Future<void> _onUpdate(PurchaseUpdate update) async {
+    switch (update) {
+      case PurchaseUpdate.purchased || PurchaseUpdate.restored:
+        await _save(true);
+        _setFlow(update == PurchaseUpdate.purchased ? PurchaseFlow.purchased : PurchaseFlow.restored);
+      case PurchaseUpdate.pending:
+        _setFlow(PurchaseFlow.pending);
+      case PurchaseUpdate.canceled:
+        _setFlow(PurchaseFlow.canceled);
+      case PurchaseUpdate.error:
+        _setFlow(PurchaseFlow.error);
+      case PurchaseUpdate.alreadyOwned:
+        await _restore(userInitiated: true);
+    }
+  }
+
+  Future<void> _save(bool owned) async {
+    if (!ref.mounted) return;
+    state = state.copyWith(owned: owned);
+    await ref.read(settingsRepositoryProvider).setAdsRemoved(owned);
+  }
+
+  void _setFlow(PurchaseFlow flow) {
+    if (ref.mounted) state = state.copyWith(flow: flow);
+  }
+}
 
 final flavorProvider = Provider<Flavor>((ref) => Flavor.prod);
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) => _missing('settingsRepositoryProvider'));

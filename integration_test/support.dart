@@ -11,6 +11,7 @@ import 'package:fileflow/core/domain/ads.dart';
 import 'package:fileflow/core/domain/files.dart';
 import 'package:fileflow/core/domain/result.dart';
 import 'package:fileflow/core/domain/pdf.dart';
+import 'package:fileflow/core/domain/purchases.dart';
 import 'package:fileflow/core/domain/settings.dart';
 import 'package:fileflow/core/jobs/jobs.dart';
 import 'package:fileflow/data/files/disk_job_workspace.dart';
@@ -180,6 +181,7 @@ class DeviceEnv {
           // No ads in device tests: they would need network and real units.
           adsGatewayProvider.overrideWithValue(const _NoAds()),
           consentGatewayProvider.overrideWithValue(const _NoConsent()),
+          billingGatewayProvider.overrideWithValue(const _NoBilling()),
         ],
         child: const FileFlowApp(),
       ),
@@ -241,6 +243,12 @@ class TestSettings implements SettingsRepository {
 
   @override
   Future<void> setDefaultPage(PagePreset value) async => defaultPage = value;
+
+  @override
+  bool adsRemoved = false;
+
+  @override
+  Future<void> setAdsRemoved(bool value) async => adsRemoved = value;
 }
 
 class _NoAds implements AdsGateway {
@@ -267,4 +275,21 @@ class _NoConsent implements ConsentGateway {
 
   @override
   Future<void> showPrivacyOptions() async {}
+}
+
+/// Play Billing that never answers, as on a phone without Play.
+class _NoBilling implements BillingGateway {
+  const _NoBilling();
+
+  @override
+  Future<String?> price() async => null;
+
+  @override
+  Future<BuyLaunch> buy() async => BuyLaunch.unavailable;
+
+  @override
+  Future<StoreOwnership?> ownership() async => null;
+
+  @override
+  Stream<PurchaseUpdate> get updates => const Stream.empty();
 }

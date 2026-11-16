@@ -10,6 +10,7 @@ import 'package:platform_files/platform_files.dart';
 
 import '../core/domain/ads.dart';
 import '../data/ads/admob.dart';
+import '../data/billing/play_billing.dart';
 import '../data/files/disk_job_workspace.dart';
 import '../data/files/platform_file_gateway.dart';
 import '../data/pdf/engine_pdf_service.dart';
@@ -44,13 +45,15 @@ Future<void> bootstrap(Flavor flavor) async {
   final units = AdUnits.forFlavor(flavor);
   final consent = UmpConsentGateway(debugEea: flavor == Flavor.dev && const bool.fromEnvironment('UMP_DEBUG_EEA'));
   final ads = AdMobAdsGateway(units, consent);
+  final billing = PlayBillingGateway();
   runApp(
     ProviderScope(
       overrides: [
         adsGatewayProvider.overrideWithValue(ads),
         consentGatewayProvider.overrideWithValue(consent),
+        billingGatewayProvider.overrideWithValue(billing),
         // RN-08 is enforced here, not only by the screens that ask for a banner.
-        adBannerProvider.overrideWithValue(
+        adMobBannerProvider.overrideWithValue(
           (placement) => bannerAllowed(placement) && units.banner != null
               ? AdMobBanner(adUnitId: units.banner!)
               : const SizedBox.shrink(),

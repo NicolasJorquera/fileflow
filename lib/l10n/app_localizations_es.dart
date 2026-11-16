@@ -1122,6 +1122,51 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get adsOptionsBody => 'Consentimiento y anuncios personalizados';
+
+  @override
+  String get settingsRemoveAds => 'Sin anuncios';
+
+  @override
+  String get removeAdsTitle => 'Quitar los anuncios';
+
+  @override
+  String get removeAdsBody =>
+      'Un solo pago, sin suscripción. Todas las herramientas siguen igual, sin un solo anuncio.';
+
+  @override
+  String removeAdsBuy(String price) {
+    return 'Quitar anuncios · $price';
+  }
+
+  @override
+  String get removeAdsBuyNoPrice => 'Quitar anuncios';
+
+  @override
+  String get removeAdsRestore => 'Restaurar compra';
+
+  @override
+  String get removeAdsBusy => 'Conectando con Google Play…';
+
+  @override
+  String get removeAdsOwned => 'Sin anuncios. ¡Gracias por apoyar FileFlow!';
+
+  @override
+  String get removeAdsRestored => 'Compra restaurada: sin anuncios.';
+
+  @override
+  String get removeAdsPending => 'Compra pendiente: los anuncios se quitan cuando Google Play la confirme.';
+
+  @override
+  String get removeAdsCanceled => 'Compra cancelada. No se hizo ningún cargo.';
+
+  @override
+  String get removeAdsError => 'No se pudo completar la compra. Inténtalo de nuevo.';
+
+  @override
+  String get removeAdsUnavailable => 'Google Play no está disponible ahora. Revisa la conexión e inténtalo de nuevo.';
+
+  @override
+  String get removeAdsNothing => 'Esta cuenta de Google Play no tiene la compra.';
 }
 
 /// The translations for Spanish Castilian, as used in Spain (`es_ES`).
