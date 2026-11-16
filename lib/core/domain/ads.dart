@@ -45,17 +45,25 @@ abstract final class InterstitialPolicy {
 }
 
 class InterstitialCoordinator {
-  InterstitialCoordinator({required this._ads, required this._settings, required this._clock});
+  InterstitialCoordinator({
+    required this._ads,
+    required this._settings,
+    required this._clock,
+    required this._adsRemoved,
+  });
 
   final AdsGateway _ads;
   final SettingsRepository _settings;
   final DateTime Function() _clock;
 
+  /// «Sin anuncios» was bought: never an interstitial.
+  final bool Function() _adsRemoved;
+
   Future<void> recordCompletedTask() => _settings.setCompletedTasks(_settings.completedTasks + 1);
 
   /// Called after a successful save or share of a result.
   Future<void> afterSaveOrShare() async {
-    if (!_ads.enabled) return;
+    if (!_ads.enabled || _adsRemoved()) return;
     final now = _clock();
     if (!InterstitialPolicy.allowed(
       completed: _settings.completedTasks,

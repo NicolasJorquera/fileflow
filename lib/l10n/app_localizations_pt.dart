@@ -1134,4 +1134,49 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get adsOptionsBody => 'Consentimento e anúncios personalizados';
+
+  @override
+  String get settingsRemoveAds => 'Sem anúncios';
+
+  @override
+  String get removeAdsTitle => 'Remover os anúncios';
+
+  @override
+  String get removeAdsBody =>
+      'Um único pagamento, sem assinatura. Todas as ferramentas continuam iguais, sem nenhum anúncio.';
+
+  @override
+  String removeAdsBuy(String price) {
+    return 'Remover anúncios · $price';
+  }
+
+  @override
+  String get removeAdsBuyNoPrice => 'Remover anúncios';
+
+  @override
+  String get removeAdsRestore => 'Restaurar compra';
+
+  @override
+  String get removeAdsBusy => 'Conectando ao Google Play…';
+
+  @override
+  String get removeAdsOwned => 'Sem anúncios. Obrigado por apoiar o FileFlow!';
+
+  @override
+  String get removeAdsRestored => 'Compra restaurada: sem anúncios.';
+
+  @override
+  String get removeAdsPending => 'Compra pendente: os anúncios somem quando o Google Play confirmar.';
+
+  @override
+  String get removeAdsCanceled => 'Compra cancelada. Nenhuma cobrança foi feita.';
+
+  @override
+  String get removeAdsError => 'Não foi possível concluir a compra. Tente de novo.';
+
+  @override
+  String get removeAdsUnavailable => 'O Google Play não está disponível agora. Verifique a conexão e tente de novo.';
+
+  @override
+  String get removeAdsNothing => 'Esta conta do Google Play não tem a compra.';
 }

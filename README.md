@@ -45,13 +45,13 @@ fvm dart run tool/fuzz.dart 200                       # lo mismo que corre cada 
 - `lib/core/jobs`: `JobRunner` (una operación a la vez, progreso, cancelación). Dart puro.
 - `lib/design_system`: tokens claro y oscuro del sistema de diseño aprobado, y el tema.
 - `lib/l10n`: textos en ARB. `app_es.arb` es la plantilla; `app_pt.arb` tiene el contenido de Brasil; `app_es_ES.arb` solo lo que cambia en España.
-- `lib/data`: adaptadores. `files/` implementa `FileGateway`, `ImageCodec` y `JobWorkspace` sobre el plugin `platform_files`.
+- `lib/data`: adaptadores. `files/` implementa `FileGateway`, `ImageCodec` y `JobWorkspace` sobre el plugin `platform_files`. `ads/` es AdMob y UMP; `billing/` es Google Play Billing para la compra única «Sin anuncios» (`fileflow_remove_ads`, sin backend).
 - `lib/app/bootstrap.dart`: único lugar que construye adaptadores (raíz de composición).
 - `lib/features/dev_tools`: pantalla de diagnóstico, solo en el flavor dev (Ajustes › Diagnóstico).
 - `packages/pdf_engine`: motor PDF en Dart puro sobre PDFium (pdfrx_engine + pdfium_dart). Tareas cortas que no lanzan excepciones; resultado como dato.
 - `packages/platform_files`: plugin Kotlin propio. Selector de documentos y Photo Picker, copias por streaming, guardar en carpeta, compartir con FileProvider limitado a `files/results/`, recepción de «Compartir» y JPEG nativo.
 - `lib/features/*/presentation`: pantallas. No importan `lib/data`.
-- `tool/check_imports.dart`: hace cumplir las reglas anteriores, y que solo `lib/data/ads` use SDK de red.
+- `tool/check_imports.dart`: hace cumplir las reglas anteriores, que solo `lib/data/ads` use SDK de red y que solo `lib/data/billing` use Play Billing (`in_app_purchase`, que habla con la app de Play Store y no abre conexiones propias).
 
 ## Privacidad en el manifiesto
 

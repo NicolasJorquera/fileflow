@@ -39,4 +39,14 @@ void main() {
     expect(checkImports({'lib/data/files/f.dart': "import 'dart:io';\nfinal c = HttpClient();"}), hasLength(1));
     expect(checkImports({'lib/data/files/f.dart': "import 'dart:io';\nfinal f = File('x');"}), isEmpty);
   });
+
+  test('Play Billing only in lib/data/billing; it does not open the network rule', () {
+    const billing = "import 'package:in_app_purchase/in_app_purchase.dart';";
+    const android = "import 'package:in_app_purchase_android/in_app_purchase_android.dart';";
+    expect(checkImports({'lib/data/billing/b.dart': '$billing\n$android'}), isEmpty);
+    expect(checkImports({'lib/data/ads/a.dart': billing}).single.rule, contains('lib/data/billing'));
+    expect(checkImports({'lib/app/bootstrap.dart': android}).single.rule, contains('lib/data/billing'));
+    const ads = "import 'package:google_mobile_ads/google_mobile_ads.dart';";
+    expect(checkImports({'lib/data/billing/b.dart': ads}).single.rule, contains('lib/data/ads'));
+  });
 }

@@ -14,6 +14,8 @@ dependencies:
   flutter_riverpod: ^3.4.3
   go_router: ^18.1.2
   google_mobile_ads: ^9.2.0
+  in_app_purchase: ^3.3.1
+  in_app_purchase_android: ^0.5.0
   intl: ^0.20.2
   path_provider: ^2.1.6
   pdf_engine:
@@ -31,6 +33,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   alchemist: ^0.14.1
   pdf: ^3.13.1
+  in_app_purchase_platform_interface: ^1.4.1
 
 flutter:
   generate: true

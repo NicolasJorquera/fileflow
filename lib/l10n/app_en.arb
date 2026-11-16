@@ -277,5 +277,19 @@
   "showFirstPage": "Show first page",
   "hideFirstPage": "Hide first page",
   "adsOptionsTitle": "Ad options",
-  "adsOptionsBody": "Consent and personalised ads"
+  "adsOptionsBody": "Consent and personalised ads",
+  "settingsRemoveAds": "No ads",
+  "removeAdsTitle": "Remove the ads",
+  "removeAdsBody": "One payment, no subscription. Every tool stays the same, without a single ad.",
+  "removeAdsBuy": "Remove ads · {price}",
+  "removeAdsBuyNoPrice": "Remove ads",
+  "removeAdsRestore": "Restore purchase",
+  "removeAdsBusy": "Connecting to Google Play…",
+  "removeAdsOwned": "No ads. Thanks for supporting FileFlow!",
+  "removeAdsRestored": "Purchase restored: no ads.",
+  "removeAdsPending": "Purchase pending: the ads go away once Google Play confirms it.",
+  "removeAdsCanceled": "Purchase canceled. You were not charged.",
+  "removeAdsError": "The purchase could not be completed. Try again.",
+  "removeAdsUnavailable": "Google Play is not available right now. Check your connection and try again.",
+  "removeAdsNothing": "This Google Play account doesn't have the purchase."
 }

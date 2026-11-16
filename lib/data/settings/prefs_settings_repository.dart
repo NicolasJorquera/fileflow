@@ -18,6 +18,7 @@ class PrefsSettingsRepository implements SettingsRepository {
   static const _completedKey = 'completed_tasks';
   static const _interstitialTaskKey = 'interstitial_task';
   static const _interstitialAtKey = 'interstitial_at';
+  static const _adsRemovedKey = 'ads_removed';
 
   final SharedPreferences _prefs;
 
@@ -66,4 +67,12 @@ class PrefsSettingsRepository implements SettingsRepository {
 
   @override
   Future<void> setDefaultPage(PagePreset value) => _prefs.setString(_pageKey, value.name);
+
+  /// Included in Android's backup like the other preferences: a backup from
+  /// another Play account is corrected when Play answers at startup.
+  @override
+  bool get adsRemoved => _prefs.getBool(_adsRemovedKey) ?? false;
+
+  @override
+  Future<void> setAdsRemoved(bool value) => _prefs.setBool(_adsRemovedKey, value);
 }

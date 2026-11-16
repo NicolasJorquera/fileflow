@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +9,7 @@ import '../../../app/providers.dart';
 import '../../../app/router.dart';
 import '../../../app/version.dart';
 import '../../../core/domain/pdf.dart';
+import '../../../core/domain/purchases.dart';
 import '../../../core/domain/settings.dart';
 import '../../../core/format/sizes.dart';
 import '../../../design_system/theme.dart';
@@ -14,8 +17,8 @@ import '../../../design_system/tokens.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../shared/retention_label.dart';
 
-/// Ajustes (UX v1.0): theme, language, default page size, Recientes, privacy
-/// and about.
+/// Ajustes (UX v1.0): theme, language, default page size, Recientes, the
+/// one-time purchase «Sin anuncios», privacy and about.
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -83,6 +86,9 @@ class SettingsScreen extends ConsumerWidget {
           const SizedBox(height: Space.xl),
           _SectionLabel(l10n.settingsRecents),
           const _RetentionCard(),
+          const SizedBox(height: Space.xl),
+          _SectionLabel(l10n.settingsRemoveAds),
+          const _RemoveAdsCard(),
           const SizedBox(height: Space.xl),
           _SectionLabel(l10n.settingsPrivacy),
           _Card(
@@ -201,6 +207,112 @@ class _RetentionCard extends ConsumerWidget {
                 ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// «Sin anuncios»: buy with Play's price, restore, and what Play answered.
+/// The status is a live region, so TalkBack reads each change.
+class _RemoveAdsCard extends ConsumerStatefulWidget {
+  const _RemoveAdsCard();
+
+  @override
+  ConsumerState<_RemoveAdsCard> createState() => _RemoveAdsCardState();
+}
+
+class _RemoveAdsCardState extends ConsumerState<_RemoveAdsCard> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) unawaited(ref.read(removeAdsProvider.notifier).loadProduct());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final palette = context.palette;
+    final text = Theme.of(context).textTheme;
+    final s = ref.watch(removeAdsProvider);
+    final controller = ref.read(removeAdsProvider.notifier);
+    final busy = s.flow == PurchaseFlow.busy;
+    final status = switch (s.flow) {
+      PurchaseFlow.restored when s.owned => l10n.removeAdsRestored,
+      _ when s.owned => l10n.removeAdsOwned,
+      PurchaseFlow.busy => l10n.removeAdsBusy,
+      PurchaseFlow.pending => l10n.removeAdsPending,
+      PurchaseFlow.canceled => l10n.removeAdsCanceled,
+      PurchaseFlow.error => l10n.removeAdsError,
+      PurchaseFlow.unavailable => l10n.removeAdsUnavailable,
+      PurchaseFlow.nothingToRestore => l10n.removeAdsNothing,
+      _ => null,
+    };
+    final price = s.price;
+    return Material(
+      key: const Key('remove-ads-card'),
+      color: palette.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Radii.card),
+        side: BorderSide(color: palette.line),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(Space.l),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.removeAdsTitle, style: text.bodyLarge),
+            const SizedBox(height: Space.xs),
+            Text(l10n.removeAdsBody, style: text.bodyMedium?.copyWith(color: palette.muted)),
+            if (status != null) ...[
+              const SizedBox(height: Space.m),
+              // Its own node, so TalkBack reads only the new status.
+              Semantics(
+                container: true,
+                liveRegion: true,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (s.owned) ...[
+                      Icon(Icons.check_circle_outline, color: palette.success),
+                      const SizedBox(width: Space.s),
+                    ],
+                    Expanded(
+                      child: Text(
+                        status,
+                        key: const Key('remove-ads-status'),
+                        style: text.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            if (!s.owned) ...[
+              const SizedBox(height: Space.l),
+              FilledButton(
+                key: const Key('remove-ads-buy'),
+                // Room for two lines when the text is large.
+                style: FilledButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: Space.xl, vertical: Space.s),
+                ),
+                onPressed: busy || s.flow == PurchaseFlow.pending ? null : () => unawaited(controller.buy()),
+                child: Text(
+                  price == null ? l10n.removeAdsBuyNoPrice : l10n.removeAdsBuy(price),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: Space.xs),
+              TextButton(
+                key: const Key('remove-ads-restore'),
+                style: TextButton.styleFrom(minimumSize: const Size.fromHeight(Touch.minTarget)),
+                onPressed: busy ? null : () => unawaited(controller.restore()),
+                child: Text(l10n.removeAdsRestore, textAlign: TextAlign.center),
+              ),
+            ],
+          ],
         ),
       ),
     );

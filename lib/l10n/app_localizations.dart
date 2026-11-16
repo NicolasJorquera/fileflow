@@ -1760,6 +1760,90 @@ abstract class AppLocalizations {
   /// In es, this message translates to:
   /// **'Consentimiento y anuncios personalizados'**
   String get adsOptionsBody;
+
+  /// No description provided for @settingsRemoveAds.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin anuncios'**
+  String get settingsRemoveAds;
+
+  /// Card in Ajustes for the one-time purchase that removes every ad.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar los anuncios'**
+  String get removeAdsTitle;
+
+  /// No description provided for @removeAdsBody.
+  ///
+  /// In es, this message translates to:
+  /// **'Un solo pago, sin suscripción. Todas las herramientas siguen igual, sin un solo anuncio.'**
+  String get removeAdsBody;
+
+  /// Buy button. The price comes from Google Play, localized.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar anuncios · {price}'**
+  String removeAdsBuy(String price);
+
+  /// No description provided for @removeAdsBuyNoPrice.
+  ///
+  /// In es, this message translates to:
+  /// **'Quitar anuncios'**
+  String get removeAdsBuyNoPrice;
+
+  /// No description provided for @removeAdsRestore.
+  ///
+  /// In es, this message translates to:
+  /// **'Restaurar compra'**
+  String get removeAdsRestore;
+
+  /// No description provided for @removeAdsBusy.
+  ///
+  /// In es, this message translates to:
+  /// **'Conectando con Google Play…'**
+  String get removeAdsBusy;
+
+  /// No description provided for @removeAdsOwned.
+  ///
+  /// In es, this message translates to:
+  /// **'Sin anuncios. ¡Gracias por apoyar FileFlow!'**
+  String get removeAdsOwned;
+
+  /// No description provided for @removeAdsRestored.
+  ///
+  /// In es, this message translates to:
+  /// **'Compra restaurada: sin anuncios.'**
+  String get removeAdsRestored;
+
+  /// No description provided for @removeAdsPending.
+  ///
+  /// In es, this message translates to:
+  /// **'Compra pendiente: los anuncios se quitan cuando Google Play la confirme.'**
+  String get removeAdsPending;
+
+  /// No description provided for @removeAdsCanceled.
+  ///
+  /// In es, this message translates to:
+  /// **'Compra cancelada. No se hizo ningún cargo.'**
+  String get removeAdsCanceled;
+
+  /// No description provided for @removeAdsError.
+  ///
+  /// In es, this message translates to:
+  /// **'No se pudo completar la compra. Inténtalo de nuevo.'**
+  String get removeAdsError;
+
+  /// No description provided for @removeAdsUnavailable.
+  ///
+  /// In es, this message translates to:
+  /// **'Google Play no está disponible ahora. Revisa la conexión e inténtalo de nuevo.'**
+  String get removeAdsUnavailable;
+
+  /// No description provided for @removeAdsNothing.
+  ///
+  /// In es, this message translates to:
+  /// **'Esta cuenta de Google Play no tiene la compra.'**
+  String get removeAdsNothing;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

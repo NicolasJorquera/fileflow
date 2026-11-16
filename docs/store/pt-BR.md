@@ -27,7 +27,7 @@ FEITO PARA TODOS
 • Funciona com o TalkBack e com texto a 200 %.
 • Em português, espanhol e inglês, com tema claro e escuro.
 
-O FileFlow é gratuito e mantido por anúncios, que nunca aparecem sobre seus documentos.
+O FileFlow é gratuito e mantido por anúncios, que nunca aparecem sobre seus documentos. Se preferir não vê-los, você pode removê-los com um pagamento único em Configurações.
 
 ## Novidades
 Primeira versão do FileFlow.

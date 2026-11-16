@@ -7,6 +7,11 @@
 // 2. Presentation (lib/features/**/presentation) never imports lib/data.
 // 3. Only lib/data/ads may use network-capable SDKs (RN-01: no document
 //    operation touches the network).
+// 4. Only lib/data/billing may use Google Play Billing (in_app_purchase). It
+//    opens no connection itself: it talks to the Play Store app on the phone,
+//    which charges the purchase. It lives apart from lib/data/ads so that the
+//    network rule above stays as strict as before, and it is kept out of
+//    every other folder like a network SDK.
 import 'dart:io';
 
 class Violation {
@@ -24,6 +29,9 @@ const _pureFolders = ['lib/core/domain/', 'lib/core/jobs/'];
 const _pureDartLibraries = {'dart:async', 'dart:core', 'dart:collection', 'dart:typed_data', 'dart:math'};
 
 const _networkPackages = ['package:http/', 'package:dio/', 'package:google_mobile_ads/', 'package:web_socket'];
+
+/// in_app_purchase, in_app_purchase_android, in_app_purchase_platform_interface…
+const _billingPackages = ['package:in_app_purchase'];
 
 /// [files] maps a path relative to the project root (with `/`) to its source.
 List<Violation> checkImports(Map<String, String> files) {
@@ -44,6 +52,9 @@ List<Violation> checkImports(Map<String, String> files) {
           (target == 'dart:io' && RegExp(r'\b(HttpClient|Socket|WebSocket)\b').hasMatch(source));
       if (usesNetwork && !path.startsWith('lib/data/ads/')) {
         violations.add(Violation(path, target, 'network access is only allowed in lib/data/ads'));
+      }
+      if (_billingPackages.any(target.startsWith) && !path.startsWith('lib/data/billing/')) {
+        violations.add(Violation(path, target, 'Play Billing is only allowed in lib/data/billing'));
       }
     }
   }

@@ -27,7 +27,7 @@ BUILT FOR EVERYONE
 • Works with TalkBack and 200 % text.
 • In English, Spanish and Portuguese, with light and dark themes.
 
-FileFlow is free and supported by ads, which never appear over your documents.
+FileFlow is free and supported by ads, which never appear over your documents. If you'd rather not see them, you can remove them with a one-time payment in Settings.
 
 ## What's new
 First release of FileFlow.

@@ -43,7 +43,12 @@ void main() {
     test('shows, then records the task count and the time', () async {
       final settings = MemorySettings()..completedTasks = 5;
       final ads = FakeAds();
-      final coordinator = InterstitialCoordinator(ads: ads, settings: settings, clock: () => t0);
+      final coordinator = InterstitialCoordinator(
+        ads: ads,
+        settings: settings,
+        clock: () => t0,
+        adsRemoved: () => false,
+      );
       await coordinator.afterSaveOrShare();
       expect((ads.shown, settings.interstitialAtTask, settings.interstitialAt), (1, 5, t0));
     });
@@ -54,16 +59,41 @@ void main() {
         ads: FakeAds(isEnabled: false),
         settings: settings,
         clock: () => t0,
+        adsRemoved: () => false,
       ).afterSaveOrShare();
       final noAd = FakeAds(willShow: false);
-      await InterstitialCoordinator(ads: noAd, settings: settings, clock: () => t0).afterSaveOrShare();
+      await InterstitialCoordinator(
+        ads: noAd,
+        settings: settings,
+        clock: () => t0,
+        adsRemoved: () => false,
+      ).afterSaveOrShare();
       expect(noAd.requested, 1);
       expect(settings.interstitialAt, isNull);
     });
 
+    test('never shows one once «Sin anuncios» is bought, but still counts tasks', () async {
+      final settings = MemorySettings()..completedTasks = 5;
+      final ads = FakeAds();
+      final coordinator = InterstitialCoordinator(
+        ads: ads,
+        settings: settings,
+        clock: () => t0,
+        adsRemoved: () => true,
+      );
+      await coordinator.afterSaveOrShare();
+      await coordinator.recordCompletedTask();
+      expect((ads.requested, settings.interstitialAt, settings.completedTasks), (0, null, 6));
+    });
+
     test('counts completed tasks', () async {
       final settings = MemorySettings();
-      final coordinator = InterstitialCoordinator(ads: FakeAds(), settings: settings, clock: () => t0);
+      final coordinator = InterstitialCoordinator(
+        ads: FakeAds(),
+        settings: settings,
+        clock: () => t0,
+        adsRemoved: () => false,
+      );
       await coordinator.recordCompletedTask();
       await coordinator.recordCompletedTask();
       expect(settings.completedTasks, 2);

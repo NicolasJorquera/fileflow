@@ -6,6 +6,7 @@ import 'package:fileflow/core/domain/failures.dart';
 import 'package:fileflow/core/domain/ads.dart';
 import 'package:fileflow/core/domain/files.dart';
 import 'package:fileflow/core/domain/pdf.dart';
+import 'package:fileflow/core/domain/purchases.dart';
 import 'package:fileflow/core/domain/recents.dart';
 import 'package:fileflow/core/domain/result.dart';
 import 'package:fileflow/core/domain/scanner.dart';
@@ -57,6 +58,12 @@ class MemorySettings implements SettingsRepository {
 
   @override
   Future<void> setInterstitialAt(DateTime value) async => interstitialAt = value;
+
+  @override
+  bool adsRemoved = false;
+
+  @override
+  Future<void> setAdsRemoved(bool value) async => adsRemoved = value;
 }
 
 /// Ads that never load: records interstitial requests.
@@ -83,16 +90,43 @@ class FakeAds implements AdsGateway {
 
 class FakeConsent implements ConsentGateway {
   bool canRequest = true;
-  int optionsOpened = 0;
+  int optionsOpened = 0, gathered = 0;
 
   @override
-  Future<void> gather() async {}
+  Future<void> gather() async => gathered++;
 
   @override
   Future<bool> canRequestAds() async => canRequest;
 
   @override
   Future<void> showPrivacyOptions() async => optionsOpened++;
+}
+
+/// Play Billing for screens that only show the card: Play answers with
+/// [priceLabel] and [owns]. Purchase flows are tested with the real adapter
+/// over a fake InAppPurchase (test/features/remove_ads).
+class FakeBilling implements BillingGateway {
+  FakeBilling({this.priceLabel = r'US$2.99', this.owns = StoreOwnership.none});
+
+  String? priceLabel;
+  StoreOwnership? owns;
+  final _updates = StreamController<PurchaseUpdate>.broadcast();
+
+  @override
+  Future<String?> price() async => priceLabel;
+
+  @override
+  Future<BuyLaunch> buy() async {
+    owns = StoreOwnership.owned;
+    scheduleMicrotask(() => _updates.add(PurchaseUpdate.purchased));
+    return BuyLaunch.launched;
+  }
+
+  @override
+  Future<StoreOwnership?> ownership() async => owns;
+
+  @override
+  Stream<PurchaseUpdate> get updates => _updates.stream;
 }
 
 class FakeWorkspace implements JobWorkspace {
@@ -526,6 +560,8 @@ List<Override> fakeOverrides({
   int interrupted = 0,
   FakeScanner? scanner,
   FakeAds? ads,
+  FakeConsent? consent,
+  BillingGateway? billing,
   FakeImageCodec? codec,
   String? region = 'CL',
 }) => [
@@ -537,7 +573,8 @@ List<Override> fakeOverrides({
   interruptedJobsProvider.overrideWithValue(interrupted),
   thumbnailSourceProvider.overrideWithValue(FakeThumbnailSource()),
   adsGatewayProvider.overrideWithValue(ads ?? FakeAds(isEnabled: false)),
-  consentGatewayProvider.overrideWithValue(FakeConsent()),
+  consentGatewayProvider.overrideWithValue(consent ?? FakeConsent()),
+  billingGatewayProvider.overrideWithValue(billing ?? FakeBilling()),
   scannerGatewayProvider.overrideWithValue(scanner ?? FakeScanner()),
   imageCodecProvider.overrideWithValue(codec ?? FakeImageCodec()),
   regionProvider.overrideWithValue(region),

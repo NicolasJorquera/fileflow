@@ -41,4 +41,9 @@ abstract interface class SettingsRepository {
   /// Page size Fotos a PDF starts with.
   PagePreset get defaultPage;
   Future<void> setDefaultPage(PagePreset value);
+
+  /// «Sin anuncios» was bought, as Play last said. Read at startup so a buyer
+  /// sees no ads offline; Play's answer replaces it whenever it comes.
+  bool get adsRemoved;
+  Future<void> setAdsRemoved(bool value);
 }

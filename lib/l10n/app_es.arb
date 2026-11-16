@@ -919,5 +919,30 @@
   "showFirstPage": "Ver primera página",
   "hideFirstPage": "Ocultar primera página",
   "adsOptionsTitle": "Opciones de anuncios",
-  "adsOptionsBody": "Consentimiento y anuncios personalizados"
+  "adsOptionsBody": "Consentimiento y anuncios personalizados",
+  "settingsRemoveAds": "Sin anuncios",
+  "removeAdsTitle": "Quitar los anuncios",
+  "@removeAdsTitle": {
+    "description": "Card in Ajustes for the one-time purchase that removes every ad."
+  },
+  "removeAdsBody": "Un solo pago, sin suscripción. Todas las herramientas siguen igual, sin un solo anuncio.",
+  "removeAdsBuy": "Quitar anuncios · {price}",
+  "@removeAdsBuy": {
+    "description": "Buy button. The price comes from Google Play, localized.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "removeAdsBuyNoPrice": "Quitar anuncios",
+  "removeAdsRestore": "Restaurar compra",
+  "removeAdsBusy": "Conectando con Google Play…",
+  "removeAdsOwned": "Sin anuncios. ¡Gracias por apoyar FileFlow!",
+  "removeAdsRestored": "Compra restaurada: sin anuncios.",
+  "removeAdsPending": "Compra pendiente: los anuncios se quitan cuando Google Play la confirme.",
+  "removeAdsCanceled": "Compra cancelada. No se hizo ningún cargo.",
+  "removeAdsError": "No se pudo completar la compra. Inténtalo de nuevo.",
+  "removeAdsUnavailable": "Google Play no está disponible ahora. Revisa la conexión e inténtalo de nuevo.",
+  "removeAdsNothing": "Esta cuenta de Google Play no tiene la compra."
 }
