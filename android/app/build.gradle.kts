@@ -75,6 +75,7 @@ android {
     buildTypes {
         release {
             signingConfig = signingConfigs.getByName(if (hasUploadKey) "release" else "debug")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }
