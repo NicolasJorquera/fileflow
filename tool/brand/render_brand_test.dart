@@ -1,71 +1,53 @@
 // Renders the app icon, launcher icons and Play feature graphics.
 // Run: flutter test tool/brand/render_brand_test.dart
 // Not part of the test suite: it writes files into android/, ios/ and docs/.
+// Logo: «P7 · Gradiente», three isometric layers (Figma file «FileFlow · Logo»).
 import 'dart:io';
-import 'dart:math' as math;
 import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-const _blue = Color(0xFF2349C9);
-const _deep = Color(0xFF16318F);
-const _soft = Color(0xFFC9D4F6);
-const _accent = Color(0xFF1C7447);
+const _light = Color(0xFFF4F6FB);
+const _navy = Color(0xFF13235F);
+const _muted = Color(0xFF566072);
 
-/// The glyph on a 1024 grid: a page with a folded corner and a badge with a
-/// down arrow (smaller, lighter files). [scale] shrinks it around the centre.
+/// Layer centres and colours (top to bottom) on a 1024 grid.
+const _layers = [
+  (450.0, Color(0xFF3BE0C0), Color(0xFF14A88F)),
+  (550.0, Color(0xFF4F8BFF), Color(0xFF2349C9)),
+  (650.0, Color(0xFF3F63E8), _navy),
+];
+const _halfWidth = 300.0, _halfHeight = 170.0;
+
+/// Point on the layer centred at [cy]: a runs along the top-right edge, b along the top-left one.
+Offset _iso(double cy, double a, double b) =>
+    Offset(512 + (a - b) * _halfWidth, cy - _halfHeight + (a + b) * _halfHeight);
+
 void _glyph(Canvas c, double scale) {
   c.save();
   c.translate(512, 512);
   c.scale(scale);
-  c.translate(-512, -512);
-  const l = 300.0, t = 220.0, r = 680.0, b = 780.0, fold = 120.0;
-  final page = Path()
-    ..moveTo(l + 40, t)
-    ..lineTo(r - fold, t)
-    ..lineTo(r, t + fold)
-    ..lineTo(r, b - 40)
-    ..arcToPoint(const Offset(r - 40, b), radius: const Radius.circular(40))
-    ..lineTo(l + 40, b)
-    ..arcToPoint(const Offset(l, b - 40), radius: const Radius.circular(40))
-    ..lineTo(l, t + 40)
-    ..arcToPoint(const Offset(l + 40, t), radius: const Radius.circular(40))
-    ..close();
-  c.drawPath(page.shift(const Offset(0, 14)), Paint()..color = _deep.withValues(alpha: 0.35));
-  c.drawPath(page, Paint()..color = const Color(0xFFFFFFFF));
-  final corner = Path()
-    ..moveTo(r - fold, t)
-    ..lineTo(r - fold, t + fold - 24)
-    ..arcToPoint(const Offset(r - fold + 24, t + fold), radius: const Radius.circular(24), clockwise: false)
-    ..lineTo(r, t + fold)
-    ..close();
-  c.drawPath(corner, Paint()..color = _soft);
-  final line = Paint()
-    ..color = _soft
-    ..strokeWidth = 34
-    ..strokeCap = StrokeCap.round;
-  for (final (y, end) in [(400.0, 600.0), (480.0, 600.0), (560.0, 500.0)]) {
-    c.drawLine(Offset(l + 70, y), Offset(end, y), line);
+  c.translate(-512, -550); // the stack's centre sits at y = 550
+  for (final (cy, from, to) in _layers.reversed) {
+    final rhombus = Path()
+      ..moveTo(512, cy - _halfHeight)
+      ..lineTo(512 + _halfWidth, cy)
+      ..lineTo(512, cy + _halfHeight)
+      ..lineTo(512 - _halfWidth, cy)
+      ..close();
+    final box = rhombus.getBounds();
+    c.drawPath(rhombus, Paint()..shader = ui.Gradient.linear(box.topLeft, box.bottomRight, [from, to]));
   }
-  const centre = Offset(668, 700);
-  c.drawCircle(centre, 150, Paint()..color = _blue);
-  c.drawCircle(centre, 122, Paint()..color = _accent);
-  final arrow = Paint()
-    ..color = const Color(0xFFFFFFFF)
-    ..strokeWidth = 30
-    ..strokeCap = StrokeCap.round
-    ..strokeJoin = StrokeJoin.round
-    ..style = PaintingStyle.stroke;
-  c.drawLine(centre + const Offset(0, -62), centre + const Offset(0, 58), arrow);
-  c.drawPath(
-    Path()
-      ..moveTo(centre.dx - 52, centre.dy + 8)
-      ..lineTo(centre.dx, centre.dy + 60)
-      ..lineTo(centre.dx + 52, centre.dy + 8),
-    arrow,
-  );
+  final line = Paint()
+    ..color = const Color(0xE6FFFFFF)
+    ..strokeWidth = 28
+    ..strokeCap = StrokeCap.round;
+  const top = 450.0;
+  for (final (a1, b) in [(0.75, 0.3), (0.85, 0.48), (0.6, 0.66)]) {
+    c.drawLine(_iso(top, 0.25, b), _iso(top, a1, b), line);
+  }
   c.restore();
 }
 
@@ -75,8 +57,7 @@ Future<void> _icon(String path, int px, {required _Shape bg, double scale = 1}) 
   final rec = ui.PictureRecorder();
   final c = Canvas(rec)..scale(px / 1024);
   const full = Rect.fromLTWH(0, 0, 1024, 1024);
-  final fill = Paint()
-    ..shader = ui.Gradient.linear(Offset.zero, const Offset(1024, 1024), [const Color(0xFF2F5BE0), _blue]);
+  final fill = Paint()..color = _light;
   switch (bg) {
     case _Shape.square:
       c.drawRect(full, fill);
@@ -97,8 +78,8 @@ Future<void> _write(ui.PictureRecorder rec, String path, int w, int h) async {
     ..writeAsBytesSync(data!.buffer.asUint8List());
 }
 
-ui.Paragraph _text(String s, double size, Color color, double width, {FontWeight weight = FontWeight.w700}) {
-  final b = ui.ParagraphBuilder(ui.ParagraphStyle(fontFamily: 'Brand', fontSize: size, fontWeight: weight))
+ui.Paragraph _text(String s, double size, Color color, double width) {
+  final b = ui.ParagraphBuilder(ui.ParagraphStyle(fontFamily: 'Brand', fontSize: size))
     ..pushStyle(ui.TextStyle(color: color, fontFamily: 'Brand', fontSize: size, height: 1.15))
     ..addText(s);
   return b.build()..layout(ui.ParagraphConstraints(width: width));
@@ -109,15 +90,19 @@ Future<void> _feature(String path, String tagline) async {
   final c = Canvas(rec);
   c.drawRect(
     const Rect.fromLTWH(0, 0, 1024, 500),
-    Paint()..shader = ui.Gradient.linear(Offset.zero, const Offset(1024, 500), [const Color(0xFF2F5BE0), _deep]),
+    Paint()
+      ..shader = ui.Gradient.linear(Offset.zero, const Offset(1024, 500), [
+        const Color(0xFFF7F9FD),
+        const Color(0xFFE4EAF6),
+      ]),
   );
   c.save();
-  c.translate(60, 40);
-  c.scale(420 / 1024);
+  c.translate(50, 30);
+  c.scale(440 / 1024);
   _glyph(c, 1);
   c.restore();
-  c.drawParagraph(_text('FileFlow', 96, const Color(0xFFFFFFFF), 520), const Offset(470, 130));
-  c.drawParagraph(_text(tagline, 40, const Color(0xFFE5EBFB), 500), const Offset(474, 260));
+  c.drawParagraph(_text('FileFlow', 96, _navy, 520), const Offset(480, 130));
+  c.drawParagraph(_text(tagline, 40, _muted, 500), const Offset(484, 260));
   await _write(rec, path, 1024, 500);
 }
 
@@ -128,10 +113,11 @@ void main() {
     const res = 'android/app/src/main/res';
     const densities = {'mdpi': 1.0, 'hdpi': 1.5, 'xhdpi': 2.0, 'xxhdpi': 3.0, 'xxxhdpi': 4.0};
     for (final MapEntry(key: d, value: f) in densities.entries) {
-      await _icon('$res/mipmap-$d/ic_launcher.png', (48 * f).round(), bg: _Shape.rounded, scale: 0.92);
-      await _icon('$res/mipmap-$d/ic_launcher_foreground.png', (108 * f).round(), bg: _Shape.none, scale: 0.62);
+      await _icon('$res/mipmap-$d/ic_launcher.png', (48 * f).round(), bg: _Shape.rounded, scale: 0.9);
+      // Adaptive foreground: keeps the stack inside the 66 dp safe circle.
+      await _icon('$res/mipmap-$d/ic_launcher_foreground.png', (108 * f).round(), bg: _Shape.none, scale: 0.8);
     }
-    await _icon('docs/store/graphics/icon-512.png', 512, bg: _Shape.square, scale: 0.86);
+    await _icon('docs/store/graphics/icon-512.png', 512, bg: _Shape.square, scale: 1);
     const ios = 'ios/Runner/Assets.xcassets/AppIcon.appiconset';
     for (final (name, px) in [
       ('1024x1024@1x', 1024),
@@ -150,11 +136,10 @@ void main() {
       ('76x76@2x', 152),
       ('83.5x83.5@2x', 167),
     ]) {
-      await _icon('$ios/Icon-App-$name.png', px, bg: _Shape.square, scale: 0.86);
+      await _icon('$ios/Icon-App-$name.png', px, bg: _Shape.square, scale: 1);
     }
     await _feature('docs/store/graphics/feature-es.png', 'Tus PDF, en tu teléfono. Sin subir nada.');
     await _feature('docs/store/graphics/feature-en.png', 'Your PDFs, on your phone. Nothing uploaded.');
     await _feature('docs/store/graphics/feature-pt.png', 'Seus PDFs, no seu celular. Nada é enviado.');
-    expect(math.max(1, 0), 1);
   });
 }
