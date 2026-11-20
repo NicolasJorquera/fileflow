@@ -1,0 +1,18 @@
+{
+  "hosting": {
+    "public": "public",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": ["firebase.json", "**/.*"],
+    "headers": [
+      {
+        "source": "/app-ads.txt",
+        "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
+      }
+    ],
+    "redirects": [
+      { "source": "/privacidad", "destination": "https://nicolasjorquera.github.io/fileflow/privacy/", "type": 301 },
+      { "source": "/privacy", "destination": "https://nicolasjorquera.github.io/fileflow/privacy/#en", "type": 301 }
+    ]
+  }
+}
